@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { PuffLoader } from 'react-spinners'
 import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
 import appStateManager from './managers/AppStateManager.js'
@@ -39,7 +40,12 @@ function App() {
   if (appState === APP_STATE.LOADING) {
     return (
       <div className="app-loading">
-        <p>Loading...</p>
+        <Background />
+        <PuffLoader 
+          color="var(--color-white)" 
+          size={60}
+          aria-label="Loading"
+        />
       </div>
     )
   }

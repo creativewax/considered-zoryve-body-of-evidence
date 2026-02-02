@@ -6,7 +6,7 @@
 .body-area-filter-background {
   position: absolute;
   top: 8px;
-  left: 0;
+  left: -8px;
   width: 50px;
   height: 102px;
   pointer-events: none;
