@@ -1,0 +1,19 @@
+.body-area-filter {
+  position: relative;
+  min-height: 200px;
+}
+
+.body-area-filter__background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.body-area-filter__options {
+  position: relative;
+  z-index: 1;
+  padding-left: 120px;
+}

@@ -1,0 +1,14 @@
+.intro-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-zoryve-midnight-blue) 0%, var(--color-primary-blue) 100%);
+}
+
+.intro-page__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

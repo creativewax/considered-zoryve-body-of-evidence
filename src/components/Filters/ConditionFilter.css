@@ -1,0 +1,38 @@
+.condition-filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.condition-button {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding-left: var(--spacing-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+}
+
+.condition-button__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.condition-button__text {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-zoryve-black);
+}
+
+.condition-button--selected .condition-button__text {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}

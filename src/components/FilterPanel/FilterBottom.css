@@ -1,0 +1,9 @@
+.filter-bottom {
+  width: 100%;
+  height: var(--filter-bottom-height);
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

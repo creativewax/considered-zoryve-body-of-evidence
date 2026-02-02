@@ -1,0 +1,9 @@
+.main-container {
+  margin-left: var(--filter-panel-width);
+  width: calc(100vw - var(--filter-panel-width));
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}

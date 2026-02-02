@@ -1,0 +1,28 @@
+.filter-component {
+  width: 100%;
+  box-shadow: var(--shadow-filter);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.filter-component__header {
+  padding: var(--spacing-xs) var(--filter-body-padding);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.filter-component__title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.filter-component__body {
+  background: var(--color-filter-body);
+  padding: var(--filter-body-padding);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.filter-component__body--condensed {
+  padding: var(--filter-body-padding-condensed);
+}

@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Colors */
+  --color-primary-blue: #1378A8;
+  --color-zoryve-blue: #408BAB;
+  --color-zoryve-midnight-blue: #14365B;
+  --color-zoryve-black: #1F2B2B;
+  --color-zoryve-yellow: #FDE939;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  
+  /* Clinical Trial Colors */
+  --color-ct-gradient-start: #21679E;
+  --color-ct-gradient-end: #154E80;
+  
+  /* Practice Based Colors */
+  --color-pb-gradient-start: #224B8C;
+  --color-pb-gradient-end: #112C5A;
+  --color-pb-header: #FFB81C;
+  
+  /* Condition Colors */
+  --color-plaque-psoriasis: #44988A;
+  --color-atopic-dermatitis: #E57424;
+  --color-seborrheic-dermatitis: #984FBA;
+  
+  /* Filter Body Background */
+  --color-filter-body: rgba(104, 154, 207, 0.35);
+  
+  /* Shadows */
+  --shadow-soft: 0 0 40px rgba(0, 0, 0, 0.15);
+  --shadow-filter: 0 0 20px rgba(0, 0, 0, 0.15);
+  
+  /* Spacing */
+  --spacing-xs: 10px;
+  --spacing-sm: 12px;
+  --spacing-md: 20px;
+  --spacing-lg: 30px;
+  --spacing-xl: 40px;
+  --spacing-xxl: 45px;
+  
+  /* Typography */
+  --font-family: 'Inter', sans-serif;
+  --font-size-xs: 10px;
+  --font-size-sm: 13px;
+  --font-size-base: 20px;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  
+  /* Button */
+  --button-min-width: 200px;
+  --button-height: 80px;
+  --button-padding-horizontal: 30px;
+  --button-disabled-opacity: 0.4;
+  --button-selected-glow: 20px;
+  
+  /* Filter Panel */
+  --filter-panel-width: 590px;
+  --filter-tab-height: 120px;
+  --filter-tab-padding: 20px;
+  --filter-body-padding: 30px;
+  --filter-body-padding-condensed: 20px;
+  --filter-spacing: 45px;
+  --filter-bottom-height: 120px;
+  
+  /* Footer */
+  --footer-height: 80px;
+  --footer-padding: 30px;
+  
+  /* ISI Panel */
+  --isi-panel-collapsed-height: 200px;
+  --isi-panel-expanded-height: 800px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}

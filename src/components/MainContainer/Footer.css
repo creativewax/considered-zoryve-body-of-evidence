@@ -1,0 +1,47 @@
+.footer {
+  width: 100%;
+  height: var(--footer-height);
+  background-color: var(--color-zoryve-blue);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--footer-padding);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.footer__buttons {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.footer__button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.footer__button:hover {
+  opacity: 0.8;
+}
+
+.footer__button img {
+  height: 40px;
+  width: auto;
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  padding-right: var(--footer-padding);
+}
+
+.footer__logo img {
+  height: 40px;
+  width: auto;
+}

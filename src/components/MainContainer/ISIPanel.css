@@ -1,0 +1,57 @@
+.isi-panel {
+  width: 100%;
+  background-color: var(--color-zoryve-midnight-blue);
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.isi-panel__toggle {
+  position: absolute;
+  top: -20px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 6px solid var(--color-zoryve-midnight-blue);
+  background-color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.isi-panel__toggle:hover {
+  transform: scale(1.1);
+}
+
+.isi-panel__toggle img {
+  width: 30px;
+  height: 30px;
+}
+
+.isi-panel__content {
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-xl);
+  color: var(--color-white);
+}
+
+.isi-panel__scrollable {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.isi-overlay {
+  position: fixed;
+  top: 0;
+  left: var(--filter-panel-width);
+  width: calc(100vw - var(--filter-panel-width));
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+}

@@ -1,0 +1,35 @@
+.basic-button {
+  min-width: var(--button-min-width);
+  height: var(--button-height);
+  padding: 0 var(--button-padding-horizontal);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-blue);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.basic-button--disabled {
+  opacity: var(--button-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.basic-button--selected {
+  background-color: var(--color-white);
+  color: var(--color-zoryve-black);
+  box-shadow: 0 0 var(--button-selected-glow) var(--color-zoryve-yellow);
+}
+
+.basic-button:not(.basic-button--disabled):not(.basic-button--selected):hover {
+  opacity: 0.9;
+}

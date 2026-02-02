@@ -1,0 +1,39 @@
+.age-filter {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.age-button {
+  width: 100%;
+  height: var(--button-height);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-blue);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.age-button--selected {
+  background-color: var(--color-white);
+  color: var(--color-zoryve-black);
+  box-shadow: 0 0 var(--button-selected-glow) var(--color-zoryve-yellow);
+}
+
+.age-button__text {
+  font-weight: var(--font-weight-regular);
+}
+
+.age-button__text--selected {
+  font-weight: var(--font-weight-bold);
+}
