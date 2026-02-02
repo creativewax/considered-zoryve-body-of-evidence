@@ -17,7 +17,7 @@ const FilterBody = ({ currentSource, filters }) => {
       animate={ANIMATIONS.FADE_IN.animate}
       transition={TRANSITIONS.NORMAL}
     >
-      <div className="filter-body__content">
+      <div className="filter-body-content">
         <ConditionFilter currentSource={currentSource} selected={filters.condition} />
         <FormulationFilter currentSource={currentSource} selected={filters.formulation} />
         <BodyAreaFilter currentSource={currentSource} selected={filters.bodyArea} />

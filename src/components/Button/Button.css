@@ -19,17 +19,17 @@
   white-space: nowrap;
 }
 
-.basic-button--disabled {
+.basic-button-disabled {
   opacity: var(--button-disabled-opacity);
   cursor: not-allowed;
 }
 
-.basic-button--selected {
+.basic-button-selected {
   background-color: var(--color-white);
   color: var(--color-zoryve-black);
   box-shadow: 0 0 var(--button-selected-glow) var(--color-zoryve-yellow);
 }
 
-.basic-button:not(.basic-button--disabled):not(.basic-button--selected):hover {
+.basic-button:not(.basic-button-disabled):not(.basic-button-selected):hover {
   opacity: 0.9;
 }

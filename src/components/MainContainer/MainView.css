@@ -6,7 +6,7 @@
   z-index: 1;
 }
 
-.main-view__content {
+.main-view-content {
   width: 100%;
   height: 100%;
   display: flex;
@@ -14,7 +14,7 @@
   justify-content: center;
 }
 
-.main-view__placeholder {
+.main-view-placeholder {
   text-align: center;
   color: var(--color-white);
   padding: var(--spacing-xl);
@@ -22,14 +22,14 @@
   border-radius: var(--radius-lg);
 }
 
-.main-view__placeholder h2 {
+.main-view-placeholder h2 {
   font-family: var(--font-family);
   font-size: 32px;
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-md);
 }
 
-.main-view__placeholder p {
+.main-view-placeholder p {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   margin: var(--spacing-sm) 0;

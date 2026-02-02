@@ -4,7 +4,7 @@
   overflow-x: hidden;
 }
 
-.filter-body__content {
+.filter-body-content {
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;

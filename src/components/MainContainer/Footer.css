@@ -10,12 +10,12 @@
   z-index: 10;
 }
 
-.footer__buttons {
+.footer-buttons {
   display: flex;
   gap: var(--spacing-sm);
 }
 
-.footer__button {
+.footer-button {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -26,21 +26,21 @@
   transition: opacity 0.3s ease;
 }
 
-.footer__button:hover {
+.footer-button:hover {
   opacity: 0.8;
 }
 
-.footer__button img {
+.footer-button img {
   height: 20px;
   width: auto;
 }
 
-.footer__logo {
+.footer-logo {
   display: flex;
   align-items: center;
 }
 
-.footer__logo img {
+.footer-logo img {
   height: 20px;
   width: auto;
 }

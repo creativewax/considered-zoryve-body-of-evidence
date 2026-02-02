@@ -22,7 +22,7 @@ const Background = () => {
       if (backgroundRef.current) {
         // Create new background element
         const newBg = document.createElement('div')
-        newBg.className = 'background__image'
+        newBg.className = 'background-image'
         newBg.style.backgroundImage = `url(${getBackgroundImage(source)})`
         newBg.style.opacity = '0'
         backgroundRef.current.appendChild(newBg)
@@ -37,7 +37,7 @@ const Background = () => {
             if (oldBackgroundRef.current) {
               oldBackgroundRef.current.remove()
             }
-            oldBackgroundRef.current = backgroundRef.current.querySelector('.background__image:not(:last-child)')
+            oldBackgroundRef.current = backgroundRef.current.querySelector('.background-image:not(:last-child)')
             if (oldBackgroundRef.current) {
               oldBackgroundRef.current.remove()
             }
@@ -50,7 +50,7 @@ const Background = () => {
     // Set initial background
     if (backgroundRef.current) {
       const initialBg = document.createElement('div')
-      initialBg.className = 'background__image'
+      initialBg.className = 'background-image'
       initialBg.style.backgroundImage = `url(${getBackgroundImage(currentSource)})`
       initialBg.style.opacity = '1'
       backgroundRef.current.appendChild(initialBg)

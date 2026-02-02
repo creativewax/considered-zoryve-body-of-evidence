@@ -24,18 +24,18 @@
   transition: all 0.3s ease;
 }
 
-.age-button--selected {
+.age-button-selected {
   background-color: var(--color-white);
   color: var(--color-zoryve-black);
   box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
 }
 
-.age-button__text {
+.age-button-text {
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
 }
 
-.age-button__text--selected {
+.age-button-text-selected {
   font-weight: var(--font-weight-bold);
   color: var(--color-zoryve-black);
 }

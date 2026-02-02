@@ -21,7 +21,7 @@ const IntroPage = () => {
       transition={TRANSITIONS.SLOW}
     >
       <motion.div
-        className="intro-page__content"
+        className="intro-page-content"
         initial={ANIMATIONS.SLIDE_UP.initial}
         animate={ANIMATIONS.SLIDE_UP.animate}
         transition={TRANSITIONS.DELAYED(0.3)}

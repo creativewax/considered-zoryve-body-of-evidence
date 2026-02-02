@@ -10,8 +10,8 @@ const FilterComponent = ({
   condensed = false 
 }) => {
   const headerClass = currentSource === DATA_SOURCE.CLINICAL_TRIAL
-    ? 'filter-component__header--clinical-trial'
-    : 'filter-component__header--practice-based'
+    ? 'filter-component-header-clinical-trial'
+    : 'filter-component-header-practice-based'
 
   return (
     <motion.div 
@@ -20,11 +20,11 @@ const FilterComponent = ({
       animate={ANIMATIONS.FADE_SLIDE_UP.animate}
       transition={TRANSITIONS.NORMAL}
     >
-      <div className={`filter-component__header ${headerClass}`}>
-        <h3 className="filter-component__title">{title}</h3>
+      <div className={`filter-component-header ${headerClass}`}>
+        <h3 className="filter-component-title">{title}</h3>
       </div>
       <div 
-        className={`filter-component__body ${condensed ? 'filter-component__body--condensed' : ''}`}
+        className={`filter-component-body ${condensed ? 'filter-component-body-condensed' : ''}`}
       >
         {children}
       </div>

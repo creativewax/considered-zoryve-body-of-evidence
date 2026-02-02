@@ -35,7 +35,7 @@ const ISIPanel = () => {
         transition={TRANSITIONS.FADE_NORMAL}
       >
         <motion.button
-          className="isi-panel__toggle"
+          className="isi-panel-toggle"
           onClick={togglePanel}
           animate={{
             rotate: isOpen ? 45 : 0
@@ -44,10 +44,10 @@ const ISIPanel = () => {
         >
           <img src={ASSETS.ICONS.PLUS_BUTTON} alt={isOpen ? 'Close' : 'Open'} />
         </motion.button>
-        <div className="isi-panel__content">
+        <div className="isi-panel-content">
           {isOpen && (
             <motion.div
-              className="isi-panel__scrollable"
+              className="isi-panel-scrollable"
               initial={ANIMATIONS.FADE_IN.initial}
               animate={ANIMATIONS.FADE_IN.animate}
               transition={TRANSITIONS.DELAYED_NORMAL(0.2)}

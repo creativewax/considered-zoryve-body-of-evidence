@@ -15,7 +15,7 @@ const ConditionOption = ({
 }) => {
   return (
     <motion.button
-      className={`condition-button ${isSelected ? `condition-button--selected ${colorClass}` : ''}`}
+      className={`condition-button ${isSelected ? `condition-button-selected ${colorClass}` : ''}`}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >
@@ -31,7 +31,7 @@ const ConditionOption = ({
 const ConditionDot = ({ isSelected }) => {
   return (
     <div 
-      className={`condition-button__dot ${isSelected ? 'condition-button__dot--selected' : 'condition-button__dot--unselected'}`}
+      className={`condition-button-dot ${isSelected ? 'condition-button-dot-selected' : 'condition-button-dot-unselected'}`}
     />
   )
 }
@@ -41,7 +41,7 @@ const ConditionDot = ({ isSelected }) => {
  */
 const ConditionText = ({ label }) => {
   return (
-    <span className="condition-button__text">
+    <span className="condition-button-text">
       {label}
     </span>
   )

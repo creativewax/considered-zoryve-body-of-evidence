@@ -11,15 +11,15 @@ const Footer = () => {
       animate={{ y: 0 }}
       transition={TRANSITIONS.SLOW_EASE}
     >
-      <div className="footer__buttons">
-        <button className="footer__button">
+      <div className="footer-buttons">
+        <button className="footer-button">
           <img src={ASSETS.ICONS.FOOTER_INFO} alt="Info" />
         </button>
-        <button className="footer__button">
+        <button className="footer-button">
           <img src={ASSETS.ICONS.FOOTER_REFS} alt="References" />
         </button>
       </div>
-      <div className="footer__logo">
+      <div className="footer-logo">
         <img src={ASSETS.ICONS.LOGO_ZORYVE} alt="Zoryve" />
       </div>
     </motion.footer>

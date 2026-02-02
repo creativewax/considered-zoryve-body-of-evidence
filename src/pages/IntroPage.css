@@ -7,7 +7,7 @@
   background: linear-gradient(135deg, var(--color-zoryve-midnight-blue) 0%, var(--color-primary-blue) 100%);
 }
 
-.intro-page__content {
+.intro-page-content {
   display: flex;
   align-items: center;
   justify-content: center;

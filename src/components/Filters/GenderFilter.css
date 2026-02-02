@@ -25,33 +25,33 @@
   overflow: hidden;
 }
 
-.gender-button--selected {
+.gender-button-selected {
   background-color: var(--color-white);
   color: var(--color-zoryve-black);
   box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
 }
 
-.gender-button__icon {
+.gender-button-icon {
   width: 45px;
   height: 50px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-.gender-button__icon--selected {
+.gender-button-icon-selected {
   filter: brightness(0);
 }
 
-.gender-button__icon--unselected {
+.gender-button-icon-unselected {
   filter: brightness(1);
 }
 
-.gender-button__text {
+.gender-button-text {
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
 }
 
-.gender-button__text--selected {
+.gender-button-text-selected {
   font-weight: var(--font-weight-bold);
   color: var(--color-zoryve-black);
 }

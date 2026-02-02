@@ -15,11 +15,11 @@ const FilterButton = ({
 }) => {
   return (
     <motion.button
-      className={`age-button ${isSelected ? 'age-button--selected' : ''} ${className}`}
+      className={`age-button ${isSelected ? 'age-button-selected' : ''} ${className}`}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >
-      <span className={`age-button__text ${isSelected ? 'age-button__text--selected' : ''}`}>
+      <span className={`age-button-text ${isSelected ? 'age-button-text-selected' : ''}`}>
         {label}
       </span>
     </motion.button>

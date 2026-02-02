@@ -15,7 +15,7 @@ const GenderOption = ({
 }) => {
   return (
     <motion.button
-      className={`gender-button ${isSelected ? 'gender-button--selected' : ''}`}
+      className={`gender-button ${isSelected ? 'gender-button-selected' : ''}`}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >
@@ -33,7 +33,7 @@ const GenderIcon = ({ icon, isSelected }) => {
     <img 
       src={icon} 
       alt=""
-      className={`gender-button__icon ${isSelected ? 'gender-button__icon--selected' : 'gender-button__icon--unselected'}`}
+      className={`gender-button-icon ${isSelected ? 'gender-button-icon-selected' : 'gender-button-icon-unselected'}`}
     />
   )
 }
@@ -43,7 +43,7 @@ const GenderIcon = ({ icon, isSelected }) => {
  */
 const GenderText = ({ label, isSelected }) => {
   return (
-    <span className={`gender-button__text ${isSelected ? 'gender-button__text--selected' : ''}`}>
+    <span className={`gender-button-text ${isSelected ? 'gender-button-text-selected' : ''}`}>
       {label}
     </span>
   )

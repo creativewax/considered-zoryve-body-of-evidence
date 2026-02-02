@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { DATA_SOURCE } from '../../constants/index.js'
 import dataManager from '../../managers/DataManager.js'
 import appStateManager from '../../managers/AppStateManager.js'
@@ -42,8 +41,8 @@ const MainView = () => {
 
   return (
     <div className="main-view">
-      <div className="main-view__content">
-        <div className="main-view__placeholder">
+      <div className="main-view-content">
+        <div className="main-view-placeholder">
           <h2>3D View Placeholder</h2>
           <p>This will be replaced with the React Three Fiber 3D component</p>
           <p>Filtered Images: {images.length}</p>

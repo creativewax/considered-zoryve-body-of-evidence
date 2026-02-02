@@ -26,7 +26,7 @@ const FilterPanel = () => {
       if (backgroundRef.current) {
         // Create new background element
         const newBg = document.createElement('div')
-        newBg.className = 'filter-panel__background'
+        newBg.className = 'filter-panel-background'
         newBg.style.backgroundImage = `url(${getFilterBackground(source)})`
         newBg.style.opacity = '0'
         backgroundRef.current.appendChild(newBg)
@@ -38,7 +38,7 @@ const FilterPanel = () => {
           ease: TRANSITIONS.FADE_NORMAL.ease,
           onComplete: () => {
             // Remove old backgrounds
-            const oldBgs = backgroundRef.current.querySelectorAll('.filter-panel__background:not(:last-child)')
+            const oldBgs = backgroundRef.current.querySelectorAll('.filter-panel-background:not(:last-child)')
             oldBgs.forEach(bg => bg.remove())
           }
         })
@@ -58,7 +58,7 @@ const FilterPanel = () => {
     // Set initial background
     if (backgroundRef.current) {
       const initialBg = document.createElement('div')
-      initialBg.className = 'filter-panel__background'
+      initialBg.className = 'filter-panel-background'
       initialBg.style.backgroundImage = `url(${getFilterBackground(currentSource)})`
       initialBg.style.opacity = '1'
       backgroundRef.current.appendChild(initialBg)
@@ -86,8 +86,8 @@ const FilterPanel = () => {
       animate={ANIMATIONS.SLIDE_LEFT.animate}
       transition={TRANSITIONS.SLOW_EASE}
     >
-      <div className="filter-panel__background-container" ref={backgroundRef} />
-      <div className="filter-panel__content">
+      <div className="filter-panel-background-container" ref={backgroundRef} />
+      <div className="filter-panel-content">
         <FilterTabs 
           currentSource={currentSource}
           onSourceChange={handleSourceChange}

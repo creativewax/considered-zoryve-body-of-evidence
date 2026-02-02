@@ -30,7 +30,7 @@ const RadioOption = ({
  */
 const RadioButton = ({ isSelected }) => {
   return (
-    <div className={`radio-button ${isSelected ? 'radio-button--selected' : ''}`}>
+    <div className={`radio-button ${isSelected ? 'radio-button-selected' : ''}`}>
       {isSelected && (
         <ScaleIn>
           <svg
@@ -58,7 +58,7 @@ const RadioButton = ({ isSelected }) => {
  */
 const RadioOptionText = ({ label, isSelected }) => {
   return (
-    <span className={`radio-option__text ${isSelected ? 'radio-option__text--selected' : ''}`}>
+    <span className={`radio-option-text ${isSelected ? 'radio-option-text-selected' : ''}`}>
       {label}
     </span>
   )

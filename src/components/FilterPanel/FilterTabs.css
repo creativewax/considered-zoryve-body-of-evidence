@@ -22,24 +22,24 @@
   transition: all 0.3s ease;
 }
 
-.filter-tab--active {
+.filter-tab-active {
   transform: translateY(-2px);
   z-index: 2;
 }
 
-.filter-tab:not(.filter-tab--active) {
+.filter-tab:not(.filter-tab-active) {
   opacity: 0.4;
 }
 
-.filter-tab--clinical-trial {
+.filter-tab-clinical-trial {
   background: linear-gradient(to bottom, var(--color-ct-gradient-start), var(--color-ct-gradient-end));
 }
 
-.filter-tab--practice-based {
+.filter-tab-practice-based {
   background: linear-gradient(to bottom, var(--color-pb-gradient-start), var(--color-pb-gradient-end));
 }
 
-.filter-tab__text {
+.filter-tab-text {
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);

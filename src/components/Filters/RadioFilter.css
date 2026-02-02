@@ -26,19 +26,19 @@
   transition: all 0.3s ease;
 }
 
-.radio-button--selected {
+.radio-button-selected {
   background-color: var(--color-white);
   box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
 }
 
-.radio-option__text {
+.radio-option-text {
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
 }
 
-.radio-option__text--selected {
+.radio-option-text-selected {
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
 }

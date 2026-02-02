@@ -5,34 +5,34 @@
   overflow: hidden;
 }
 
-.filter-component__header {
+.filter-component-header {
   padding: var(--spacing-xs) var(--filter-body-padding);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
-.filter-component__header--clinical-trial {
+.filter-component-header-clinical-trial {
   background: var(--color-zoryve-midnight-blue);
   color: var(--color-white);
 }
 
-.filter-component__header--practice-based {
+.filter-component-header-practice-based {
   background: var(--color-pb-header);
   color: var(--color-zoryve-midnight-blue);
 }
 
-.filter-component__title {
+.filter-component-title {
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
-.filter-component__body {
+.filter-component-body {
   background: var(--color-filter-body);
   padding: var(--filter-body-padding);
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
-.filter-component__body--condensed {
+.filter-component-body-condensed {
   padding: var(--filter-body-padding-condensed);
 }

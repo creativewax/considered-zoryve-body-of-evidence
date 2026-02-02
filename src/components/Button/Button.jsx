@@ -14,7 +14,7 @@ const Button = ({
   
   return (
     <motion.button
-      className={`basic-button ${selected ? 'basic-button--selected' : ''} ${disabled ? 'basic-button--disabled' : ''} ${className}`}
+      className={`basic-button ${selected ? 'basic-button-selected' : ''} ${disabled ? 'basic-button-disabled' : ''} ${className}`}
       onClick={onClick}
       disabled={disabled}
       style={style}

@@ -20,8 +20,8 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
   return (
     <FilterComponent title="Body Area" currentSource={currentSource}>
       <div className="body-area-filter">
-        <div className="body-area-filter__background" />
-        <div className="radio-filter body-area-filter__options">
+        <div className="body-area-filter-background" />
+        <div className="radio-filter body-area-filter-options">
           {bodyAreas.map((bodyArea) => (
             <RadioOption
               key={bodyArea}
