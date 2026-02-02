@@ -3,7 +3,7 @@
   height: var(--button-height);
   padding: 0 var(--button-padding-horizontal);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background-color: var(--color-primary-blue);
   color: var(--color-white);
   font-family: var(--font-family);

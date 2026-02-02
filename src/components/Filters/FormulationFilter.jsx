@@ -30,17 +30,17 @@ const FormulationFilter = ({ currentSource, selected }) => {
             <div className={`radio-button ${selected === formulation ? 'radio-button--selected' : ''}`}>
               {selected === formulation && (
                 <motion.svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
+                  width="9"
+                  height="9"
+                  viewBox="0 0 9 9"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 >
                   <path
-                    d="M4 8 L7 11 L12 4"
+                    d="M1.5 4.5 L3.5 6.5 L7.5 2"
                     stroke="var(--color-zoryve-black)"
-                    strokeWidth="2"
+                    strokeWidth="1.5"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"

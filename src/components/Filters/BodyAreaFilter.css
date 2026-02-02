@@ -1,6 +1,6 @@
 .body-area-filter {
   position: relative;
-  min-height: 200px;
+  min-height: 100px;
 }
 
 .body-area-filter__background {
@@ -10,10 +10,11 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  background-size: contain;
 }
 
 .body-area-filter__options {
   position: relative;
   z-index: 1;
-  padding-left: 120px;
+  padding-left: 60px;
 }

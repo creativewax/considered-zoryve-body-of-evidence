@@ -1,7 +1,7 @@
 .radio-filter {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .radio-option {
@@ -14,26 +14,26 @@
 }
 
 .radio-button {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-sm);
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border-radius: var(--radio-radius);
   border: 2px solid var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: var(--spacing-md);
+  margin-right: var(--spacing-sm);
   flex-shrink: 0;
   transition: all 0.3s ease;
 }
 
 .radio-button--selected {
   background-color: var(--color-white);
-  box-shadow: 0 0 10px var(--color-zoryve-yellow);
+  box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
 }
 
 .radio-option__text {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   color: var(--color-zoryve-black);
 }

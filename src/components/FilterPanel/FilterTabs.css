@@ -2,15 +2,16 @@
   width: 100%;
   height: var(--filter-tab-height);
   display: flex;
-  padding: var(--filter-tab-padding) var(--filter-tab-padding) 0;
-  gap: var(--filter-tab-padding);
+  padding: var(--spacing-sm) var(--spacing-sm) 0;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .filter-tab {
   flex: 1;
   border: none;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: var(--filter-tab-padding);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  padding: var(--spacing-sm);
   cursor: pointer;
   position: relative;
   display: flex;
@@ -30,7 +31,7 @@
 
 .filter-tab__text {
   font-family: var(--font-family);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-white);
   text-transform: uppercase;

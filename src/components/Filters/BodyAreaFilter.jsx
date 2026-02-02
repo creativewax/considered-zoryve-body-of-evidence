@@ -25,7 +25,8 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
           style={{
             backgroundImage: `url(${ASSETS.ICONS.BODY_AREA_PERSON})`,
             backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom left'
+            backgroundPosition: 'bottom left',
+            backgroundSize: '50px auto'
           }}
         />
         <div className="radio-filter body-area-filter__options">
@@ -40,17 +41,17 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
               <div className={`radio-button ${selected === bodyArea ? 'radio-button--selected' : ''}`}>
                 {selected === bodyArea && (
                   <motion.svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
+                    width="9"
+                    height="9"
+                    viewBox="0 0 9 9"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   >
                     <path
-                      d="M4 8 L7 11 L12 4"
+                      d="M1.5 4.5 L3.5 6.5 L7.5 2"
                       stroke="var(--color-zoryve-black)"
-                      strokeWidth="2"
+                      strokeWidth="1.5"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"

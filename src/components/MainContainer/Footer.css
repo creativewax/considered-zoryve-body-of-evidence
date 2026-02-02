@@ -12,7 +12,7 @@
 
 .footer__buttons {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .footer__button {
@@ -31,17 +31,16 @@
 }
 
 .footer__button img {
-  height: 40px;
+  height: 20px;
   width: auto;
 }
 
 .footer__logo {
   display: flex;
   align-items: center;
-  padding-right: var(--footer-padding);
 }
 
 .footer__logo img {
-  height: 40px;
+  height: 20px;
   width: auto;
 }

@@ -2,12 +2,11 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background: var(--color-white);
 }
 
 .filter-body__content {
-  padding: var(--filter-spacing);
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--filter-spacing);
+  gap: var(--spacing-lg);
 }

@@ -139,6 +139,10 @@ export const ASSETS = {
     CLINICAL_TRIAL: '/UI/bkgd-ct.jpg',
     PRACTICE_BASED: '/UI/bkgd-pb.jpg',
   },
+  FILTER_BACKGROUNDS: {
+    CLINICAL_TRIAL: '/UI/filter-bkgd-ct.jpg',
+    PRACTICE_BASED: '/UI/filter-bkgd-pb.jpg',
+  },
   ICONS: {
     MALE: '/UI/icon-male.svg',
     FEMALE: '/UI/icon-female.svg',

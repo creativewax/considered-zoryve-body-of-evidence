@@ -1,18 +1,18 @@
 .filter-component {
   width: 100%;
   box-shadow: var(--shadow-filter);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
 .filter-component__header {
-  padding: var(--spacing-xs) var(--filter-body-padding);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--spacing-sm) var(--filter-body-padding);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .filter-component__title {
   font-family: var(--font-family);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   margin: 0;
 }
@@ -20,7 +20,7 @@
 .filter-component__body {
   background: var(--color-filter-body);
   padding: var(--filter-body-padding);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .filter-component__body--condensed {
