@@ -48,7 +48,7 @@ function App() {
         <div className="app-loading-content">
           <PuffLoader 
             color="var(--color-white)" 
-            size={60}
+            size={120}
             aria-label="Loading"
           />
         </div>
