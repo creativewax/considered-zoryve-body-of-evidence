@@ -29,7 +29,6 @@
   justify-content: center;
   cursor: pointer;
   z-index: 20;
-  transition: all 0.3s ease;
   padding: 0;
 }
 

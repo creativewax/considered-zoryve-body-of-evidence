@@ -1,100 +1,176 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ASSETS } from '../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
+import { gsap } from 'gsap'
 import './ISIPanel.css'
 
 const ISIPanel = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [overlayHeight, setOverlayHeight] = useState(0)
   const panelRef = useRef(null)
+  const overlayRef = useRef(null)
+  const toggleRef = useRef(null)
+  const scrollableRef = useRef(null)
+  const timelineRef = useRef(null)
 
   const togglePanel = () => {
     setIsOpen(!isOpen)
   }
 
-  // Calculate overlay height based on panel position
   useEffect(() => {
-    if (panelRef.current) {
-      const updateOverlayHeight = () => {
-        const rect = panelRef.current.getBoundingClientRect()
-        setOverlayHeight(rect.top)
+    if (!panelRef.current || !overlayRef.current) return
+
+    // Get CSS variable values
+    const collapsedHeight = parseInt(getComputedStyle(document.documentElement)
+      .getPropertyValue('--isi-panel-collapsed-height').replace('px', ''))
+    const expandedHeight = parseInt(getComputedStyle(document.documentElement)
+      .getPropertyValue('--isi-panel-expanded-height').replace('px', ''))
+
+    // Kill any existing timeline
+    if (timelineRef.current) {
+      timelineRef.current.kill()
+    }
+
+    // Create new timeline
+    const tl = gsap.timeline()
+    timelineRef.current = tl
+
+    if (isOpen) {
+      // Opening animation
+      // Animate panel height
+      tl.to(panelRef.current, {
+        height: expandedHeight,
+        duration: 0.5,
+        ease: [0.25, 0.1, 0.25, 1],
+        onUpdate: () => {
+          // Update overlay height based on panel position
+          if (panelRef.current && overlayRef.current) {
+            const rect = panelRef.current.getBoundingClientRect()
+            gsap.set(overlayRef.current, { height: rect.top })
+          }
+        }
+      })
+
+      // Animate overlay opacity and height
+      tl.to(overlayRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        ease: 'power2.out'
+      }, 0) // Start at same time as panel animation
+
+      // Animate button rotation
+      if (toggleRef.current) {
+        tl.to(toggleRef.current, {
+          rotation: 45,
+          duration: 0.3,
+          ease: 'power2.out'
+        }, 0)
       }
-      
-      // Update on open/close and resize
-      const rafId = requestAnimationFrame(updateOverlayHeight)
-      window.addEventListener('resize', updateOverlayHeight)
-      
-      // Also update during animation
-      const interval = isOpen ? setInterval(updateOverlayHeight, 16) : null
-      
-      // Stop interval after animation completes
-      const timeout = isOpen ? setTimeout(() => {
-        if (interval) clearInterval(interval)
-        updateOverlayHeight()
-      }, 600) : null
-      
-      return () => {
-        cancelAnimationFrame(rafId)
-        window.removeEventListener('resize', updateOverlayHeight)
-        if (interval) clearInterval(interval)
-        if (timeout) clearTimeout(timeout)
+
+      // Fade in scrollable content
+      if (scrollableRef.current) {
+        tl.to(scrollableRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out'
+        }, 0.2) // Start slightly after panel starts opening
+      }
+    } else {
+      // Closing animation
+      // Fade out scrollable content first
+      if (scrollableRef.current) {
+        tl.to(scrollableRef.current, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in'
+        })
+      }
+
+      // Animate overlay opacity
+      tl.to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.in'
+      }, 0)
+
+      // Animate button rotation
+      if (toggleRef.current) {
+        tl.to(toggleRef.current, {
+          rotation: 0,
+          duration: 0.3,
+          ease: 'power2.in'
+        }, 0)
+      }
+
+      // Animate panel height
+      tl.to(panelRef.current, {
+        height: collapsedHeight,
+        duration: 0.5,
+        ease: [0.25, 0.1, 0.25, 1],
+        onUpdate: () => {
+          // Update overlay height based on panel position
+          if (panelRef.current && overlayRef.current) {
+            const rect = panelRef.current.getBoundingClientRect()
+            gsap.set(overlayRef.current, { height: rect.top })
+          }
+        }
+      }, 0)
+    }
+
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill()
       }
     }
   }, [isOpen])
 
-  // Get CSS variable values for animation
-  const collapsedHeight = 'var(--isi-panel-collapsed-height)'
-  const expandedHeight = 'var(--isi-panel-expanded-height)'
+  // Initialize overlay height on mount
+  useEffect(() => {
+    if (panelRef.current && overlayRef.current) {
+      const updateOverlayHeight = () => {
+        const rect = panelRef.current.getBoundingClientRect()
+        gsap.set(overlayRef.current, { height: rect.top })
+      }
+      
+      updateOverlayHeight()
+      window.addEventListener('resize', updateOverlayHeight)
+      
+      return () => {
+        window.removeEventListener('resize', updateOverlayHeight)
+      }
+    }
+  }, [])
 
   return (
     <div className="isi-panel-wrapper">
-      <AnimatePresence>
-        {isOpen && overlayHeight > 0 && (
-          <motion.div
-            className="isi-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={TRANSITIONS.NORMAL}
-            style={{
-              height: `${overlayHeight}px`
-            }}
-          />
-        )}
-      </AnimatePresence>
-      <motion.div
+      <div
+        ref={overlayRef}
+        className="isi-overlay"
+        style={{ opacity: 0, height: 0 }}
+      />
+      <div
         ref={panelRef}
         className="isi-panel"
-        initial={{ height: collapsedHeight }}
-        animate={{ 
-          height: isOpen ? expandedHeight : collapsedHeight
-        }}
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        style={{ height: 'var(--isi-panel-collapsed-height)' }}
       >
-        <motion.button
+        <button
+          ref={toggleRef}
           className="isi-panel-toggle"
           onClick={togglePanel}
-          animate={{
-            rotate: isOpen ? 45 : 0
-          }}
-          transition={TRANSITIONS.EASE_IN_OUT_SMOOTH}
+          style={{ transform: 'rotate(0deg)' }}
         >
           <img src={ASSETS.ICONS.PLUS_BUTTON} alt={isOpen ? 'Close' : 'Open'} />
-        </motion.button>
+        </button>
         <div className="isi-panel-content">
-          {isOpen && (
-            <motion.div
-              className="isi-panel-scrollable"
-              initial={ANIMATIONS.FADE_IN.initial}
-              animate={ANIMATIONS.FADE_IN.animate}
-              transition={TRANSITIONS.DELAYED_NORMAL(0.2)}
-            >
-              <p>Important Safety Information content will be populated here.</p>
-            </motion.div>
-          )}
+          <div
+            ref={scrollableRef}
+            className="isi-panel-scrollable"
+            style={{ opacity: 0 }}
+          >
+            <p>Important Safety Information content will be populated here.</p>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }
