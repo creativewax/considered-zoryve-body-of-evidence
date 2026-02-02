@@ -6,9 +6,9 @@ import './ConditionFilter.css'
 
 const ConditionFilter = ({ currentSource, selected }) => {
   const conditions = [
-    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colorClass: 'condition-button--plaque-psoriasis' },
-    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colorClass: 'condition-button--atopic-dermatitis' },
-    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colorClass: 'condition-button--seborrheic-dermatitis' },
+    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colorClass: 'condition-button-plaque-psoriasis' },
+    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colorClass: 'condition-button-atopic-dermatitis' },
+    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colorClass: 'condition-button-seborrheic-dermatitis' },
   ]
 
   const handleSelect = (condition) => {

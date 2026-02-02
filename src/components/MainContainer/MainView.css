@@ -4,6 +4,9 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
+  min-height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
+  max-height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
 }
 
 .main-view-content {

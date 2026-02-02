@@ -5,6 +5,12 @@
   overflow: hidden;
 }
 
+.filter-component-body {
+  background: var(--color-filter-body);
+  padding: var(--filter-body-padding);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
 .filter-component-header {
   padding: var(--spacing-xs) var(--filter-body-padding);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
@@ -25,12 +31,6 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   margin: 0;
-}
-
-.filter-component-body {
-  background: var(--color-filter-body);
-  padding: var(--filter-body-padding);
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .filter-component-body-condensed {

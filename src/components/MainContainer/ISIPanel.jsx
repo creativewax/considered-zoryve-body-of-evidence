@@ -11,6 +11,8 @@ const ISIPanel = () => {
     setIsOpen(!isOpen)
   }
 
+  const overlayHeight = isOpen ? 'calc(100vh - var(--isi-panel-expanded-height))' : '0px'
+
   return (
     <>
       <AnimatePresence>
@@ -22,7 +24,7 @@ const ISIPanel = () => {
             exit={ANIMATIONS.FADE_OUT.animate}
             transition={TRANSITIONS.NORMAL}
             style={{
-              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.35) 75%, rgba(0, 0, 0, 1) 100%)'
+              height: overlayHeight
             }}
           />
         )}
@@ -30,6 +32,7 @@ const ISIPanel = () => {
       <motion.div
         className="isi-panel"
         animate={{
+          y: isOpen ? `calc(100vh - var(--isi-panel-expanded-height))` : `calc(100vh - var(--isi-panel-collapsed-height))`,
           height: isOpen ? 'var(--isi-panel-expanded-height)' : 'var(--isi-panel-collapsed-height)'
         }}
         transition={TRANSITIONS.FADE_NORMAL}
