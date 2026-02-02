@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 import { ASSETS } from '../../constants/index.js'
-import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import { gsap } from 'gsap'
 import './ISIPanel.css'
 
@@ -66,26 +64,7 @@ const ISIPanel = () => {
           ease: 'power2.out'
         }, 0)
       }
-
-      // Fade in scrollable content
-      if (scrollableRef.current) {
-        tl.to(scrollableRef.current, {
-          opacity: 1,
-          duration: 0.3,
-          ease: 'power2.out'
-        }, 0.2) // Start slightly after panel starts opening
-      }
     } else {
-      // Closing animation
-      // Fade out scrollable content first
-      if (scrollableRef.current) {
-        tl.to(scrollableRef.current, {
-          opacity: 0,
-          duration: 0.2,
-          ease: 'power2.in'
-        })
-      }
-
       // Animate overlay opacity
       tl.to(overlayRef.current, {
         opacity: 0,
@@ -165,7 +144,6 @@ const ISIPanel = () => {
           <div
             ref={scrollableRef}
             className="isi-panel-scrollable"
-            style={{ opacity: 0 }}
           >
             <p>Important Safety Information content will be populated here.</p>
           </div>

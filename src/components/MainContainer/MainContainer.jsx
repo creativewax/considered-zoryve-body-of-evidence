@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
-import Background from '../Background/Background.jsx'
 import Footer from './Footer.jsx'
 import ISIPanel from './ISIPanel.jsx'
 import MainView from './MainView.jsx'
@@ -14,7 +13,6 @@ const MainContainer = () => {
       animate={ANIMATIONS.FADE_IN.animate}
       transition={{ ...TRANSITIONS.SLOW_EASE, delay: 0.3 }}
     >
-      <Background />
       <MainView />
       <Footer />
       <ISIPanel />

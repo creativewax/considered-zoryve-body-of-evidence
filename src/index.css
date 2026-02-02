@@ -30,7 +30,7 @@
   --color-filter-body: rgba(104, 154, 207, 0.35);
   
   /* Shadows */
-  --shadow-soft: 0 0 20px rgba(0, 0, 0, 0.15);
+  --shadow-soft: 0 0 30px rgba(0, 0, 0, 0.25);
   --shadow-filter: 0 0 15px rgba(0, 0, 0, 0.15);
   
   /* Spacing */
