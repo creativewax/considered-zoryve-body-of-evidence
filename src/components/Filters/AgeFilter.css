@@ -32,8 +32,10 @@
 
 .age-button__text {
   font-weight: var(--font-weight-regular);
+  color: var(--color-white);
 }
 
 .age-button__text--selected {
   font-weight: var(--font-weight-bold);
+  color: var(--color-zoryve-black);
 }

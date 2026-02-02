@@ -40,6 +40,7 @@
 
 .gender-button__text {
   font-weight: var(--font-weight-regular);
+  color: var(--color-white);
 }
 
 .gender-button__text--selected {

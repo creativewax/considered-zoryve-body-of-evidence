@@ -35,9 +35,10 @@
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
-  color: var(--color-zoryve-black);
+  color: var(--color-white);
 }
 
 .radio-option__text--selected {
   font-weight: var(--font-weight-bold);
+  color: var(--color-white);
 }
