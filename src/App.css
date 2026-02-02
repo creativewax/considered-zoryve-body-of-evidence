@@ -20,6 +20,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-lg);
+  position: relative;
+  z-index: 2;
 }
 
 .app-loading-text {
@@ -28,4 +30,5 @@
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
   margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
