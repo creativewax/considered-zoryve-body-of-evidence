@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { DATA_SOURCE, ASSETS } from '../../constants/index.js'
+import { TRANSITIONS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import eventSystem from '../../utils/EventSystem.js'
 import { gsap } from 'gsap'
@@ -29,8 +30,8 @@ const Background = () => {
         // Animate new background in
         gsap.to(newBg, {
           opacity: 1,
-          duration: 0.6,
-          ease: 'power2.inOut',
+          duration: TRANSITIONS.FADE_SLOW.duration,
+          ease: TRANSITIONS.FADE_SLOW.ease,
           onComplete: () => {
             // Remove old background
             if (oldBackgroundRef.current) {

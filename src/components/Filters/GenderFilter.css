@@ -38,6 +38,14 @@
   flex-shrink: 0;
 }
 
+.gender-button__icon--selected {
+  filter: brightness(0);
+}
+
+.gender-button__icon--unselected {
+  filter: brightness(1);
+}
+
 .gender-button__text {
   font-weight: var(--font-weight-regular);
   color: var(--color-white);

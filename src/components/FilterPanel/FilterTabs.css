@@ -31,9 +31,17 @@
   opacity: 0.4;
 }
 
+.filter-tab--clinical-trial {
+  background: linear-gradient(to bottom, var(--color-ct-gradient-start), var(--color-ct-gradient-end));
+}
+
+.filter-tab--practice-based {
+  background: linear-gradient(to bottom, var(--color-pb-gradient-start), var(--color-pb-gradient-end));
+}
+
 .filter-tab__text {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-white);
   text-transform: uppercase;

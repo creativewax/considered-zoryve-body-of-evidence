@@ -10,6 +10,16 @@
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
+.filter-component__header--clinical-trial {
+  background: var(--color-zoryve-midnight-blue);
+  color: var(--color-white);
+}
+
+.filter-component__header--practice-based {
+  background: var(--color-pb-header);
+  color: var(--color-zoryve-midnight-blue);
+}
+
 .filter-component__title {
   font-family: var(--font-family);
   font-size: var(--font-size-sm);

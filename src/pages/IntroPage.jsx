@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constants/index.js'
+import { ANIMATIONS, TRANSITIONS } from '../constants/animations.js'
 import Button from '../components/Button/Button.jsx'
 import './IntroPage.css'
 
@@ -14,16 +15,16 @@ const IntroPage = () => {
   return (
     <motion.div 
       className="intro-page"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
+      initial={ANIMATIONS.FADE_IN.initial}
+      animate={ANIMATIONS.FADE_IN.animate}
+      exit={ANIMATIONS.FADE_OUT.animate}
+      transition={TRANSITIONS.SLOW}
     >
       <motion.div
         className="intro-page__content"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
+        initial={ANIMATIONS.SLIDE_UP.initial}
+        animate={ANIMATIONS.SLIDE_UP.animate}
+        transition={TRANSITIONS.DELAYED(0.3)}
       >
         <Button onClick={handleGetStarted}>
           GET STARTED

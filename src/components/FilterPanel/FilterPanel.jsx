@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { DATA_SOURCE, ASSETS } from '../../constants/index.js'
+import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import eventSystem from '../../utils/EventSystem.js'
 import { gsap } from 'gsap'
@@ -33,8 +34,8 @@ const FilterPanel = () => {
         // Animate new background in
         gsap.to(newBg, {
           opacity: 1,
-          duration: 0.4,
-          ease: 'power2.inOut',
+          duration: TRANSITIONS.FADE_NORMAL.duration,
+          ease: TRANSITIONS.FADE_NORMAL.ease,
           onComplete: () => {
             // Remove old backgrounds
             const oldBgs = backgroundRef.current.querySelectorAll('.filter-panel__background:not(:last-child)')
@@ -81,9 +82,9 @@ const FilterPanel = () => {
   return (
     <motion.div 
       className="filter-panel"
-      initial={{ x: -300 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={ANIMATIONS.SLIDE_LEFT.initial}
+      animate={ANIMATIONS.SLIDE_LEFT.animate}
+      transition={TRANSITIONS.SLOW_EASE}
     >
       <div className="filter-panel__background-container" ref={backgroundRef} />
       <div className="filter-panel__content">

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import ConditionFilter from '../Filters/ConditionFilter.jsx'
 import FormulationFilter from '../Filters/FormulationFilter.jsx'
 import BodyAreaFilter from '../Filters/BodyAreaFilter.jsx'
@@ -12,9 +13,9 @@ const FilterBody = ({ currentSource, filters }) => {
     <motion.div 
       className="filter-body"
       key={currentSource}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      initial={ANIMATIONS.FADE_IN.initial}
+      animate={ANIMATIONS.FADE_IN.animate}
+      transition={TRANSITIONS.NORMAL}
     >
       <div className="filter-body__content">
         <ConditionFilter currentSource={currentSource} selected={filters.condition} />

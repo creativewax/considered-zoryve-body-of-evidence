@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { FILTER_OPTIONS } from '../../constants/index.js'
+import { ANIMATION_PROPS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
 import './AgeFilter.css'
@@ -25,8 +26,7 @@ const AgeFilter = ({ currentSource, selected }) => {
             key={age}
             className={`age-button ${selected === age ? 'age-button--selected' : ''}`}
             onClick={() => handleSelect(age)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            {...ANIMATION_PROPS.INTERACTIVE}
           >
             <span className={`age-button__text ${selected === age ? 'age-button__text--selected' : ''}`}>
               {age}

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { DATA_SOURCE } from '../../constants/index.js'
+import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import './FilterComponent.css'
 
 const FilterComponent = ({ 
@@ -8,28 +9,18 @@ const FilterComponent = ({
   currentSource,
   condensed = false 
 }) => {
-  const headerBg = currentSource === DATA_SOURCE.CLINICAL_TRIAL
-    ? 'var(--color-zoryve-midnight-blue)'
-    : 'var(--color-pb-header)'
-  
-  const titleColor = currentSource === DATA_SOURCE.CLINICAL_TRIAL
-    ? 'var(--color-white)'
-    : 'var(--color-zoryve-midnight-blue)'
+  const headerClass = currentSource === DATA_SOURCE.CLINICAL_TRIAL
+    ? 'filter-component__header--clinical-trial'
+    : 'filter-component__header--practice-based'
 
   return (
     <motion.div 
       className="filter-component"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={ANIMATIONS.FADE_SLIDE_UP.initial}
+      animate={ANIMATIONS.FADE_SLIDE_UP.animate}
+      transition={TRANSITIONS.NORMAL}
     >
-      <div 
-        className="filter-component__header"
-        style={{ 
-          background: headerBg,
-          color: titleColor
-        }}
-      >
+      <div className={`filter-component__header ${headerClass}`}>
         <h3 className="filter-component__title">{title}</h3>
       </div>
       <div 

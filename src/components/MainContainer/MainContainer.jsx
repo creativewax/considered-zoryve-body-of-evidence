@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import Background from '../Background/Background.jsx'
 import Footer from './Footer.jsx'
 import ISIPanel from './ISIPanel.jsx'
@@ -9,9 +10,9 @@ const MainContainer = () => {
   return (
     <motion.div 
       className="main-container"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      initial={ANIMATIONS.FADE_IN.initial}
+      animate={ANIMATIONS.FADE_IN.animate}
+      transition={{ ...TRANSITIONS.SLOW_EASE, delay: 0.3 }}
     >
       <Background />
       <MainView />

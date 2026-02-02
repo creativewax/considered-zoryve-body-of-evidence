@@ -1,14 +1,15 @@
 import { motion } from 'framer-motion'
 import { FILTER_OPTIONS } from '../../constants/index.js'
+import { ANIMATION_PROPS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
 import './ConditionFilter.css'
 
 const ConditionFilter = ({ currentSource, selected }) => {
   const conditions = [
-    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, color: 'var(--color-plaque-psoriasis)' },
-    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, color: 'var(--color-atopic-dermatitis)' },
-    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, color: 'var(--color-seborrheic-dermatitis)' },
+    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colorClass: 'condition-button--plaque-psoriasis' },
+    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colorClass: 'condition-button--atopic-dermatitis' },
+    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colorClass: 'condition-button--seborrheic-dermatitis' },
   ]
 
   const handleSelect = (condition) => {
@@ -18,29 +19,22 @@ const ConditionFilter = ({ currentSource, selected }) => {
   return (
     <FilterComponent title="Condition" currentSource={currentSource} condensed>
       <div className="condition-filter">
-        {conditions.map((condition) => (
-          <motion.button
-            key={condition.value}
-            className={`condition-button ${selected === condition.value ? 'condition-button--selected' : ''}`}
-            onClick={() => handleSelect(condition.value)}
-            style={{
-              backgroundColor: selected === condition.value ? condition.color : 'transparent'
-            }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div 
-              className="condition-button__dot"
-              style={{
-                backgroundColor: selected === condition.value 
-                  ? 'var(--color-white)' 
-                  : 'var(--color-zoryve-midnight-blue)',
-                opacity: selected === condition.value ? 1 : 0.4
-              }}
-            />
-            <span className="condition-button__text">{condition.value}</span>
-          </motion.button>
-        ))}
+        {conditions.map((condition) => {
+          const isSelected = selected === condition.value
+          return (
+            <motion.button
+              key={condition.value}
+              className={`condition-button ${isSelected ? `condition-button--selected ${condition.colorClass}` : ''}`}
+              onClick={() => handleSelect(condition.value)}
+              {...ANIMATION_PROPS.INTERACTIVE}
+            >
+              <div 
+                className={`condition-button__dot ${isSelected ? 'condition-button__dot--selected' : 'condition-button__dot--unselected'}`}
+              />
+              <span className="condition-button__text">{condition.value}</span>
+            </motion.button>
+          )
+        })}
       </div>
     </FilterComponent>
   )

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ANIMATION_PROPS } from '../../constants/animations.js'
 import './Button.css'
 
 const Button = ({ 
@@ -9,14 +10,15 @@ const Button = ({
   className = '',
   style = {}
 }) => {
+  const animationProps = (!disabled && !selected) ? ANIMATION_PROPS.INTERACTIVE : {}
+  
   return (
     <motion.button
       className={`basic-button ${selected ? 'basic-button--selected' : ''} ${disabled ? 'basic-button--disabled' : ''} ${className}`}
       onClick={onClick}
       disabled={disabled}
       style={style}
-      whileHover={!disabled && !selected ? { scale: 1.02 } : {}}
-      whileTap={!disabled ? { scale: 0.98 } : {}}
+      {...animationProps}
     >
       {children}
     </motion.button>

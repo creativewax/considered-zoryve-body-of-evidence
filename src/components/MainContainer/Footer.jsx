@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { ASSETS } from '../../constants/index.js'
+import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import './Footer.css'
 
 const Footer = () => {
@@ -8,7 +9,7 @@ const Footer = () => {
       className="footer"
       initial={{ y: 80 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={TRANSITIONS.SLOW_EASE}
     >
       <div className="footer__buttons">
         <button className="footer__button">

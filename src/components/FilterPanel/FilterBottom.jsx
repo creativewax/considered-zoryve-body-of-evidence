@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import FadeIn from '../Animations/FadeIn.jsx'
 import appStateManager from '../../managers/AppStateManager.js'
 import eventSystem from '../../utils/EventSystem.js'
 import Button from '../Button/Button.jsx'
@@ -37,19 +37,16 @@ const FilterBottom = () => {
   }
 
   return (
-    <motion.div 
-      className="filter-bottom"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.3 }}
-    >
-      <Button
-        onClick={handleReset}
-        disabled={!hasActiveFilters}
-      >
-        RESET FILTERS
-      </Button>
-    </motion.div>
+    <FadeIn delay={0.3}>
+      <div className="filter-bottom">
+        <Button
+          onClick={handleReset}
+          disabled={!hasActiveFilters}
+        >
+          RESET FILTERS
+        </Button>
+      </div>
+    </FadeIn>
   )
 }
 

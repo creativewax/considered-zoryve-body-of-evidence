@@ -13,8 +13,8 @@
   --color-black: #000000;
   
   /* Clinical Trial Colors */
-  --color-ct-gradient-start: #21679E;
-  --color-ct-gradient-end: #154E80;
+  --color-ct-gradient-start: #3d89c3;
+  --color-ct-gradient-end: #21679E;
   
   /* Practice Based Colors */
   --color-pb-gradient-start: #224B8C;
@@ -31,7 +31,7 @@
   
   /* Shadows */
   --shadow-soft: 0 0 20px rgba(0, 0, 0, 0.15);
-  --shadow-filter: 0 0 10px rgba(0, 0, 0, 0.15);
+  --shadow-filter: 0 0 15px rgba(0, 0, 0, 0.15);
   
   /* Spacing */
   --spacing-xs: 5px;
@@ -43,17 +43,23 @@
   
   /* Typography */
   --font-family: 'Inter', sans-serif;
-  --font-size-xs: 10px;
-  --font-size-sm: 12px;
-  --font-size-md: 13px;
-  --font-weight-regular: 400;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-xxl: 22px;
+  --font-weight-regular: 500;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 900;
   
   /* Border Radius */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-xxl: 15px;
   
   /* Button */
   --button-min-width: 100px;
@@ -86,7 +92,7 @@
   
   /* Condition Button */
   --condition-height: 26px;
-  --condition-dot-size: 5px;
+  --condition-dot-size: 6px;
 }
 
 * {
