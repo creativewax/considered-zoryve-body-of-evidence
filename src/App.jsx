@@ -16,7 +16,11 @@ function App() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        await dataManager.loadData()
+        // Wait for both data loading and minimum 2 second delay
+        await Promise.all([
+          dataManager.loadData(),
+          new Promise(resolve => setTimeout(resolve, 2000))
+        ])
         setAppState(APP_STATE.INTRO)
         appStateManager.setState(APP_STATE.INTRO)
       } catch (error) {
