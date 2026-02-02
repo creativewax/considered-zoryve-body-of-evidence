@@ -1,10 +1,18 @@
+.isi-panel-wrapper {
+  position: fixed;
+  bottom: var(--footer-height);
+  left: var(--filter-panel-width);
+  right: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
 .isi-panel {
   width: 100%;
   background-color: var(--color-zoryve-midnight-blue);
-  position: relative;
-  flex-shrink: 0;
   overflow: hidden;
-  z-index: 15;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
 }
 
 .isi-panel-toggle {
@@ -52,8 +60,8 @@
   position: fixed;
   top: 0;
   left: var(--filter-panel-width);
-  width: calc(100vw - var(--filter-panel-width));
+  right: 0;
   pointer-events: none;
-  z-index: 10;
+  z-index: 15;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.35) 75%, rgba(0, 0, 0, 1) 100%);
 }
