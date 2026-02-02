@@ -1,9 +1,7 @@
-import { motion } from 'framer-motion'
 import { FILTER_OPTIONS } from '../../constants/index.js'
-import { ANIMATION_PROPS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
-import ScaleIn from '../Animations/ScaleIn.jsx'
+import RadioOption from './RadioOption.jsx'
 import './RadioFilter.css'
 
 const BaselineSeverityFilter = ({ currentSource, selected }) => {
@@ -21,36 +19,13 @@ const BaselineSeverityFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Baseline Severity" currentSource={currentSource}>
       <div className="radio-filter">
         {severities.map((severity) => (
-          <motion.button
+          <RadioOption
             key={severity}
-            className="radio-option"
+            value={severity}
+            label={severity}
+            isSelected={selected === severity}
             onClick={() => handleSelect(severity)}
-            {...ANIMATION_PROPS.INTERACTIVE}
-          >
-            <div className={`radio-button ${selected === severity ? 'radio-button--selected' : ''}`}>
-              {selected === severity && (
-                <ScaleIn>
-                  <svg
-                    width="9"
-                    height="9"
-                    viewBox="0 0 9 9"
-                  >
-                    <path
-                      d="M1.5 4.5 L3.5 6.5 L7.5 2"
-                      stroke="var(--color-zoryve-black)"
-                      strokeWidth="1.5"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </ScaleIn>
-              )}
-            </div>
-            <span className={`radio-option__text ${selected === severity ? 'radio-option__text--selected' : ''}`}>
-              {severity}
-            </span>
-          </motion.button>
+          />
         ))}
       </div>
     </FilterComponent>

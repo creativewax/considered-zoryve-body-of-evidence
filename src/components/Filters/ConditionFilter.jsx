@@ -1,8 +1,7 @@
-import { motion } from 'framer-motion'
 import { FILTER_OPTIONS } from '../../constants/index.js'
-import { ANIMATION_PROPS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
+import ConditionOption from './ConditionOption.jsx'
 import './ConditionFilter.css'
 
 const ConditionFilter = ({ currentSource, selected }) => {
@@ -19,22 +18,16 @@ const ConditionFilter = ({ currentSource, selected }) => {
   return (
     <FilterComponent title="Condition" currentSource={currentSource} condensed>
       <div className="condition-filter">
-        {conditions.map((condition) => {
-          const isSelected = selected === condition.value
-          return (
-            <motion.button
-              key={condition.value}
-              className={`condition-button ${isSelected ? `condition-button--selected ${condition.colorClass}` : ''}`}
-              onClick={() => handleSelect(condition.value)}
-              {...ANIMATION_PROPS.INTERACTIVE}
-            >
-              <div 
-                className={`condition-button__dot ${isSelected ? 'condition-button__dot--selected' : 'condition-button__dot--unselected'}`}
-              />
-              <span className="condition-button__text">{condition.value}</span>
-            </motion.button>
-          )
-        })}
+        {conditions.map((condition) => (
+          <ConditionOption
+            key={condition.value}
+            value={condition.value}
+            label={condition.value}
+            colorClass={condition.colorClass}
+            isSelected={selected === condition.value}
+            onClick={() => handleSelect(condition.value)}
+          />
+        ))}
       </div>
     </FilterComponent>
   )

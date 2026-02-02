@@ -1,9 +1,7 @@
-import { motion } from 'framer-motion'
-import { FILTER_OPTIONS, ASSETS } from '../../constants/index.js'
-import { ANIMATION_PROPS } from '../../constants/animations.js'
+import { FILTER_OPTIONS } from '../../constants/index.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
-import ScaleIn from '../Animations/ScaleIn.jsx'
+import RadioOption from './RadioOption.jsx'
 import './RadioFilter.css'
 import './BodyAreaFilter.css'
 
@@ -22,47 +20,16 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
   return (
     <FilterComponent title="Body Area" currentSource={currentSource}>
       <div className="body-area-filter">
-        <div 
-          className="body-area-filter__background"
-          style={{
-            backgroundImage: `url(${ASSETS.ICONS.BODY_AREA_PERSON})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom left',
-            backgroundSize: '50px auto'
-          }}
-        />
+        <div className="body-area-filter__background" />
         <div className="radio-filter body-area-filter__options">
           {bodyAreas.map((bodyArea) => (
-            <motion.button
+            <RadioOption
               key={bodyArea}
-              className="radio-option"
+              value={bodyArea}
+              label={bodyArea}
+              isSelected={selected === bodyArea}
               onClick={() => handleSelect(bodyArea)}
-              {...ANIMATION_PROPS.INTERACTIVE}
-            >
-              <div className={`radio-button ${selected === bodyArea ? 'radio-button--selected' : ''}`}>
-                {selected === bodyArea && (
-                  <ScaleIn>
-                    <svg
-                      width="9"
-                      height="9"
-                      viewBox="0 0 9 9"
-                    >
-                      <path
-                        d="M1.5 4.5 L3.5 6.5 L7.5 2"
-                        stroke="var(--color-zoryve-black)"
-                        strokeWidth="1.5"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </ScaleIn>
-                )}
-              </div>
-              <span className={`radio-option__text ${selected === bodyArea ? 'radio-option__text--selected' : ''}`}>
-                {bodyArea}
-              </span>
-            </motion.button>
+            />
           ))}
         </div>
       </div>

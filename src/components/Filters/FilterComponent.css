@@ -6,7 +6,7 @@
 }
 
 .filter-component__header {
-  padding: var(--spacing-sm) var(--filter-body-padding);
+  padding: var(--spacing-xs) var(--filter-body-padding);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 

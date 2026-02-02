@@ -1,8 +1,7 @@
-import { motion } from 'framer-motion'
 import { FILTER_OPTIONS } from '../../constants/index.js'
-import { ANIMATION_PROPS } from '../../constants/animations.js'
 import appStateManager from '../../managers/AppStateManager.js'
 import FilterComponent from './FilterComponent.jsx'
+import FilterButton from './FilterButton.jsx'
 import './AgeFilter.css'
 
 const AgeFilter = ({ currentSource, selected }) => {
@@ -22,16 +21,13 @@ const AgeFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Age" currentSource={currentSource}>
       <div className="age-filter">
         {ageRanges.map((age) => (
-          <motion.button
+          <FilterButton
             key={age}
-            className={`age-button ${selected === age ? 'age-button--selected' : ''}`}
+            value={age}
+            label={age}
+            isSelected={selected === age}
             onClick={() => handleSelect(age)}
-            {...ANIMATION_PROPS.INTERACTIVE}
-          >
-            <span className={`age-button__text ${selected === age ? 'age-button__text--selected' : ''}`}>
-              {age}
-            </span>
-          </motion.button>
+          />
         ))}
       </div>
     </FilterComponent>
