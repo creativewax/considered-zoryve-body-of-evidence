@@ -45,11 +45,14 @@ function App() {
     return (
       <div className="app-loading">
         <Background />
-        <PuffLoader 
-          color="var(--color-white)" 
-          size={60}
-          aria-label="Loading"
-        />
+        <div className="app-loading-content">
+          <PuffLoader 
+            color="var(--color-white)" 
+            size={60}
+            aria-label="Loading"
+          />
+          <p className="app-loading-text">Loading...</p>
+        </div>
       </div>
     )
   }
