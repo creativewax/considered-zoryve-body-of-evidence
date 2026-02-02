@@ -26,9 +26,10 @@
 
 .app-loading-text {
   font-family: var(--font-family);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-white);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: #FFFFFF;
   margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.5px;
 }
