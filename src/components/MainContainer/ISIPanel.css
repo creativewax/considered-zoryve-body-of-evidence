@@ -1,13 +1,10 @@
 .isi-panel {
   width: 100%;
   background-color: var(--color-zoryve-midnight-blue);
-  position: fixed;
-  bottom: 0;
-  left: var(--filter-panel-width);
-  right: 0;
-  z-index: 15;
+  position: relative;
+  flex-shrink: 0;
   overflow: hidden;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 15;
 }
 
 .isi-panel-toggle {

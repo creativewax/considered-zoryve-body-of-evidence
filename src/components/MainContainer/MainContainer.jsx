@@ -16,8 +16,8 @@ const MainContainer = () => {
     >
       <Background />
       <MainView />
-      <Footer />
       <ISIPanel />
+      <Footer />
     </motion.div>
   )
 }

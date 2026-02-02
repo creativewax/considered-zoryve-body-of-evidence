@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ASSETS } from '../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
@@ -6,12 +6,34 @@ import './ISIPanel.css'
 
 const ISIPanel = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [overlayHeight, setOverlayHeight] = useState(0)
+  const panelRef = useRef(null)
 
   const togglePanel = () => {
     setIsOpen(!isOpen)
   }
 
-  const overlayHeight = isOpen ? 'calc(100vh - var(--isi-panel-expanded-height))' : '0px'
+  useEffect(() => {
+    if (isOpen && panelRef.current) {
+      const updateOverlayHeight = () => {
+        const rect = panelRef.current.getBoundingClientRect()
+        setOverlayHeight(rect.top)
+      }
+      
+      // Use requestAnimationFrame to ensure layout is complete
+      requestAnimationFrame(() => {
+        updateOverlayHeight()
+      })
+      
+      window.addEventListener('resize', updateOverlayHeight)
+      
+      return () => {
+        window.removeEventListener('resize', updateOverlayHeight)
+      }
+    } else {
+      setOverlayHeight(0)
+    }
+  }, [isOpen])
 
   return (
     <>
@@ -24,15 +46,15 @@ const ISIPanel = () => {
             exit={ANIMATIONS.FADE_OUT.animate}
             transition={TRANSITIONS.NORMAL}
             style={{
-              height: overlayHeight
+              height: overlayHeight > 0 ? `${overlayHeight}px` : '100vh'
             }}
           />
         )}
       </AnimatePresence>
       <motion.div
+        ref={panelRef}
         className="isi-panel"
         animate={{
-          y: isOpen ? `calc(100vh - var(--isi-panel-expanded-height))` : `calc(100vh - var(--isi-panel-collapsed-height))`,
           height: isOpen ? 'var(--isi-panel-expanded-height)' : 'var(--isi-panel-collapsed-height)'
         }}
         transition={TRANSITIONS.FADE_NORMAL}
