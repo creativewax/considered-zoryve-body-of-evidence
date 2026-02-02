@@ -51,8 +51,8 @@ function App() {
             size={60}
             aria-label="Loading"
           />
-          <p className="app-loading-text">Loading...</p>
         </div>
+        <p className="app-loading-text">Loading</p>
       </div>
     )
   }
