@@ -46,10 +46,11 @@ const MainView = () => {
       }
 
       const config = getLayoutConfig(count)
-      const rowsChanged = currentRowsRef.current !== null && currentRowsRef.current !== config.rows
+      const isInitialLoad = currentRowsRef.current === null
 
-      if (rowsChanged && containerRef.current) {
-        // Fade out, then update and spin in
+      // Always fade transition when filters change (except initial load)
+      if (!isInitialLoad && containerRef.current) {
+        // Fade out, then update and fade in
         pendingRef.current = { config, images: imagesWithThumbs, count }
 
         gsap.to(containerRef.current, {
@@ -65,33 +66,25 @@ const MainView = () => {
             setImageCount(pending.count)
             currentRowsRef.current = pending.config.rows
             rotationStateManager.setColumnAngle(pending.config.columnAngle)
-            
-            // Initialize pool with intro start rotation
-            const introStartRotation = -CAROUSEL_SETTINGS.introSpinAngle
-            rotationStateManager.setRotation(introStartRotation)
-            poolManager.initializePool(pending.config, pending.images, introStartRotation)
+            rotationStateManager.setRotation(0)
+            poolManager.initializePool(pending.config, pending.images, 0)
 
             // Fade back in
             gsap.to(containerRef.current, {
               opacity: 1,
               duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-              ease: 'power2.inOut',
-              onComplete: () => rotationStateManager.playIntro(pending.config.visibleColumns)
+              ease: 'power2.inOut'
             })
           }
         })
       } else {
-        // Same row count - always do intro spin when filters change
+        // Initial load - no fade, just set up
         setLayoutConfig(config)
         setImageCount(count)
         currentRowsRef.current = config.rows
         rotationStateManager.setColumnAngle(config.columnAngle)
-        
-        // Initialize pool with intro start rotation
-        const introStartRotation = -CAROUSEL_SETTINGS.introSpinAngle
-        rotationStateManager.setRotation(introStartRotation)
-        poolManager.initializePool(config, imagesWithThumbs, introStartRotation)
-        rotationStateManager.playIntro(config.visibleColumns)
+        rotationStateManager.setRotation(0)
+        poolManager.initializePool(config, imagesWithThumbs, 0)
       }
     }
 

@@ -9,7 +9,6 @@ class RotationStateManager {
     this.rotation = 0
     this.columnAngle = 0
     this.isAnimating = false
-    this.isIntroPlaying = false
     this.currentTween = null
     this.listeners = new Set()
   }
@@ -17,8 +16,7 @@ class RotationStateManager {
   // Getters
   getRotation() { return this.rotation }
   getColumnAngle() { return this.columnAngle }
-  getIsIntroPlaying() { return this.isIntroPlaying }
-  canInteract() { return !this.isIntroPlaying }
+  canInteract() { return true }
 
   // Set rotation and notify listeners
   setRotation(value) {
@@ -36,7 +34,7 @@ class RotationStateManager {
 
   // Start snap animation to nearest column
   snapToNearestColumn() {
-    if (this.columnAngle <= 0 || this.isIntroPlaying) return
+    if (this.columnAngle <= 0) return
     const target = calculateSnapTarget(this.rotation, this.columnAngle)
     this.animateTo(target, CAROUSEL_SETTINGS.snapDuration)
   }
@@ -55,41 +53,6 @@ class RotationStateManager {
     this.interruptAnimation()
     const currentColumn = Math.round(this.rotation / this.columnAngle)
     this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
-  }
-
-  // Play intro spin animation - images spin in from hidden
-  playIntro(visibleColumns, onComplete) {
-    if (!visibleColumns || this.columnAngle <= 0) {
-      console.warn('playIntro: visibleColumns or columnAngle not set')
-      onComplete?.()
-      return
-    }
-
-    this.interruptAnimation()
-    this.isIntroPlaying = true
-
-    // Set starting rotation (behind the view) for the spin animation
-    this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
-    this.notifyListeners()
-
-    const target = { rotation: this.rotation }
-    this.currentTween = gsap.to(target, {
-      rotation: 0,
-      duration: CAROUSEL_SETTINGS.introSpinDuration,
-      ease: 'power2.out',
-      onUpdate: () => {
-        this.rotation = target.rotation
-        this.notifyListeners()
-      },
-      onComplete: () => {
-        this.isIntroPlaying = false
-        this.isAnimating = false
-        this.currentTween = null
-        this.rotation = 0
-        this.notifyListeners()
-        onComplete?.()
-      }
-    })
   }
 
   // Animate to target rotation
@@ -123,7 +86,6 @@ class RotationStateManager {
       this.currentTween = null
     }
     this.isAnimating = false
-    this.isIntroPlaying = false
   }
 
   // Subscribe to rotation changes
@@ -143,7 +105,6 @@ class RotationStateManager {
     this.interruptAnimation()
     this.rotation = 0
     this.columnAngle = 0
-    this.isIntroPlaying = false
     this.notifyListeners()
   }
 }
