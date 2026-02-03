@@ -66,39 +66,38 @@ const MainView = () => {
             currentRowsRef.current = pending.config.rows
             rotationStateManager.setColumnAngle(pending.config.columnAngle)
             
-            // Prepare intro state BEFORE initializing pool so images are hidden immediately
-            // prepareIntro returns the starting rotation for pool initialization
-            const introStartRotation = rotationStateManager.prepareIntro(pending.config.visibleColumns)
+            // Initialize pool first (it calculates virtualColumns at rotation 0)
+            const introStartRotation = -CAROUSEL_SETTINGS.introSpinAngle
             rotationStateManager.setRotation(introStartRotation)
             poolManager.initializePool(pending.config, pending.images, introStartRotation)
+            
+            // Then prepare intro state from pool (so we know which virtualColumns to hide)
+            rotationStateManager.prepareIntroFromPool(poolManager)
 
             // Fade back in
             gsap.to(containerRef.current, {
               opacity: 1,
               duration: CAROUSEL_SETTINGS.transitionFadeDuration,
               ease: 'power2.inOut',
-              onComplete: () => rotationStateManager.playIntro(pending.config.visibleColumns)
+              onComplete: () => rotationStateManager.playIntro(pending.config.visibleColumns, poolManager)
             })
           }
         })
       } else {
-        // Initial load or same row count
+        // Same row count - always do intro spin when filters change
         setLayoutConfig(config)
         setImageCount(count)
         currentRowsRef.current = config.rows
         rotationStateManager.setColumnAngle(config.columnAngle)
         
-        // Play intro on initial load
-        if (!rowsChanged) {
-          // Prepare intro state BEFORE initializing pool so images are hidden immediately
-          // prepareIntro returns the starting rotation for pool initialization
-          const introStartRotation = rotationStateManager.prepareIntro(config.visibleColumns)
-          rotationStateManager.setRotation(introStartRotation)
-          poolManager.initializePool(config, imagesWithThumbs, introStartRotation)
-          rotationStateManager.playIntro(config.visibleColumns)
-        } else {
-          poolManager.initializePool(config, imagesWithThumbs, 0)
-        }
+        // Initialize pool first (it calculates virtualColumns at rotation 0)
+        const introStartRotation = -CAROUSEL_SETTINGS.introSpinAngle
+        rotationStateManager.setRotation(introStartRotation)
+        poolManager.initializePool(config, imagesWithThumbs, introStartRotation)
+        
+        // Then prepare intro state from pool (so we know which virtualColumns to hide)
+        rotationStateManager.prepareIntroFromPool(poolManager)
+        rotationStateManager.playIntro(config.visibleColumns, poolManager)
       }
     }
 
