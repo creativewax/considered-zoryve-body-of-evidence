@@ -4,6 +4,9 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  /* Account for footer and ISI panel collapsed height */
+  height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
+  min-height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
 }
 
 .main-view-content {
@@ -22,25 +25,4 @@
   left: 0;
   width: 100% !important;
   height: 100% !important;
-}
-
-.main-view-placeholder {
-  text-align: center;
-  color: var(--color-white);
-  padding: var(--spacing-xl);
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--radius-lg);
-}
-
-.main-view-placeholder h2 {
-  font-family: var(--font-family);
-  font-size: 32px;
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-md);
-}
-
-.main-view-placeholder p {
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  margin: var(--spacing-sm) 0;
 }
