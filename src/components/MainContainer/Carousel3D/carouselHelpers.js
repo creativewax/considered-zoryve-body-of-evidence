@@ -27,7 +27,7 @@ export function getLayoutConfig(imageCount) {
     rowSpacing: (s.imageSizeBase - (rows - 1) * s.imageSizeRowReduction) * s.rowSpacingMultiplier,
     columnAngle: Math.PI / visibleColumns,
     poolSize: (visibleColumns + s.poolBuffer * 2) * rows,
-    cameraZ: s.cameraZ[rows] || 8
+    cameraZ: s.cameraZ[rows]
   }
 }
 

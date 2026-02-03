@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
+import { gsap } from 'gsap'
 import ImageFrame from './ImageFrame'
 import poolManager from './PoolManager'
 import rotationStateManager from './RotationStateManager'
@@ -9,7 +10,18 @@ import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isD
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 
 const CarouselScene = ({ layoutConfig }) => {
-  const { gl } = useThree()
+  const { gl, camera } = useThree()
+  
+  // Update camera position when layout config changes
+  useEffect(() => {
+    if (layoutConfig && camera) {
+      gsap.to(camera.position, {
+        z: layoutConfig.cameraZ,
+        duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+        ease: 'power2.inOut'
+      })
+    }
+  }, [layoutConfig, camera])
   const dragRef = useRef({ active: false, moved: false, startX: 0, startRotation: 0 })
   const clickRef = useRef({ isDragging: false })
 

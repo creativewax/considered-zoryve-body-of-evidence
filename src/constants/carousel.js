@@ -7,8 +7,8 @@ export const CAROUSEL_LAYOUT = {
 }
 
 export const CAROUSEL_SETTINGS = {
-  cylinderRadius: { 1: 2.0, 3: 2.0, 5: 3.0 },
-  cameraZ: { 1: 8, 3: 8, 5: 9 },
+  cylinderRadius: { 1: 2.0, 3: 2.5, 5: 3.0 },
+  cameraZ: { 1: 8, 3: 7, 5: 10 },
   rowSpacingMultiplier: 1.25,
   imageSizeBase: 1.0,
   imageSizeRowReduction: 0.05,
