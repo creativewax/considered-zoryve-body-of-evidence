@@ -1,7 +1,7 @@
 // RotationStateManager - handles carousel rotation state and animations
 
 import { gsap } from 'gsap'
-import { calculateSnapTarget } from './carouselHelpers'
+import { calculateSnapTarget, getPoolingRange } from './carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 
 class RotationStateManager {
@@ -70,14 +70,15 @@ class RotationStateManager {
   prepareIntro(visibleColumns) {
     if (!visibleColumns || this.columnAngle <= 0) return 0
 
-    // Calculate which columns are visible at rotation 0 (BEFORE the spin)
-    // These are the columns that should be hidden during intro
-    const centerColumnAtZero = Math.round(0 / this.columnAngle) // Should be 0
-    const buffer = Math.ceil(visibleColumns / 2) + CAROUSEL_SETTINGS.poolBuffer
+    // Calculate which virtualColumns will be visible at rotation 0
+    // We need to simulate what the pool will assign at rotation 0
+    const { startColumn, endColumn } = getPoolingRange(0, visibleColumns, this.columnAngle)
+    
     this.introStartColumns = new Set()
     
-    // Store columns that are currently in view (at rotation 0)
-    for (let i = centerColumnAtZero - buffer; i <= centerColumnAtZero + buffer; i++) {
+    // Store all virtualColumns that will be in the pool at rotation 0
+    // These are the columns that should be hidden during intro
+    for (let i = startColumn; i <= endColumn; i++) {
       this.introStartColumns.add(i)
     }
 
