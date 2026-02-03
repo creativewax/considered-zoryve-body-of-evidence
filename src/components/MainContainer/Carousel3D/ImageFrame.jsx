@@ -9,7 +9,7 @@ import { CAROUSEL_FRAME } from '../../../constants/carousel'
 import textureCache from './TextureCache'
 import { getRoundedMask, getGlowTexture } from './frameTextures'
 
-const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, introHidden }) => {
+const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef }) => {
   const spinnerRef = useRef()
   const { imagePath } = imageData
 
@@ -75,7 +75,7 @@ const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, in
   const handlePointerOut = () => { document.body.style.cursor = 'auto' }
 
   // Don't render if not visible
-  if (!visibility.visible || introHidden) return null
+  if (!visibility.visible) return null
 
   const { opacity, darkOverlay } = visibility
 

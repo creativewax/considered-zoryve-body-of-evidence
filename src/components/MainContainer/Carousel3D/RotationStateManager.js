@@ -1,7 +1,7 @@
 // RotationStateManager - handles carousel rotation state and animations
 
 import { gsap } from 'gsap'
-import { calculateSnapTarget, getPoolingRange } from './carouselHelpers'
+import { calculateSnapTarget } from './carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 
 class RotationStateManager {
@@ -10,7 +10,6 @@ class RotationStateManager {
     this.columnAngle = 0
     this.isAnimating = false
     this.isIntroPlaying = false
-    this.introStartColumns = new Set() // columns hidden during intro
     this.currentTween = null
     this.listeners = new Set()
   }
@@ -19,14 +18,7 @@ class RotationStateManager {
   getRotation() { return this.rotation }
   getColumnAngle() { return this.columnAngle }
   getIsIntroPlaying() { return this.isIntroPlaying }
-  getIntroStartColumns() { return this.introStartColumns }
   canInteract() { return !this.isIntroPlaying }
-
-  // Check if a column should be hidden during intro
-  isColumnHiddenDuringIntro(virtualColumn) {
-    if (!this.isIntroPlaying) return false
-    return this.introStartColumns.has(virtualColumn)
-  }
 
   // Set rotation and notify listeners
   setRotation(value) {
@@ -65,43 +57,20 @@ class RotationStateManager {
     this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
   }
 
-  // Prepare intro state (set hidden columns) - call after initializing pool
-  // The pool will calculate which virtualColumns are at rotation 0
-  prepareIntroFromPool(poolManager) {
-    if (!poolManager) return false
-
-    // Get the virtualColumns that will be visible at rotation 0 from the pool
-    this.introStartColumns = new Set(poolManager.getVirtualColumnsAtZero())
-
-    // Set intro playing state immediately so introHidden check works
-    this.isIntroPlaying = true
-    
-    return true
-  }
-
   // Play intro spin animation - images spin in from hidden
-  playIntro(visibleColumns, poolManager, onComplete) {
+  playIntro(visibleColumns, onComplete) {
     if (!visibleColumns || this.columnAngle <= 0) {
       console.warn('playIntro: visibleColumns or columnAngle not set')
       onComplete?.()
       return
     }
 
-    // If intro wasn't prepared, prepare it now from pool
-    if (!this.isIntroPlaying || this.introStartColumns.size === 0) {
-      if (poolManager) {
-        this.prepareIntroFromPool(poolManager)
-      }
-    }
-
-    // Ensure rotation is at start position
-    if (this.rotation !== -CAROUSEL_SETTINGS.introSpinAngle) {
-      this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
-      this.notifyListeners()
-    }
-
     this.interruptAnimation()
     this.isIntroPlaying = true
+
+    // Set starting rotation (behind the view) for the spin animation
+    this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
+    this.notifyListeners()
 
     const target = { rotation: this.rotation }
     this.currentTween = gsap.to(target, {
@@ -114,7 +83,6 @@ class RotationStateManager {
       },
       onComplete: () => {
         this.isIntroPlaying = false
-        this.introStartColumns = new Set()
         this.isAnimating = false
         this.currentTween = null
         this.rotation = 0
@@ -156,7 +124,6 @@ class RotationStateManager {
     }
     this.isAnimating = false
     this.isIntroPlaying = false
-    this.introStartColumns = new Set()
   }
 
   // Subscribe to rotation changes
@@ -177,7 +144,6 @@ class RotationStateManager {
     this.rotation = 0
     this.columnAngle = 0
     this.isIntroPlaying = false
-    this.introStartColumns = new Set()
     this.notifyListeners()
   }
 }

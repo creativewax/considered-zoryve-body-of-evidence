@@ -36,21 +36,8 @@ class PoolManager {
       }
     }
 
-    // Calculate which virtualColumns will be at rotation 0 (for intro hiding)
-    // This needs to happen BEFORE we assign with initialRotation
-    const { startColumn: startAtZero, endColumn: endAtZero } = getPoolingRange(0, visibleColumns, layoutConfig.columnAngle)
-    this.virtualColumnsAtZero = new Set()
-    for (let i = startAtZero; i <= endAtZero; i++) {
-      this.virtualColumnsAtZero.add(i)
-    }
-
     this.updatePoolAssignments(initialRotation)
     this.notifyListeners()
-  }
-
-  // Get virtualColumns that will be visible at rotation 0
-  getVirtualColumnsAtZero() {
-    return this.virtualColumnsAtZero || new Set()
   }
 
   // Update which images are assigned to pool slots

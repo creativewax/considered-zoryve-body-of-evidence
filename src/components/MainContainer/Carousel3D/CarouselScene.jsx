@@ -64,12 +64,11 @@ const CarouselScene = ({ layoutConfig }) => {
     setTimeout(() => { clickRef.current.isDragging = false }, 50)
   }, [gl])
 
-  // Calculate visibility and intro hidden state for each slot
+  // Calculate visibility for each slot
   const slots = activeSlots.map(slot => ({
     ...slot,
     visibility: calculateVisibility(getAngleFromCenter(slot.virtualColumn, rotation, layoutConfig.columnAngle)),
-    position: calculateCylinderPosition(slot.virtualColumn, slot.rowIndex, layoutConfig),
-    introHidden: rotationStateManager.isColumnHiddenDuringIntro(slot.virtualColumn)
+    position: calculateCylinderPosition(slot.virtualColumn, slot.rowIndex, layoutConfig)
   }))
 
   return (
@@ -99,7 +98,6 @@ const CarouselScene = ({ layoutConfig }) => {
             visibility={slot.visibility}
             imageSize={layoutConfig.imageSize}
             onClickRef={clickRef}
-            introHidden={slot.introHidden}
           />
         ))}
       </group>
