@@ -43,7 +43,7 @@ const CarouselScene = ({ images, onImageClick }) => {
   const navigateColumn = useRef((direction) => {
     const targetAngle = getNavigationTargetAngle(rotation, direction, totalColumns)
     
-    if (snapTween.current) snapTween.current.kill()
+    if (snapTween) snapTween.kill()
     
     const tween = gsap.to({ rotation }, {
       rotation: targetAngle,
@@ -54,7 +54,7 @@ const CarouselScene = ({ images, onImageClick }) => {
       }
     })
     
-    snapTween.current = tween
+    setSnapTween(tween)
   })
 
   useEffect(() => {
