@@ -23,11 +23,18 @@ const MainView = () => {
   const pendingRef = useRef(null)
   const currentRowsRef = useRef(null)
 
-  // Get thumbnail path from full image path
+  // ---------------------------------------------------------------------------
+  // THUMBNAIL PATH HELPER
+  // ---------------------------------------------------------------------------
+
   const getThumbnailPath = (path) => {
     const dot = path.lastIndexOf('.')
     return dot === -1 ? path : `${path.substring(0, dot)}_thumb${path.substring(dot)}`
   }
+
+  // ---------------------------------------------------------------------------
+  // CAROUSEL INITIALIZATION
+  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const initCarousel = () => {
@@ -36,6 +43,7 @@ const MainView = () => {
       const imagesWithThumbs = images.map(img => ({ ...img, thumbnailPath: getThumbnailPath(img.imagePath) }))
       const count = imagesWithThumbs.length
 
+      // Handle empty state
       if (count === 0) {
         setLayoutConfig(null)
         setImageCount(0)
@@ -48,9 +56,8 @@ const MainView = () => {
       const config = getLayoutConfig(count)
       const isInitialLoad = currentRowsRef.current === null
 
-      // Always fade transition when filters change (except initial load)
+      // Fade transition for filter changes (not initial load)
       if (!isInitialLoad && containerRef.current) {
-        // Fade out, then update and fade in
         pendingRef.current = { config, images: imagesWithThumbs, count }
 
         gsap.to(containerRef.current, {
@@ -69,7 +76,6 @@ const MainView = () => {
             rotationStateManager.setRotation(0)
             poolManager.initializePool(pending.config, pending.images, 0)
 
-            // Fade back in
             gsap.to(containerRef.current, {
               opacity: 1,
               duration: CAROUSEL_SETTINGS.transitionFadeDuration,
@@ -78,7 +84,7 @@ const MainView = () => {
           }
         })
       } else {
-        // Initial load - no fade, just set up
+        // Initial load - no transition
         setLayoutConfig(config)
         setImageCount(count)
         currentRowsRef.current = config.rows
@@ -89,6 +95,8 @@ const MainView = () => {
     }
 
     initCarousel()
+
+    // Subscribe to data updates
     eventSystem.on(eventSystem.constructor.EVENTS.IMAGES_UPDATED, initCarousel)
     eventSystem.on(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, initCarousel)
 
@@ -97,6 +105,10 @@ const MainView = () => {
       eventSystem.off(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, initCarousel)
     }
   }, [])
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <div className="main-view">

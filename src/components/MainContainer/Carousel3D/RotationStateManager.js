@@ -1,4 +1,4 @@
-// RotationStateManager - handles carousel rotation state and animations
+// RotationStateManager - singleton for carousel rotation state and animations
 
 import { gsap } from 'gsap'
 import { calculateSnapTarget } from './carouselHelpers'
@@ -13,18 +13,23 @@ class RotationStateManager {
     this.listeners = new Set()
   }
 
-  // Getters
+  // ---------------------------------------------------------------------------
+  // GETTERS
+  // ---------------------------------------------------------------------------
+
   getRotation() { return this.rotation }
   getColumnAngle() { return this.columnAngle }
-  canInteract() { return true }
+  canInteract() { return !this.isAnimating }
 
-  // Set rotation and notify listeners
+  // ---------------------------------------------------------------------------
+  // ROTATION CONTROL
+  // ---------------------------------------------------------------------------
+
   setRotation(value) {
     this.rotation = value
     this.notifyListeners()
   }
 
-  // Set column angle (resets rotation)
   setColumnAngle(value) {
     this.columnAngle = value
     this.rotation = 0
@@ -32,14 +37,20 @@ class RotationStateManager {
     this.notifyListeners()
   }
 
-  // Start snap animation to nearest column
+  // ---------------------------------------------------------------------------
+  // SNAP ANIMATION
+  // ---------------------------------------------------------------------------
+
   snapToNearestColumn() {
     if (this.columnAngle <= 0) return
     const target = calculateSnapTarget(this.rotation, this.columnAngle)
     this.animateTo(target, CAROUSEL_SETTINGS.snapDuration)
   }
 
-  // Navigate one column left
+  // ---------------------------------------------------------------------------
+  // NAVIGATION
+  // ---------------------------------------------------------------------------
+
   navigateLeft() {
     if (!this.canInteract()) return
     this.interruptAnimation()
@@ -47,7 +58,6 @@ class RotationStateManager {
     this.animateTo((currentColumn - 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
   }
 
-  // Navigate one column right
   navigateRight() {
     if (!this.canInteract()) return
     this.interruptAnimation()
@@ -55,7 +65,10 @@ class RotationStateManager {
     this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
   }
 
-  // Animate to target rotation
+  // ---------------------------------------------------------------------------
+  // ANIMATION
+  // ---------------------------------------------------------------------------
+
   animateTo(targetRotation, duration, onComplete) {
     this.interruptAnimation()
     this.isAnimating = true
@@ -79,7 +92,6 @@ class RotationStateManager {
     })
   }
 
-  // Stop any running animation
   interruptAnimation() {
     if (this.currentTween) {
       this.currentTween.kill()
@@ -88,7 +100,10 @@ class RotationStateManager {
     this.isAnimating = false
   }
 
-  // Subscribe to rotation changes
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTION
+  // ---------------------------------------------------------------------------
+
   subscribe(callback) {
     this.listeners.add(callback)
     return () => this.listeners.delete(callback)
@@ -100,7 +115,10 @@ class RotationStateManager {
     })
   }
 
-  // Reset all state
+  // ---------------------------------------------------------------------------
+  // RESET
+  // ---------------------------------------------------------------------------
+
   reset() {
     this.interruptAnimation()
     this.rotation = 0

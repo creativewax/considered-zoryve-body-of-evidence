@@ -1,4 +1,4 @@
-// NavigationArrows - left/right navigation buttons
+// NavigationArrows - left/right carousel navigation buttons
 
 import { useState, useEffect, useCallback } from 'react'
 import rotationStateManager from './RotationStateManager'
@@ -7,7 +7,7 @@ import './NavigationArrows.css'
 const NavigationArrows = () => {
   const [visible, setVisible] = useState(rotationStateManager.canInteract())
 
-  // Update visibility when intro state changes
+  // Subscribe to state changes to update visibility
   useEffect(() => {
     const checkVisibility = () => setVisible(rotationStateManager.canInteract())
     checkVisibility()

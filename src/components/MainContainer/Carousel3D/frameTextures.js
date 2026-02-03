@@ -1,4 +1,4 @@
-// Frame Textures - cached textures for image frame rendering
+// Frame Textures - cached canvas-generated textures for image frames
 
 import * as THREE from 'three'
 import { CAROUSEL_FRAME } from '../../../constants/carousel'
@@ -6,7 +6,10 @@ import { CAROUSEL_FRAME } from '../../../constants/carousel'
 const maskCache = new Map()
 const glowCache = new Map()
 
-// Create rounded rectangle alpha mask
+// -----------------------------------------------------------------------------
+// ROUNDED MASK - alpha mask for rounded corners
+// -----------------------------------------------------------------------------
+
 export function getRoundedMask(size = 256) {
   const key = `mask-${size}`
   if (maskCache.has(key)) return maskCache.get(key)
@@ -28,7 +31,10 @@ export function getRoundedMask(size = 256) {
   return texture
 }
 
-// Create glow texture that hugs the rounded rectangle
+// -----------------------------------------------------------------------------
+// GLOW TEXTURE - layered soft glow that hugs the rounded shape
+// -----------------------------------------------------------------------------
+
 export function getGlowTexture(size = 200, glowSize = 40) {
   const key = `glow-${size}-${glowSize}`
   if (glowCache.has(key)) return glowCache.get(key)
@@ -40,7 +46,7 @@ export function getGlowTexture(size = 200, glowSize = 40) {
   const ctx = canvas.getContext('2d')
   const radius = size * CAROUSEL_FRAME.cornerRadiusRatio
 
-  // Draw layered glow
+  // Draw layered glow from outside in
   for (let i = glowSize; i > 0; i -= 2) {
     const alpha = (1 - i / glowSize) * 0.3
     ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
@@ -53,4 +59,15 @@ export function getGlowTexture(size = 200, glowSize = 40) {
   texture.needsUpdate = true
   glowCache.set(key, texture)
   return texture
+}
+
+// -----------------------------------------------------------------------------
+// CLEANUP - dispose cached textures (call on unmount if needed)
+// -----------------------------------------------------------------------------
+
+export function disposeFrameTextures() {
+  maskCache.forEach(texture => texture.dispose())
+  glowCache.forEach(texture => texture.dispose())
+  maskCache.clear()
+  glowCache.clear()
 }

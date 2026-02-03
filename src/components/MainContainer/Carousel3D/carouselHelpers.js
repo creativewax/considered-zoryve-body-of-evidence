@@ -1,4 +1,4 @@
-// Carousel3D Helper Functions
+// Carousel3D Helper Functions - pure calculation utilities
 
 import {
   CAROUSEL_LAYOUT,
@@ -9,11 +9,15 @@ import {
 
 export { DRAG_THRESHOLD }
 
+// -----------------------------------------------------------------------------
+// LAYOUT CONFIGURATION
+// -----------------------------------------------------------------------------
+
 // Get layout configuration based on image count
 export function getLayoutConfig(imageCount) {
   const layout = imageCount >= CAROUSEL_LAYOUT.LARGE.minImages ? CAROUSEL_LAYOUT.LARGE
     : imageCount >= CAROUSEL_LAYOUT.MEDIUM.minImages ? CAROUSEL_LAYOUT.MEDIUM
-    : CAROUSEL_LAYOUT.SMALL
+      : CAROUSEL_LAYOUT.SMALL
 
   const { rows, visibleColumns } = layout
   const s = CAROUSEL_SETTINGS
@@ -25,12 +29,16 @@ export function getLayoutConfig(imageCount) {
     imageSize: s.imageSizeBase - (rows - 1) * s.imageSizeRowReduction,
     cylinderRadius: s.cylinderRadius[rows] || 2.0,
     rowSpacing: (s.imageSizeBase - (rows - 1) * s.imageSizeRowReduction) * s.rowSpacingMultiplier,
-    columnAngle: Math.PI / visibleColumns,
+    columnAngle: Math.PI / visibleColumns, // columns spread across 180 degrees
     poolSize: (visibleColumns + s.poolBuffer * 2) * rows,
     cameraZ: s.cameraZ[rows],
-    fov: s.fov[rows] || 50
+    fovHorizontal: s.fovHorizontal[rows] || 50 // Horizontal FOV, will be converted to vertical based on aspect ratio
   }
 }
+
+// -----------------------------------------------------------------------------
+// 3D POSITIONING
+// -----------------------------------------------------------------------------
 
 // Calculate 3D position on cylinder surface
 export function calculateCylinderPosition(columnIndex, rowIndex, config) {
@@ -44,36 +52,47 @@ export function calculateCylinderPosition(columnIndex, rowIndex, config) {
   }
 }
 
-// Calculate visibility and dark overlay based on angle from center
+// -----------------------------------------------------------------------------
+// VISIBILITY & DEPTH
+// -----------------------------------------------------------------------------
+
+// Calculate visibility (opacity, darkOverlay) based on angle from center
 export function calculateVisibility(angleFromCenter) {
   const absAngle = Math.abs(angleFromCenter)
   const v = CAROUSEL_VISIBILITY
 
-  // Beyond cutoff - hidden
+  // Beyond cutoff - don't render
   if (absAngle >= v.cutoffAngle) {
     return { opacity: 0, darkOverlay: 0, visible: false }
   }
 
-  // Full opacity zone - no darkening
+  // Full opacity zone - no fading, no darkening
   if (absAngle <= v.fullOpacityAngle) {
     return { opacity: 1, darkOverlay: 0, visible: true }
   }
 
-  // Calculate opacity fade
-  const fadeRange = v.cutoffAngle - v.fullOpacityAngle
-  const fadeProgress = (absAngle - v.fullOpacityAngle) / fadeRange
-  const opacity = 1 - (fadeProgress * fadeProgress * 0.9)
+  // Opacity: fade from 1 to 0 between fullOpacityAngle and zeroOpacityAngle
+  let opacity = 1
+  if (absAngle > v.fullOpacityAngle) {
+    const fadeRange = v.zeroOpacityAngle - v.fullOpacityAngle
+    const fadeProgress = Math.min(1, (absAngle - v.fullOpacityAngle) / fadeRange)
+    opacity = Math.max(0, 1 - fadeProgress)
+  }
 
-  // Calculate dark overlay (starts after darkStartAngle)
+  // Dark overlay: starts at darkStartAngle, maxes at zeroOpacityAngle
   let darkOverlay = 0
   if (absAngle > v.darkStartAngle) {
-    const darkRange = v.cutoffAngle - v.darkStartAngle
-    const darkProgress = (absAngle - v.darkStartAngle) / darkRange
+    const darkRange = v.zeroOpacityAngle - v.darkStartAngle
+    const darkProgress = Math.min(1, (absAngle - v.darkStartAngle) / darkRange)
     darkOverlay = darkProgress * v.maxDarkOverlay
   }
 
   return { opacity, darkOverlay, visible: true }
 }
+
+// -----------------------------------------------------------------------------
+// ROTATION & SNAP
+// -----------------------------------------------------------------------------
 
 // Calculate snap target rotation to nearest column
 export function calculateSnapTarget(rotation, columnAngle) {
@@ -84,6 +103,10 @@ export function calculateSnapTarget(rotation, columnAngle) {
 export function isDragThresholdMet(startX, currentX) {
   return Math.abs(currentX - startX) > DRAG_THRESHOLD
 }
+
+// -----------------------------------------------------------------------------
+// POOLING
+// -----------------------------------------------------------------------------
 
 // Get column range for pooling based on current rotation
 export function getPoolingRange(rotation, visibleColumns, columnAngle) {
@@ -96,6 +119,15 @@ export function getPoolingRange(rotation, visibleColumns, columnAngle) {
     centerColumn
   }
 }
+
+// Wrap index for infinite scroll (handles negative values)
+export function wrapIndex(index, total) {
+  return ((index % total) + total) % total
+}
+
+// -----------------------------------------------------------------------------
+// ANGLE UTILITIES
+// -----------------------------------------------------------------------------
 
 // Normalize rotation to [-PI, PI] range
 export function normalizeRotation(rotation) {
@@ -110,7 +142,14 @@ export function getAngleFromCenter(columnIndex, currentRotation, columnAngle) {
   return normalizeRotation(columnIndex * columnAngle - currentRotation)
 }
 
-// Wrap index for infinite scroll (handles negative values)
-export function wrapIndex(index, total) {
-  return ((index % total) + total) % total
+// -----------------------------------------------------------------------------
+// CAMERA UTILITIES
+// -----------------------------------------------------------------------------
+
+// Convert horizontal FOV (degrees) to vertical FOV (degrees) based on aspect ratio
+// Formula: verticalFOV = 2 * atan(tan(horizontalFOV / 2) / aspectRatio)
+export function horizontalToVerticalFOV(horizontalFOVDegrees, aspectRatio) {
+  const horizontalFOVRad = (horizontalFOVDegrees * Math.PI) / 180
+  const verticalFOVRad = 2 * Math.atan(Math.tan(horizontalFOVRad / 2) / aspectRatio)
+  return (verticalFOVRad * 180) / Math.PI
 }

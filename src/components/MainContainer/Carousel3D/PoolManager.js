@@ -1,4 +1,4 @@
-// PoolManager - manages image slot pooling for carousel
+// PoolManager - manages image slot pooling for infinite carousel scroll
 
 import { getPoolingRange, wrapIndex } from './carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
@@ -12,7 +12,10 @@ class PoolManager {
     this.listeners = new Set()
   }
 
-  // Initialize pool with layout and images
+  // ---------------------------------------------------------------------------
+  // INITIALIZATION
+  // ---------------------------------------------------------------------------
+
   initializePool(layoutConfig, imageData, initialRotation = 0) {
     this.layoutConfig = layoutConfig
     this.imageData = imageData
@@ -22,7 +25,7 @@ class PoolManager {
     const { rows, visibleColumns } = layoutConfig
     const totalSlots = visibleColumns + CAROUSEL_SETTINGS.poolBuffer * 2
 
-    // Create pool slots
+    // Create pool slots in column-major order
     for (let col = 0; col < totalSlots; col++) {
       for (let row = 0; row < rows; row++) {
         this.pool.push({
@@ -40,21 +43,24 @@ class PoolManager {
     this.notifyListeners()
   }
 
-  // Update which images are assigned to pool slots
+  // ---------------------------------------------------------------------------
+  // POOL UPDATES
+  // ---------------------------------------------------------------------------
+
   updatePoolAssignments(currentRotation) {
     if (!this.layoutConfig || this.imageData.length === 0) return
 
     const { visibleColumns, columnAngle, rows } = this.layoutConfig
     const { startColumn, centerColumn } = getPoolingRange(currentRotation, visibleColumns, columnAngle)
 
-    // Skip if center hasn't changed
+    // Skip update if center column hasn't changed
     if (this.lastCenterColumn === centerColumn) return
     this.lastCenterColumn = centerColumn
 
     const totalSlots = visibleColumns + CAROUSEL_SETTINGS.poolBuffer * 2
     const totalImageColumns = Math.ceil(this.imageData.length / rows)
 
-    // Assign images to slots
+    // Reassign images to slots based on current view position
     this.pool.forEach((slot, index) => {
       const slotCol = Math.floor(index / rows)
       const rowIndex = index % rows
@@ -63,7 +69,7 @@ class PoolManager {
       slot.virtualColumn = virtualColumn
       slot.rowIndex = rowIndex
 
-      // Wrap column for infinite scroll
+      // Wrap column index for infinite scroll
       const wrappedColumn = wrapIndex(virtualColumn, totalImageColumns)
       const imageIndex = wrapIndex(wrappedColumn * rows + rowIndex, this.imageData.length)
       slot.imageData = this.imageData[imageIndex]
@@ -72,7 +78,10 @@ class PoolManager {
     this.notifyListeners()
   }
 
-  // Get active slots for rendering
+  // ---------------------------------------------------------------------------
+  // GETTERS
+  // ---------------------------------------------------------------------------
+
   getActiveSlots() {
     return this.pool.filter(slot => slot.isActive && slot.imageData)
   }
@@ -80,7 +89,10 @@ class PoolManager {
   getLayoutConfig() { return this.layoutConfig }
   getImageCount() { return this.imageData.length }
 
-  // Subscribe to pool changes
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTION
+  // ---------------------------------------------------------------------------
+
   subscribe(callback) {
     this.listeners.add(callback)
     return () => this.listeners.delete(callback)
@@ -92,7 +104,10 @@ class PoolManager {
     })
   }
 
-  // Reset all state
+  // ---------------------------------------------------------------------------
+  // RESET
+  // ---------------------------------------------------------------------------
+
   reset() {
     this.pool = []
     this.imageData = []

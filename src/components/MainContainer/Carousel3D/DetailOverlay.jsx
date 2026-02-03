@@ -7,6 +7,10 @@ import appStateManager from '../../../managers/AppStateManager'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
 import './DetailOverlay.css'
 
+// -----------------------------------------------------------------------------
+// HELPERS
+// -----------------------------------------------------------------------------
+
 // Format field name for display (e.g. "baselineImage" -> "Baseline")
 const formatField = (field) => field
   .replace('Image', '')
@@ -15,9 +19,14 @@ const formatField = (field) => field
   .trim()
   .replace(/^./, s => s.toUpperCase())
 
+// -----------------------------------------------------------------------------
+// MAIN COMPONENT
+// -----------------------------------------------------------------------------
+
 const DetailOverlay = () => {
   const [selected, setSelected] = useState(null)
 
+  // Subscribe to image click events
   useEffect(() => {
     const onImageClicked = (data) => setSelected(data)
     eventSystem.on(eventSystem.constructor.EVENTS.IMAGE_CLICKED, onImageClicked)
@@ -81,7 +90,10 @@ const DetailOverlay = () => {
   )
 }
 
-// Info item component
+// -----------------------------------------------------------------------------
+// INFO ITEM COMPONENT
+// -----------------------------------------------------------------------------
+
 const InfoItem = ({ label, value }) => {
   if (!value) return null
   return (

@@ -6,55 +6,70 @@ import { gsap } from 'gsap'
 import ImageFrame from './ImageFrame'
 import poolManager from './PoolManager'
 import rotationStateManager from './RotationStateManager'
-import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isDragThresholdMet } from './carouselHelpers'
+import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isDragThresholdMet, horizontalToVerticalFOV } from './carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 
 const CarouselScene = ({ layoutConfig }) => {
-  const { gl, camera } = useThree()
-  
-  // Update camera position and FOV when layout config changes
-  useEffect(() => {
-    if (layoutConfig && camera) {
-      // Animate camera Z position
-      gsap.to(camera.position, {
-        z: layoutConfig.cameraZ,
-        duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-        ease: 'power2.inOut'
-      })
-      
-      // Animate FOV separately to ensure it updates the perspective
-      const targetFOV = { value: camera.fov }
-      gsap.to(targetFOV, {
-        value: layoutConfig.fov,
-        duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-        ease: 'power2.inOut',
-        onUpdate: () => {
-          camera.fov = targetFOV.value
-          camera.updateProjectionMatrix()
-        }
-      })
-    }
-  }, [layoutConfig, camera])
+  const { gl, camera, size } = useThree()
   const dragRef = useRef({ active: false, moved: false, startX: 0, startRotation: 0 })
   const clickRef = useRef({ isDragging: false })
 
   const [rotation, setRotation] = useState(rotationStateManager.getRotation())
   const [activeSlots, setActiveSlots] = useState([])
 
-  // Subscribe to rotation updates
+  // ---------------------------------------------------------------------------
+  // CAMERA ANIMATION - smooth transition when layout changes or window resizes
+  // ---------------------------------------------------------------------------
+
+  useEffect(() => {
+    if (!layoutConfig || !camera) return
+
+    // Animate camera Z position
+    gsap.to(camera.position, {
+      z: layoutConfig.cameraZ,
+      duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+      ease: 'power2.inOut'
+    })
+
+    // Calculate vertical FOV from horizontal FOV based on aspect ratio
+    const aspectRatio = size.width / size.height
+    const verticalFOV = horizontalToVerticalFOV(layoutConfig.fovHorizontal, aspectRatio)
+
+    // Animate FOV (vertical, calculated from horizontal)
+    const targetFOV = { value: camera.fov }
+    gsap.to(targetFOV, {
+      value: verticalFOV,
+      duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        camera.fov = targetFOV.value
+        camera.updateProjectionMatrix()
+      }
+    })
+  }, [layoutConfig, camera, size.width, size.height])
+
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTIONS
+  // ---------------------------------------------------------------------------
+
   useEffect(() => rotationStateManager.subscribe(setRotation), [])
 
-  // Subscribe to pool updates
   useEffect(() => {
     const update = () => setActiveSlots([...poolManager.getActiveSlots()])
     update()
     return poolManager.subscribe(update)
   }, [])
 
-  // Update pool each frame
+  // ---------------------------------------------------------------------------
+  // FRAME UPDATE - sync pool with current rotation
+  // ---------------------------------------------------------------------------
+
   useFrame(() => poolManager.updatePoolAssignments(rotationStateManager.getRotation()))
 
-  // Drag start
+  // ---------------------------------------------------------------------------
+  // DRAG HANDLERS
+  // ---------------------------------------------------------------------------
+
   const onPointerDown = useCallback((e) => {
     if (!rotationStateManager.canInteract()) return
     e.stopPropagation()
@@ -64,7 +79,6 @@ const CarouselScene = ({ layoutConfig }) => {
     gl.domElement.setPointerCapture(e.pointerId)
   }, [gl])
 
-  // Drag move
   const onPointerMove = useCallback((e) => {
     if (!dragRef.current.active) return
 
@@ -79,7 +93,6 @@ const CarouselScene = ({ layoutConfig }) => {
     }
   }, [])
 
-  // Drag end
   const onPointerUp = useCallback((e) => {
     if (!dragRef.current.active) return
     gl.domElement.releasePointerCapture(e.pointerId)
@@ -89,18 +102,25 @@ const CarouselScene = ({ layoutConfig }) => {
     setTimeout(() => { clickRef.current.isDragging = false }, 50)
   }, [gl])
 
-  // Calculate visibility for each slot
+  // ---------------------------------------------------------------------------
+  // SLOT CALCULATION - compute visibility and position for each slot
+  // ---------------------------------------------------------------------------
+
   const slots = activeSlots.map(slot => ({
     ...slot,
     visibility: calculateVisibility(getAngleFromCenter(slot.virtualColumn, rotation, layoutConfig.columnAngle)),
     position: calculateCylinderPosition(slot.virtualColumn, slot.rowIndex, layoutConfig)
   }))
 
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <group>
       <ambientLight intensity={0.8} />
 
-      {/* Interaction plane */}
+      {/* Invisible interaction plane for drag capture */}
       <mesh
         position={[0, 0, layoutConfig.cylinderRadius + 1]}
         onPointerDown={onPointerDown}
@@ -113,7 +133,7 @@ const CarouselScene = ({ layoutConfig }) => {
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 
-      {/* Rotating carousel */}
+      {/* Rotating carousel group */}
       <group rotation={[0, -rotation, 0]}>
         {slots.map(slot => (
           <ImageFrame

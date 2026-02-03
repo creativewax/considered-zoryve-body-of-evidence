@@ -1,25 +1,31 @@
-// TextureCache - singleton for caching loaded textures
+// TextureCache - singleton for throttled texture loading with caching
 
 import * as THREE from 'three'
 
+const MAX_CONCURRENT_LOADS = 3 // prevent UI lockup by limiting parallel loads
+
 class TextureCache {
   constructor() {
-    this.cache = new Map()
-    this.loading = new Map()
+    this.cache = new Map()     // path -> texture
+    this.pending = new Map()   // path -> callbacks[]
+    this.queue = []            // queued load requests
+    this.activeLoads = 0       // current number of loading textures
+    this.loader = new THREE.TextureLoader()
   }
 
-  // Check if texture is cached
+  // ---------------------------------------------------------------------------
+  // PUBLIC API
+  // ---------------------------------------------------------------------------
+
   has(path) {
     return this.cache.has(path)
   }
 
-  // Get cached texture (returns null if not cached)
   get(path) {
     return this.cache.get(path) || null
   }
 
-  // Load texture with caching and deduplication
-  getTexture(path, onLoad, onError) {
+  load(path, onLoad, onError) {
     // Return cached immediately
     if (this.cache.has(path)) {
       setTimeout(() => onLoad(this.cache.get(path)), 0)
@@ -27,36 +33,68 @@ class TextureCache {
     }
 
     // Add to pending callbacks if already loading
-    if (this.loading.has(path)) {
-      this.loading.get(path).push({ onLoad, onError })
+    if (this.pending.has(path)) {
+      this.pending.get(path).push({ onLoad, onError })
       return
     }
 
-    // Start new load
-    this.loading.set(path, [{ onLoad, onError }])
+    // Queue the load request
+    this.pending.set(path, [{ onLoad, onError }])
+    this.queue.push(path)
+    this.processQueue()
+  }
 
-    new THREE.TextureLoader().load(
+  clear() {
+    this.cache.forEach(texture => texture.dispose())
+    this.cache.clear()
+    this.pending.clear()
+    this.queue = []
+  }
+
+  // ---------------------------------------------------------------------------
+  // INTERNAL - throttled queue processing
+  // ---------------------------------------------------------------------------
+
+  processQueue() {
+    while (this.activeLoads < MAX_CONCURRENT_LOADS && this.queue.length > 0) {
+      const path = this.queue.shift()
+      this.loadTexture(path)
+    }
+  }
+
+  loadTexture(path) {
+    this.activeLoads++
+
+    this.loader.load(
       path,
       (texture) => {
         this.cache.set(path, texture)
-        const callbacks = this.loading.get(path) || []
-        this.loading.delete(path)
-        callbacks.forEach(cb => cb.onLoad(texture))
+        this.resolveCallbacks(path, texture, true)
       },
       undefined,
       (error) => {
-        const callbacks = this.loading.get(path) || []
-        this.loading.delete(path)
-        callbacks.forEach(cb => cb.onError?.(error))
+        console.warn('TextureCache: failed to load', path, error)
+        this.resolveCallbacks(path, null, false)
       }
     )
   }
 
-  // Clear all cached textures
-  clear() {
-    this.cache.forEach(texture => texture.dispose())
-    this.cache.clear()
-    this.loading.clear()
+  resolveCallbacks(path, texture, success) {
+    const callbacks = this.pending.get(path) || []
+    this.pending.delete(path)
+    this.activeLoads--
+
+    // Notify all waiting callbacks
+    callbacks.forEach(cb => {
+      try {
+        success ? cb.onLoad(texture) : cb.onError?.()
+      } catch (e) {
+        console.error('TextureCache callback error:', e)
+      }
+    })
+
+    // Process next items in queue
+    this.processQueue()
   }
 }
 
