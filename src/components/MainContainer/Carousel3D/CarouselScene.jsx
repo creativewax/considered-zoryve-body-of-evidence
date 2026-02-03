@@ -15,18 +15,21 @@ const CarouselScene = ({ layoutConfig }) => {
   // Update camera position and FOV when layout config changes
   useEffect(() => {
     if (layoutConfig && camera) {
+      // Animate camera Z position
       gsap.to(camera.position, {
         z: layoutConfig.cameraZ,
         duration: CAROUSEL_SETTINGS.transitionFadeDuration,
         ease: 'power2.inOut'
       })
       
-      // Update FOV (need to update aspect ratio after FOV change)
-      gsap.to(camera, {
-        fov: layoutConfig.fov,
+      // Animate FOV separately to ensure it updates the perspective
+      const targetFOV = { value: camera.fov }
+      gsap.to(targetFOV, {
+        value: layoutConfig.fov,
         duration: CAROUSEL_SETTINGS.transitionFadeDuration,
         ease: 'power2.inOut',
         onUpdate: () => {
+          camera.fov = targetFOV.value
           camera.updateProjectionMatrix()
         }
       })

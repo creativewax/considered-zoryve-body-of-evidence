@@ -9,7 +9,7 @@ export const CAROUSEL_LAYOUT = {
 export const CAROUSEL_SETTINGS = {
   cylinderRadius: { 1: 1.9, 3: 2.5, 5: 3.0 },
   cameraZ: { 1: 6.35, 3: 8.75, 5: 10.25 },
-  fov: { 1: 50, 3: 50, 5: 50 },
+  fov: { 1: 60, 3: 50, 5: 45 },
   rowSpacingMultiplier: 1.25,
   imageSizeBase: 1.0,
   imageSizeRowReduction: 0.05,
