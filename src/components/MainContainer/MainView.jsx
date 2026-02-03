@@ -65,6 +65,9 @@ const MainView = () => {
             setImageCount(pending.count)
             currentRowsRef.current = pending.config.rows
             rotationStateManager.setColumnAngle(pending.config.columnAngle)
+            
+            // Prepare intro state BEFORE initializing pool so images are hidden immediately
+            rotationStateManager.prepareIntro(pending.config.visibleColumns)
             poolManager.initializePool(pending.config, pending.images)
 
             // Fade back in
@@ -82,11 +85,15 @@ const MainView = () => {
         setImageCount(count)
         currentRowsRef.current = config.rows
         rotationStateManager.setColumnAngle(config.columnAngle)
-        poolManager.initializePool(config, imagesWithThumbs)
-
+        
         // Play intro on initial load
         if (!rowsChanged) {
+          // Prepare intro state BEFORE initializing pool so images are hidden immediately
+          rotationStateManager.prepareIntro(config.visibleColumns)
+          poolManager.initializePool(config, imagesWithThumbs)
           rotationStateManager.playIntro(config.visibleColumns)
+        } else {
+          poolManager.initializePool(config, imagesWithThumbs)
         }
       }
     }

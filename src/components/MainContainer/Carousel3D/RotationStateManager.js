@@ -25,7 +25,7 @@ class RotationStateManager {
   // Check if a column should be hidden during intro
   isColumnHiddenDuringIntro(virtualColumn) {
     if (!this.isIntroPlaying) return false
-    return this.introStartColumns.has(virtualColumn)
+    return !this.introStartColumns.has(virtualColumn)
   }
 
   // Set rotation and notify listeners
@@ -65,16 +65,9 @@ class RotationStateManager {
     this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
   }
 
-  // Play intro spin animation - images spin in from hidden
-  playIntro(visibleColumns, onComplete) {
-    if (!visibleColumns || this.columnAngle <= 0) {
-      console.warn('playIntro: visibleColumns or columnAngle not set')
-      onComplete?.()
-      return
-    }
-
-    this.interruptAnimation()
-    this.isIntroPlaying = true
+  // Prepare intro state (set hidden columns) - call before initializing pool
+  prepareIntro(visibleColumns) {
+    if (!visibleColumns || this.columnAngle <= 0) return false
 
     // Calculate which columns are visible at rotation 0 (BEFORE the spin)
     // These are the columns that should be hidden during intro
@@ -87,9 +80,31 @@ class RotationStateManager {
       this.introStartColumns.add(i)
     }
 
-    // Now set starting rotation (behind the view) for the spin animation
+    // Set intro playing state immediately so introHidden check works
+    this.isIntroPlaying = true
+    
+    // Set starting rotation (behind the view) for the spin animation
     this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
     this.notifyListeners()
+    
+    return true
+  }
+
+  // Play intro spin animation - images spin in from hidden
+  playIntro(visibleColumns, onComplete) {
+    if (!visibleColumns || this.columnAngle <= 0) {
+      console.warn('playIntro: visibleColumns or columnAngle not set')
+      onComplete?.()
+      return
+    }
+
+    // If intro wasn't prepared, prepare it now
+    if (!this.isIntroPlaying || this.introStartColumns.size === 0) {
+      this.prepareIntro(visibleColumns)
+    }
+
+    this.interruptAnimation()
+    this.isIntroPlaying = true
 
     const target = { rotation: this.rotation }
     this.currentTween = gsap.to(target, {
