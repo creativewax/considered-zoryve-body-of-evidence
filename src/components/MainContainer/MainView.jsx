@@ -104,7 +104,7 @@ const MainView = () => {
         {layoutConfig && imageCount > 0 ? (
           <>
             <Canvas
-              camera={{ position: [0, 0, layoutConfig.cameraZ], fov: 50 }}
+              camera={{ position: [0, 0, layoutConfig.cameraZ], fov: layoutConfig.fov }}
               style={{ background: 'transparent' }}
               gl={{ alpha: true, antialias: true }}
             >

@@ -12,13 +12,23 @@ import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 const CarouselScene = ({ layoutConfig }) => {
   const { gl, camera } = useThree()
   
-  // Update camera position when layout config changes
+  // Update camera position and FOV when layout config changes
   useEffect(() => {
     if (layoutConfig && camera) {
       gsap.to(camera.position, {
         z: layoutConfig.cameraZ,
         duration: CAROUSEL_SETTINGS.transitionFadeDuration,
         ease: 'power2.inOut'
+      })
+      
+      // Update FOV (need to update aspect ratio after FOV change)
+      gsap.to(camera, {
+        fov: layoutConfig.fov,
+        duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          camera.updateProjectionMatrix()
+        }
       })
     }
   }, [layoutConfig, camera])
