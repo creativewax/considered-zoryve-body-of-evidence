@@ -7,15 +7,15 @@ export const CAROUSEL_LAYOUT = {
 }
 
 export const CAROUSEL_SETTINGS = {
-  cylinderRadius: { 1: 2.0, 3: 2.5, 5: 3.0 },
-  cameraZ: { 1: 8, 3: 7, 5: 10 },
+  cylinderRadius: { 1: 1.9, 3: 2.5, 5: 3.0 },
+  cameraZ: { 1: 6.35, 3: 8.75, 5: 10.25 },
   rowSpacingMultiplier: 1.25,
   imageSizeBase: 1.0,
   imageSizeRowReduction: 0.05,
   dragSensitivity: 0.004,
   snapDuration: 0.5,
   poolBuffer: 2,
-  transitionFadeDuration: 0.25,
+  transitionFadeDuration: 0.5,
   introSpinDuration: 0.8,
   introSpinAngle: Math.PI * 2
 }
