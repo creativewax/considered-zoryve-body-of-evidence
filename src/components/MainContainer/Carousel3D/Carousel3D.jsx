@@ -1,57 +1,17 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
 import { gsap } from 'gsap'
 import ImageFrame from './ImageFrame.jsx'
 import rotationStateManager from './RotationStateManager.js'
 import poolManager from './PoolManager.js'
-
-/**
- * Calculate rows and columns based on result count
- */
-const getLayoutConfig = (resultCount) => {
-  if (resultCount >= 45) {
-    return { rows: 5, maxColumns: 9 }
-  } else if (resultCount >= 21) {
-    return { rows: 3, maxColumns: 7 }
-  } else if (resultCount >= 2) {
-    return { rows: 1, maxColumns: 5 }
-  }
-  return { rows: 1, maxColumns: 1 }
-}
-
-/**
- * Calculate angle for column position
- */
-const getColumnAngle = (columnIndex, totalColumns, centerColumn) => {
-  const offset = columnIndex - centerColumn
-  const angleStep = (Math.PI * 2) / totalColumns
-  return offset * angleStep
-}
-
-/**
- * Calculate opacity and blur based on angle from center
- */
-const getVisualEffects = (angle, totalColumns) => {
-  const normalizedAngle = Math.abs(angle)
-  const maxAngle = Math.PI / 2 // 90 degrees
-  const immediateNeighborAngle = Math.PI / totalColumns
-  
-  if (normalizedAngle <= immediateNeighborAngle) {
-    // Center and immediate neighbors: full opacity, no blur
-    return { opacity: 1, blur: 0 }
-  }
-  
-  // Progressive fade and blur
-  const fadeStart = immediateNeighborAngle
-  const fadeRange = maxAngle - fadeStart
-  const fadeProgress = Math.min(1, (normalizedAngle - fadeStart) / fadeRange)
-  
-  return {
-    opacity: Math.max(0, 1 - fadeProgress),
-    blur: fadeProgress * 0.1
-  }
-}
+import { 
+  getLayoutConfig, 
+  getColumnAngle, 
+  getVisualEffects,
+  getNearestColumnAngle,
+  getNavigationTargetAngle
+} from './carouselHelpers.js'
+import './Carousel3D.css'
 
 const CarouselScene = ({ images, onImageClick }) => {
   const groupRef = useRef()
@@ -60,16 +20,14 @@ const CarouselScene = ({ images, onImageClick }) => {
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, rotation: 0 })
   const [snapTween, setSnapTween] = useState(null)
-  const dragThreshold = 5 // pixels
+  const dragThreshold = 5
 
   const layoutConfig = useMemo(() => getLayoutConfig(images.length), [images.length])
   const { rows, maxColumns } = layoutConfig
 
-  // Calculate total columns needed
   const totalColumns = Math.min(maxColumns, Math.ceil(images.length / rows))
   const centerColumn = Math.floor(totalColumns / 2)
 
-  // Subscribe to rotation changes
   useEffect(() => {
     const unsubscribe = rotationStateManager.subscribe((newRotation) => {
       setRotation(newRotation)
@@ -77,13 +35,38 @@ const CarouselScene = ({ images, onImageClick }) => {
     return unsubscribe
   }, [])
 
-  // Initialize pool
   useEffect(() => {
     const poolSize = rows * maxColumns * 2
     poolManager.initializePool(images, poolSize)
   }, [images, rows, maxColumns])
 
-  // Handle mouse/touch events
+  const navigateColumn = useRef((direction) => {
+    const targetAngle = getNavigationTargetAngle(rotation, direction, totalColumns)
+    
+    if (snapTween.current) snapTween.current.kill()
+    
+    const tween = gsap.to({ rotation }, {
+      rotation: targetAngle,
+      duration: 0.5,
+      ease: 'power2.out',
+      onUpdate: function() {
+        rotationStateManager.setRotation(this.targets()[0].rotation)
+      }
+    })
+    
+    snapTween.current = tween
+  })
+
+  useEffect(() => {
+    window.carouselNavigate = { 
+      next: () => navigateColumn.current(1), 
+      prev: () => navigateColumn.current(-1) 
+    }
+    return () => { 
+      delete window.carouselNavigate 
+    }
+  }, [totalColumns, rotation])
+
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -120,10 +103,7 @@ const CarouselScene = ({ images, onImageClick }) => {
 
     const handlePointerUp = () => {
       if (isDragging) {
-        const angleStep = (Math.PI * 2) / totalColumns
-        const currentAngle = rotation % (Math.PI * 2)
-        const normalizedAngle = currentAngle < 0 ? currentAngle + Math.PI * 2 : currentAngle
-        const nearestColumnAngle = Math.round(normalizedAngle / angleStep) * angleStep
+        const nearestColumnAngle = getNearestColumnAngle(rotation, totalColumns)
         
         const tween = gsap.to({ rotation }, {
           rotation: nearestColumnAngle,
@@ -157,47 +137,15 @@ const CarouselScene = ({ images, onImageClick }) => {
     }
   }, [rotation, dragStart, isDragging, snapTween, totalColumns])
 
-  // Update group rotation
   useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y = rotation
     }
   })
 
-  // Navigate to next/previous column
-  const navigateColumn = (direction) => {
-    const angleStep = (Math.PI * 2) / totalColumns
-    const currentAngle = rotation % (Math.PI * 2)
-    const normalizedAngle = currentAngle < 0 ? currentAngle + Math.PI * 2 : currentAngle
-    const currentColumn = Math.round(normalizedAngle / angleStep)
-    const nextColumn = currentColumn + direction
-    const targetAngle = nextColumn * angleStep
-    
-    if (snapTween) snapTween.kill()
-    
-    const tween = gsap.to({ rotation }, {
-      rotation: targetAngle,
-      duration: 0.5,
-      ease: 'power2.out',
-      onUpdate: function() {
-        rotationStateManager.setRotation(this.targets()[0].rotation)
-      }
-    })
-    
-    setSnapTween(tween)
-  }
-
-  // Expose navigation functions
-  useEffect(() => {
-    window.carouselNavigate = { next: () => navigateColumn(1), prev: () => navigateColumn(-1) }
-    return () => { delete window.carouselNavigate }
-  }, [totalColumns, rotation])
-
-  // Render images in cylinder layout
   const renderImages = () => {
     const imageElements = []
     const radius = 5
-    const imageSize = 1
     
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < totalColumns; col++) {
@@ -225,7 +173,6 @@ const CarouselScene = ({ images, onImageClick }) => {
             rotation={[0, columnAngle + Math.PI / 2, 0]}
             scale={scale}
             opacity={effects.opacity}
-            blur={effects.blur}
             onClick={() => onImageClick(imageData)}
           />
         )
@@ -236,7 +183,7 @@ const CarouselScene = ({ images, onImageClick }) => {
   }
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+    <div ref={containerRef} className="carousel-3d-container">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
@@ -251,7 +198,7 @@ const CarouselScene = ({ images, onImageClick }) => {
   )
 }
 
-const Carousel3D = ({ images, onImageClick, onNavigateNext, onNavigatePrev }) => {
+const Carousel3D = ({ images, onImageClick }) => {
   if (!images || images.length === 0) {
     return null
   }

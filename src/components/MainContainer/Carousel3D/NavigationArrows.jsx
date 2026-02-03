@@ -1,4 +1,3 @@
-import { ASSETS } from '../../../constants/index.js'
 import './NavigationArrows.css'
 
 const NavigationArrows = ({ onLeftClick, onRightClick }) => {

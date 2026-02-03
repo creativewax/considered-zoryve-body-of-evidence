@@ -4,7 +4,8 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(var(--shadow-offset-y, 0px));
+  background-image: var(--shadow-image);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

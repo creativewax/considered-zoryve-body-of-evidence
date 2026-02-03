@@ -2,8 +2,9 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
+import './ImageFrame.css'
 
-const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, onClick }) => {
+const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, onClick }) => {
   const groupRef = useRef()
   const imageMeshRef = useRef()
   
@@ -28,7 +29,6 @@ const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, o
   if (!texture) return null
 
   const frameWidth = 1.08
-  const frameThickness = 0.04
   const glowSize = 1.16
 
   return (
@@ -37,15 +37,8 @@ const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, o
       position={position} 
       rotation={rotation}
       onClick={onClick}
-      onPointerOver={(e) => {
-        e.stopPropagation()
-        document.body.style.cursor = 'pointer'
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'default'
-      }}
+      className="image-frame-group"
     >
-      {/* Glow effect - outer white glow */}
       <mesh position={[0, 0, -0.01]}>
         <planeGeometry args={[glowSize, glowSize]} />
         <meshBasicMaterial
@@ -56,7 +49,6 @@ const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, o
         />
       </mesh>
       
-      {/* Frame - white border */}
       <mesh position={[0, 0, 0]}>
         <planeGeometry args={[frameWidth, frameWidth]} />
         <meshBasicMaterial
@@ -67,7 +59,6 @@ const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, o
         />
       </mesh>
       
-      {/* Inner cutout - creates the border effect */}
       <mesh position={[0, 0, 0.01]}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial
@@ -78,7 +69,6 @@ const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, blur, o
         />
       </mesh>
       
-      {/* Image plane */}
       <mesh ref={imageMeshRef} position={[0, 0, 0.02]}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial
