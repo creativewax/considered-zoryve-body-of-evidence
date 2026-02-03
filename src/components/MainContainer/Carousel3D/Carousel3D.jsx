@@ -13,9 +13,11 @@ import {
 } from './carouselHelpers.js'
 import './Carousel3D.css'
 
-const CarouselScene = ({ images, onImageClick }) => {
+/**
+ * 3D Scene Component - Must be inside Canvas
+ */
+const CarouselScene3D = ({ images, onImageClick, containerRef }) => {
   const groupRef = useRef()
-  const containerRef = useRef()
   const [rotation, setRotation] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, rotation: 0 })
@@ -67,8 +69,9 @@ const CarouselScene = ({ images, onImageClick }) => {
     }
   }, [navigateColumn])
 
+  // Handle pointer events on container (outside Canvas)
   useEffect(() => {
-    const container = containerRef.current
+    const container = containerRef?.current
     if (!container) return
 
     const handlePointerDown = (e) => {
@@ -135,8 +138,9 @@ const CarouselScene = ({ images, onImageClick }) => {
       container.removeEventListener('pointerup', handlePointerUp)
       container.removeEventListener('pointercancel', handlePointerUp)
     }
-  }, [rotation, dragStart, isDragging, snapTween, totalColumns])
+  }, [rotation, dragStart, isDragging, snapTween, totalColumns, containerRef])
 
+  // R3F hook - must be inside Canvas
   useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y = rotation
@@ -183,27 +187,40 @@ const CarouselScene = ({ images, onImageClick }) => {
   }
 
   return (
+    <>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} />
+      <group ref={groupRef}>
+        {renderImages()}
+      </group>
+    </>
+  )
+}
+
+/**
+ * Main Carousel Component
+ */
+const Carousel3D = ({ images, onImageClick }) => {
+  const containerRef = useRef(null)
+
+  if (!images || images.length === 0) {
+    return null
+  }
+
+  return (
     <div ref={containerRef} className="carousel-3d-container">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <group ref={groupRef}>
-          {renderImages()}
-        </group>
+        <CarouselScene3D 
+          images={images} 
+          onImageClick={onImageClick}
+          containerRef={containerRef}
+        />
       </Canvas>
     </div>
   )
-}
-
-const Carousel3D = ({ images, onImageClick }) => {
-  if (!images || images.length === 0) {
-    return null
-  }
-
-  return <CarouselScene images={images} onImageClick={onImageClick} />
 }
 
 export default Carousel3D
