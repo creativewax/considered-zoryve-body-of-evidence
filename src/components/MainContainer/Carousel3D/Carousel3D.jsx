@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import ImageFrame from './ImageFrame.jsx'
@@ -40,7 +40,7 @@ const CarouselScene = ({ images, onImageClick }) => {
     poolManager.initializePool(images, poolSize)
   }, [images, rows, maxColumns])
 
-  const navigateColumn = useRef((direction) => {
+  const navigateColumn = useCallback((direction) => {
     const targetAngle = getNavigationTargetAngle(rotation, direction, totalColumns)
     
     if (snapTween) snapTween.kill()
@@ -55,17 +55,17 @@ const CarouselScene = ({ images, onImageClick }) => {
     })
     
     setSnapTween(tween)
-  })
+  }, [rotation, totalColumns, snapTween])
 
   useEffect(() => {
     window.carouselNavigate = { 
-      next: () => navigateColumn.current(1), 
-      prev: () => navigateColumn.current(-1) 
+      next: () => navigateColumn(1), 
+      prev: () => navigateColumn(-1) 
     }
     return () => { 
       delete window.carouselNavigate 
     }
-  }, [totalColumns, rotation])
+  }, [navigateColumn])
 
   useEffect(() => {
     const container = containerRef.current
