@@ -1,42 +1,52 @@
-.navigation-arrows {
+.carousel-navigation {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 0;
   right: 0;
-  transform: translateY(-50%);
-  display: flex;
-  justify-content: space-between;
-  padding: 0 var(--spacing-xl);
+  bottom: 0;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
   z-index: 10;
 }
 
-.navigation-arrow {
-  width: 50px;
-  height: 50px;
+.carousel-nav-arrow {
+  pointer-events: auto;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--color-white);
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-white);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
 }
 
-.navigation-arrow:hover {
+.carousel-nav-arrow:hover {
   background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
   transform: scale(1.1);
 }
 
-.navigation-arrow:active {
+.carousel-nav-arrow:active {
   transform: scale(0.95);
 }
 
-.navigation-arrow svg {
+.carousel-nav-arrow svg {
   width: 24px;
   height: 24px;
+}
+
+.carousel-nav-left {
+  margin-left: 10px;
+}
+
+.carousel-nav-right {
+  margin-right: 10px;
 }

@@ -26,6 +26,8 @@ in the same main component i would like a arrow button to the left and right tha
 
 i would prefer the logic being split into smaller components etc, we could have one managing the image and data pooling, one managing the rotation state and have getters and setters for easy updates, viewable components etc
 
-underneath the main component we have a fake shadow image, it would be nice if this is around 900px wide and perfectly centered underneath and a component itself which can move up and down depending on how many images we show in rows, so it feels attached to the current state of the viewable images etc
+underneath the main component we have a fake shadow image, it would be nice if this is around 900px wide and perfectly centered underneath and a component itself which can move up and down depending on how many images we show in rows, so it feels attached to the current state of the viewable images etc the shadow is via an image in public/UI/shadow.png
 
 when we click and image for now please lets just have a global overlay component which shows a message to some of the relatable data for that image via the main json in the datamanager
+
+everything should animate nicely, the images should always face forward towards the camera, we should utilise my event system for things like the arrow buttons on the side vs routing new props and custom events etc

@@ -1,79 +1,94 @@
+// DetailOverlay - displays patient details when image is clicked
+
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PATIENT_SCHEMA } from '../../../constants/index.js'
-import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
+import eventSystem from '../../../utils/EventSystem'
+import appStateManager from '../../../managers/AppStateManager'
+import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
 import './DetailOverlay.css'
 
-const DetailOverlay = ({ imageData, onClose }) => {
-  if (!imageData || !imageData.patient) return null
+// Format field name for display (e.g. "baselineImage" -> "Baseline")
+const formatField = (field) => field
+  .replace('Image', '')
+  .replace(/([A-Z])/g, ' $1')
+  .replace(/week(\d+)/i, 'Week $1')
+  .trim()
+  .replace(/^./, s => s.toUpperCase())
 
-  const patient = imageData.patient
+const DetailOverlay = () => {
+  const [selected, setSelected] = useState(null)
+
+  useEffect(() => {
+    const onImageClicked = (data) => setSelected(data)
+    eventSystem.on(eventSystem.constructor.EVENTS.IMAGE_CLICKED, onImageClicked)
+    return () => eventSystem.off(eventSystem.constructor.EVENTS.IMAGE_CLICKED, onImageClicked)
+  }, [])
+
+  const close = () => {
+    setSelected(null)
+    appStateManager.setSelectedImage(null)
+  }
+
+  const onBackdrop = (e) => { if (e.target === e.currentTarget) close() }
 
   return (
     <AnimatePresence>
-      <motion.div
-        className="detail-overlay"
-        initial={ANIMATIONS.FADE_IN.initial}
-        animate={ANIMATIONS.FADE_IN.animate}
-        exit={ANIMATIONS.FADE_OUT.animate}
-        transition={TRANSITIONS.NORMAL}
-        onClick={onClose}
-      >
+      {selected && (
         <motion.div
-          className="detail-overlay-content"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
+          className="detail-overlay"
+          initial={ANIMATIONS.FADE_IN.initial}
+          animate={ANIMATIONS.FADE_IN.animate}
+          exit={{ opacity: 0 }}
           transition={TRANSITIONS.NORMAL}
-          onClick={(e) => e.stopPropagation()}
+          onClick={onBackdrop}
         >
-          <button className="detail-overlay-close" onClick={onClose}>
-            ×
-          </button>
-          
-          <div className="detail-overlay-image">
-            <img src={imageData.imagePath} alt="Patient detail" />
-          </div>
-          
-          <div className="detail-overlay-info">
-            <h2>Patient Information</h2>
-            
-            {patient[PATIENT_SCHEMA.PATIENT_ID] && (
-              <p><strong>Patient ID:</strong> {patient[PATIENT_SCHEMA.PATIENT_ID]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.INDICATION] && (
-              <p><strong>Condition:</strong> {patient[PATIENT_SCHEMA.INDICATION]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.FORMULATION] && (
-              <p><strong>Formulation:</strong> {patient[PATIENT_SCHEMA.FORMULATION]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.AGE] && (
-              <p><strong>Age:</strong> {patient[PATIENT_SCHEMA.AGE]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.GENDER] && (
-              <p><strong>Gender:</strong> {patient[PATIENT_SCHEMA.GENDER]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.BODY_AREA] && (
-              <p><strong>Body Area:</strong> {patient[PATIENT_SCHEMA.BODY_AREA]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.BASELINE_SEVERITY] && (
-              <p><strong>Baseline Severity:</strong> {patient[PATIENT_SCHEMA.BASELINE_SEVERITY]}</p>
-            )}
-            
-            {patient[PATIENT_SCHEMA.QUOTE] && (
-              <div className="detail-overlay-quote">
-                <p><em>"{patient[PATIENT_SCHEMA.QUOTE]}"</em></p>
+          <motion.div
+            className="detail-overlay-content"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={TRANSITIONS.NORMAL}
+          >
+            <button className="detail-overlay-close" onClick={close} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            <div className="detail-overlay-image-container">
+              <img src={selected.imagePath} alt="Patient" className="detail-overlay-image" />
+            </div>
+
+            {selected.patient && (
+              <div className="detail-overlay-data">
+                <h3>Patient Information</h3>
+                <div className="detail-overlay-info">
+                  <InfoItem label="Indication" value={selected.patient.indication} />
+                  <InfoItem label="Body Area" value={selected.patient.bodyArea} />
+                  <InfoItem label="Baseline Severity" value={selected.patient.baselineSeverity} />
+                  <InfoItem label="Formulation" value={selected.patient.formulation} />
+                  <InfoItem label="Age" value={selected.patient.age} />
+                  <InfoItem label="Gender" value={selected.patient.gender === 'M' ? 'Male' : 'Female'} />
+                  <InfoItem label="Skin Type" value={selected.patient.fitzpatrickSkinType} />
+                  <InfoItem label="Timepoint" value={selected.field && formatField(selected.field)} />
+                </div>
               </div>
             )}
-          </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
+  )
+}
+
+// Info item component
+const InfoItem = ({ label, value }) => {
+  if (!value) return null
+  return (
+    <p>
+      <span className="label">{label}:</span>
+      <span className="value">{value}</span>
+    </p>
   )
 }
 

@@ -1,26 +1,13 @@
-import { useMemo } from 'react'
-import { ASSETS } from '../../../constants/index.js'
-import { getRowCount } from './carouselHelpers.js'
+// Shadow - carousel shadow that adjusts position based on row count
+
 import './Shadow.css'
 
-const Shadow = ({ imageCount }) => {
-  const rows = useMemo(() => getRowCount(imageCount), [imageCount])
-  
-  const offsetY = useMemo(() => {
-    if (rows === 5) return 60
-    if (rows === 3) return 30
-    return 0
-  }, [rows])
+const BOTTOM_OFFSETS = { 1: '15%', 3: '10%', 5: '5%' }
 
-  return (
-    <div 
-      className="carousel-shadow"
-      style={{ 
-        '--shadow-offset-y': `${offsetY}px`,
-        '--shadow-image': `url(${ASSETS.ICONS.SHADOW})`
-      }}
-    />
-  )
-}
+const Shadow = ({ rowCount }) => (
+  <div className="carousel-shadow" style={{ bottom: BOTTOM_OFFSETS[rowCount] || '10%' }}>
+    <img src="/UI/shadow.png" alt="" className="carousel-shadow-image" />
+  </div>
+)
 
 export default Shadow

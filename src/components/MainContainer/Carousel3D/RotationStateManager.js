@@ -1,48 +1,172 @@
-/**
- * RotationStateManager - Singleton for managing carousel rotation state
- */
+// RotationStateManager - handles carousel rotation state and animations
+
+import { gsap } from 'gsap'
+import { calculateSnapTarget } from './carouselHelpers'
+import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
+
 class RotationStateManager {
   constructor() {
-    this.rotation = 0 // Global rotation in radians
+    this.rotation = 0
+    this.columnAngle = 0
+    this.isAnimating = false
+    this.isIntroPlaying = false
+    this.introStartColumns = new Set() // columns hidden during intro
+    this.currentTween = null
     this.listeners = new Set()
   }
 
-  /**
-   * Get current rotation
-   */
-  getRotation() {
-    return this.rotation
+  // Getters
+  getRotation() { return this.rotation }
+  getColumnAngle() { return this.columnAngle }
+  getIsIntroPlaying() { return this.isIntroPlaying }
+  getIntroStartColumns() { return this.introStartColumns }
+  canInteract() { return !this.isIntroPlaying }
+
+  // Check if a column should be hidden during intro
+  isColumnHiddenDuringIntro(virtualColumn) {
+    if (!this.isIntroPlaying) return false
+    return this.introStartColumns.has(virtualColumn)
   }
 
-  /**
-   * Set rotation
-   */
-  setRotation(rotation) {
-    this.rotation = rotation
+  // Set rotation and notify listeners
+  setRotation(value) {
+    this.rotation = value
     this.notifyListeners()
   }
 
-  /**
-   * Add rotation delta
-   */
-  addRotation(delta) {
-    this.rotation += delta
+  // Set column angle (resets rotation)
+  setColumnAngle(value) {
+    this.columnAngle = value
+    this.rotation = 0
+    this.interruptAnimation()
     this.notifyListeners()
   }
 
-  /**
-   * Subscribe to rotation changes
-   */
+  // Start snap animation to nearest column
+  snapToNearestColumn() {
+    if (this.columnAngle <= 0 || this.isIntroPlaying) return
+    const target = calculateSnapTarget(this.rotation, this.columnAngle)
+    this.animateTo(target, CAROUSEL_SETTINGS.snapDuration)
+  }
+
+  // Navigate one column left
+  navigateLeft() {
+    if (!this.canInteract()) return
+    this.interruptAnimation()
+    const currentColumn = Math.round(this.rotation / this.columnAngle)
+    this.animateTo((currentColumn - 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
+  }
+
+  // Navigate one column right
+  navigateRight() {
+    if (!this.canInteract()) return
+    this.interruptAnimation()
+    const currentColumn = Math.round(this.rotation / this.columnAngle)
+    this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
+  }
+
+  // Play intro spin animation - images spin in from hidden
+  playIntro(visibleColumns, onComplete) {
+    if (!visibleColumns || this.columnAngle <= 0) {
+      console.warn('playIntro: visibleColumns or columnAngle not set')
+      onComplete?.()
+      return
+    }
+
+    this.interruptAnimation()
+    this.isIntroPlaying = true
+
+    // Calculate which columns are visible at rotation 0 (BEFORE the spin)
+    // These are the columns that should be hidden during intro
+    const centerColumnAtZero = Math.round(0 / this.columnAngle) // Should be 0
+    const buffer = Math.ceil(visibleColumns / 2) + CAROUSEL_SETTINGS.poolBuffer
+    this.introStartColumns = new Set()
+    
+    // Store columns that are currently in view (at rotation 0)
+    for (let i = centerColumnAtZero - buffer; i <= centerColumnAtZero + buffer; i++) {
+      this.introStartColumns.add(i)
+    }
+
+    // Now set starting rotation (behind the view) for the spin animation
+    this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
+    this.notifyListeners()
+
+    const target = { rotation: this.rotation }
+    this.currentTween = gsap.to(target, {
+      rotation: 0,
+      duration: CAROUSEL_SETTINGS.introSpinDuration,
+      ease: 'power2.out',
+      onUpdate: () => {
+        this.rotation = target.rotation
+        this.notifyListeners()
+      },
+      onComplete: () => {
+        this.isIntroPlaying = false
+        this.introStartColumns = new Set()
+        this.isAnimating = false
+        this.currentTween = null
+        this.rotation = 0
+        this.notifyListeners()
+        onComplete?.()
+      }
+    })
+  }
+
+  // Animate to target rotation
+  animateTo(targetRotation, duration, onComplete) {
+    this.interruptAnimation()
+    this.isAnimating = true
+
+    const target = { rotation: this.rotation }
+    this.currentTween = gsap.to(target, {
+      rotation: targetRotation,
+      duration,
+      ease: 'power2.out',
+      onUpdate: () => {
+        this.rotation = target.rotation
+        this.notifyListeners()
+      },
+      onComplete: () => {
+        this.isAnimating = false
+        this.currentTween = null
+        this.rotation = targetRotation
+        this.notifyListeners()
+        onComplete?.()
+      }
+    })
+  }
+
+  // Stop any running animation
+  interruptAnimation() {
+    if (this.currentTween) {
+      this.currentTween.kill()
+      this.currentTween = null
+    }
+    this.isAnimating = false
+    this.isIntroPlaying = false
+    this.introStartColumns = new Set()
+  }
+
+  // Subscribe to rotation changes
   subscribe(callback) {
     this.listeners.add(callback)
     return () => this.listeners.delete(callback)
   }
 
-  /**
-   * Notify all listeners
-   */
   notifyListeners() {
-    this.listeners.forEach(callback => callback(this.rotation))
+    this.listeners.forEach(cb => {
+      try { cb(this.rotation) } catch (e) { console.error('RotationStateManager:', e) }
+    })
+  }
+
+  // Reset all state
+  reset() {
+    this.interruptAnimation()
+    this.rotation = 0
+    this.columnAngle = 0
+    this.isIntroPlaying = false
+    this.introStartColumns = new Set()
+    this.notifyListeners()
   }
 }
 

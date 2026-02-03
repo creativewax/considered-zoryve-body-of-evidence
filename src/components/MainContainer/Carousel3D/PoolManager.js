@@ -1,70 +1,104 @@
-/**
- * PoolManager - Manages image/data pooling for the carousel
- */
+// PoolManager - manages image slot pooling for carousel
+
+import { getPoolingRange, wrapIndex } from './carouselHelpers'
+import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
+
 class PoolManager {
   constructor() {
     this.pool = []
-    this.activeItems = new Map()
+    this.imageData = []
+    this.layoutConfig = null
+    this.lastCenterColumn = null
+    this.listeners = new Set()
   }
 
-  /**
-   * Initialize pool with image data
-   */
-  initializePool(imageDataArray, poolSize) {
+  // Initialize pool with layout and images
+  initializePool(layoutConfig, imageData) {
+    this.layoutConfig = layoutConfig
+    this.imageData = imageData
+    this.lastCenterColumn = null
     this.pool = []
-    this.activeItems.clear()
 
-    // Create pool of image holders
-    for (let i = 0; i < poolSize; i++) {
-      this.pool.push({
-        id: i,
-        imageData: null,
-        index: -1,
-        isActive: false
-      })
+    const { rows, visibleColumns } = layoutConfig
+    const totalSlots = visibleColumns + CAROUSEL_SETTINGS.poolBuffer * 2
+
+    // Create pool slots
+    for (let col = 0; col < totalSlots; col++) {
+      for (let row = 0; row < rows; row++) {
+        this.pool.push({
+          slotId: `slot-${col}-${row}`,
+          slotColumn: col,
+          rowIndex: row,
+          virtualColumn: col,
+          imageData: null,
+          isActive: true
+        })
+      }
     }
+
+    this.updatePoolAssignments(0)
+    this.notifyListeners()
   }
 
-  /**
-   * Get available item from pool
-   */
-  getAvailableItem() {
-    return this.pool.find(item => !item.isActive)
+  // Update which images are assigned to pool slots
+  updatePoolAssignments(currentRotation) {
+    if (!this.layoutConfig || this.imageData.length === 0) return
+
+    const { visibleColumns, columnAngle, rows } = this.layoutConfig
+    const { startColumn, centerColumn } = getPoolingRange(currentRotation, visibleColumns, columnAngle)
+
+    // Skip if center hasn't changed
+    if (this.lastCenterColumn === centerColumn) return
+    this.lastCenterColumn = centerColumn
+
+    const totalSlots = visibleColumns + CAROUSEL_SETTINGS.poolBuffer * 2
+    const totalImageColumns = Math.ceil(this.imageData.length / rows)
+
+    // Assign images to slots
+    this.pool.forEach((slot, index) => {
+      const slotCol = Math.floor(index / rows)
+      const rowIndex = index % rows
+      const virtualColumn = startColumn + slotCol
+
+      slot.virtualColumn = virtualColumn
+      slot.rowIndex = rowIndex
+
+      // Wrap column for infinite scroll
+      const wrappedColumn = wrapIndex(virtualColumn, totalImageColumns)
+      const imageIndex = wrapIndex(wrappedColumn * rows + rowIndex, this.imageData.length)
+      slot.imageData = this.imageData[imageIndex]
+    })
+
+    this.notifyListeners()
   }
 
-  /**
-   * Activate item with image data
-   */
-  activateItem(item, imageData, index) {
-    item.imageData = imageData
-    item.index = index
-    item.isActive = true
-    this.activeItems.set(item.id, item)
-    return item
+  // Get active slots for rendering
+  getActiveSlots() {
+    return this.pool.filter(slot => slot.isActive && slot.imageData)
   }
 
-  /**
-   * Deactivate item and return to pool
-   */
-  deactivateItem(item) {
-    item.imageData = null
-    item.index = -1
-    item.isActive = false
-    this.activeItems.delete(item.id)
+  getLayoutConfig() { return this.layoutConfig }
+  getImageCount() { return this.imageData.length }
+
+  // Subscribe to pool changes
+  subscribe(callback) {
+    this.listeners.add(callback)
+    return () => this.listeners.delete(callback)
   }
 
-  /**
-   * Get all active items
-   */
-  getActiveItems() {
-    return Array.from(this.activeItems.values())
+  notifyListeners() {
+    this.listeners.forEach(cb => {
+      try { cb() } catch (e) { console.error('PoolManager:', e) }
+    })
   }
 
-  /**
-   * Get item by index
-   */
-  getItemByIndex(index) {
-    return this.pool.find(item => item.index === index && item.isActive)
+  // Reset all state
+  reset() {
+    this.pool = []
+    this.imageData = []
+    this.layoutConfig = null
+    this.lastCenterColumn = null
+    this.notifyListeners()
   }
 }
 

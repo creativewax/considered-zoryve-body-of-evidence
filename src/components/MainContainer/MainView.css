@@ -9,42 +9,19 @@
 .main-view-content {
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-y: auto;
-  padding: var(--spacing-lg);
 }
 
-.main-view-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-  width: 100%;
-  max-width: 1200px;
-  justify-content: center;
-}
-
-.main-view-grid-item {
-  flex: 0 0 auto;
-  width: 140px;
-  height: 140px;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.main-view-grid-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.main-view-thumbnail {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+/* R3F Canvas fills the container */
+.main-view-content > canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .main-view-placeholder {

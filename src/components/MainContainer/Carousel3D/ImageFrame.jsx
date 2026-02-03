@@ -1,84 +1,132 @@
-import { useRef } from 'react'
+// ImageFrame - 3D image with frame, glow, and lazy loading
+
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
+import { Billboard } from '@react-three/drei'
 import * as THREE from 'three'
-import './ImageFrame.css'
+import appStateManager from '../../../managers/AppStateManager'
+import { CAROUSEL_FRAME } from '../../../constants/carousel'
+import textureCache from './TextureCache'
+import { getRoundedMask, getGlowTexture } from './frameTextures'
 
-const ImageFrame = ({ imageData, position, rotation, scale = 1, opacity, onClick }) => {
-  const groupRef = useRef()
-  const imageMeshRef = useRef()
-  
-  let texture = null
-  try {
-    texture = useTexture(imageData.imagePath)
-  } catch (error) {
-    console.warn('Failed to load texture:', imageData.imagePath)
-  }
+const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, introHidden }) => {
+  const spinnerRef = useRef()
+  const { imagePath } = imageData
 
-  useFrame(() => {
-    if (imageMeshRef.current && imageMeshRef.current.material) {
-      imageMeshRef.current.material.opacity = opacity
-      imageMeshRef.current.material.needsUpdate = true
+  // Texture loading state
+  const [texture, setTexture] = useState(() => textureCache.get(imagePath))
+  const [isLoading, setIsLoading] = useState(!textureCache.has(imagePath))
+  const [fadeIn, setFadeIn] = useState(textureCache.has(imagePath) ? 1 : 0)
+  const fadeRef = useRef(textureCache.has(imagePath) ? 1 : 0)
+
+  // Load texture via cache
+  useEffect(() => {
+    if (textureCache.has(imagePath)) {
+      setTexture(textureCache.get(imagePath))
+      setIsLoading(false)
+      fadeRef.current = 1
+      setFadeIn(1)
+      return
     }
-    
-    if (groupRef.current) {
-      groupRef.current.scale.set(scale, scale, scale)
+
+    setIsLoading(true)
+    fadeRef.current = 0
+    setFadeIn(0)
+
+    textureCache.getTexture(imagePath, (tex) => {
+      setTexture(tex)
+      setIsLoading(false)
+    }, () => setIsLoading(false))
+  }, [imagePath])
+
+  // Animate spinner and fade-in
+  useFrame((_, delta) => {
+    if (spinnerRef.current && isLoading) {
+      spinnerRef.current.rotation.z -= delta * 4
+    }
+    if (!isLoading && fadeRef.current < 1) {
+      fadeRef.current = Math.min(1, fadeRef.current + delta * 4)
+      setFadeIn(fadeRef.current)
     }
   })
 
-  if (!texture) return null
+  // Calculate frame dimensions
+  const frame = useMemo(() => ({
+    imageW: imageSize,
+    imageH: imageSize,
+    frameW: imageSize + CAROUSEL_FRAME.borderWidth * 2,
+    frameH: imageSize + CAROUSEL_FRAME.borderWidth * 2,
+    glowW: imageSize + CAROUSEL_FRAME.glowSpread,
+    glowH: imageSize + CAROUSEL_FRAME.glowSpread
+  }), [imageSize])
 
-  const frameWidth = 1.08
-  const glowSize = 1.16
+  // Get cached textures
+  const roundedMask = useMemo(() => getRoundedMask(), [])
+  const glowTexture = useMemo(() => getGlowTexture(), [])
+
+  // Event handlers
+  const handleClick = (e) => {
+    e.stopPropagation()
+    if (onClickRef?.current?.isDragging) return
+    appStateManager.setSelectedImage(imageData)
+  }
+
+  const handlePointerOver = () => { document.body.style.cursor = 'pointer' }
+  const handlePointerOut = () => { document.body.style.cursor = 'auto' }
+
+  // Don't render if not visible
+  if (!visibility.visible || introHidden) return null
+
+  const { opacity, darkOverlay } = visibility
 
   return (
-    <group 
-      ref={groupRef}
-      position={position} 
-      rotation={rotation}
-      onClick={onClick}
-      className="image-frame-group"
-    >
-      <mesh position={[0, 0, -0.01]}>
-        <planeGeometry args={[glowSize, glowSize]} />
-        <meshBasicMaterial
-          color="#ffffff"
-          transparent
-          opacity={opacity * 0.3}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      
-      <mesh position={[0, 0, 0]}>
-        <planeGeometry args={[frameWidth, frameWidth]} />
-        <meshBasicMaterial
-          color="#ffffff"
-          transparent
-          opacity={opacity}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      
-      <mesh position={[0, 0, 0.01]}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial
-          color="#000000"
-          transparent
-          opacity={0}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      
-      <mesh ref={imageMeshRef} position={[0, 0, 0.02]}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial
-          map={texture}
-          transparent
-          opacity={opacity}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-    </group>
+    <Billboard position={[position.x, position.y, position.z]} follow lockX={false} lockY={false} lockZ={false}>
+      <group>
+        {/* Glow */}
+        <mesh position={[0, 0, -0.03]}>
+          <planeGeometry args={[frame.glowW, frame.glowH]} />
+          <meshBasicMaterial map={glowTexture} transparent opacity={opacity * CAROUSEL_FRAME.glowOpacity} depthWrite={false} />
+        </mesh>
+
+        {/* White border */}
+        <mesh position={[0, 0, -0.02]}>
+          <planeGeometry args={[frame.frameW, frame.frameH]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={opacity} alphaMap={roundedMask} alphaTest={0.5} />
+        </mesh>
+
+        {/* Loading background */}
+        {isLoading && (
+          <mesh position={[0, 0, -0.015]}>
+            <planeGeometry args={[frame.imageW, frame.imageH]} />
+            <meshBasicMaterial color={CAROUSEL_FRAME.loadingColor} transparent opacity={opacity} alphaMap={roundedMask} alphaTest={0.5} />
+          </mesh>
+        )}
+
+        {/* Loading spinner */}
+        {isLoading && (
+          <mesh ref={spinnerRef} position={[0, 0, -0.01]}>
+            <ringGeometry args={[0.06, 0.09, 16, 1, 0, Math.PI * 1.5]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={opacity * 0.9} side={THREE.DoubleSide} />
+          </mesh>
+        )}
+
+        {/* Image */}
+        {texture && (
+          <mesh position={[0, 0, -0.01]} onClick={handleClick} onPointerOver={handlePointerOver} onPointerOut={handlePointerOut}>
+            <planeGeometry args={[frame.imageW, frame.imageH]} />
+            <meshBasicMaterial map={texture} transparent opacity={opacity * fadeIn} alphaMap={roundedMask} alphaTest={0.5} />
+          </mesh>
+        )}
+
+        {/* Dark overlay for depth */}
+        {darkOverlay > 0.01 && (
+          <mesh position={[0, 0, 0]}>
+            <planeGeometry args={[frame.frameW, frame.frameH]} />
+            <meshBasicMaterial color="#000000" transparent opacity={darkOverlay} alphaMap={roundedMask} alphaTest={0.5} />
+          </mesh>
+        )}
+      </group>
+    </Billboard>
   )
 }
 
