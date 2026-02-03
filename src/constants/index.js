@@ -152,6 +152,7 @@ export const ASSETS = {
     FOOTER_REFS: '/UI/footer-refs.svg',
     LOGO_ZORYVE: '/UI/logo-zoryve.svg',
     LOGO_APP: '/UI/logo-app.svg',
+    SHADOW: '/UI/shadow.png',
   },
   DATA: {
     PATIENT_DATA: '/data/patient_data.json',
