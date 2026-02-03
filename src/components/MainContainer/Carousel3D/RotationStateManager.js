@@ -66,8 +66,9 @@ class RotationStateManager {
   }
 
   // Prepare intro state (set hidden columns) - call before initializing pool
+  // Returns the rotation to use for pool initialization
   prepareIntro(visibleColumns) {
-    if (!visibleColumns || this.columnAngle <= 0) return false
+    if (!visibleColumns || this.columnAngle <= 0) return 0
 
     // Calculate which columns are visible at rotation 0 (BEFORE the spin)
     // These are the columns that should be hidden during intro
@@ -83,11 +84,9 @@ class RotationStateManager {
     // Set intro playing state immediately so introHidden check works
     this.isIntroPlaying = true
     
-    // Set starting rotation (behind the view) for the spin animation
-    this.rotation = -CAROUSEL_SETTINGS.introSpinAngle
-    this.notifyListeners()
-    
-    return true
+    // Return the starting rotation for pool initialization
+    // Pool will initialize with this rotation, then we'll animate to 0
+    return -CAROUSEL_SETTINGS.introSpinAngle
   }
 
   // Play intro spin animation - images spin in from hidden
@@ -100,7 +99,9 @@ class RotationStateManager {
 
     // If intro wasn't prepared, prepare it now
     if (!this.isIntroPlaying || this.introStartColumns.size === 0) {
-      this.prepareIntro(visibleColumns)
+      const startRotation = this.prepareIntro(visibleColumns)
+      this.rotation = startRotation
+      this.notifyListeners()
     }
 
     this.interruptAnimation()

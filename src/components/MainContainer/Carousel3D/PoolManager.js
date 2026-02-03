@@ -13,7 +13,7 @@ class PoolManager {
   }
 
   // Initialize pool with layout and images
-  initializePool(layoutConfig, imageData) {
+  initializePool(layoutConfig, imageData, initialRotation = 0) {
     this.layoutConfig = layoutConfig
     this.imageData = imageData
     this.lastCenterColumn = null
@@ -36,7 +36,7 @@ class PoolManager {
       }
     }
 
-    this.updatePoolAssignments(0)
+    this.updatePoolAssignments(initialRotation)
     this.notifyListeners()
   }
 

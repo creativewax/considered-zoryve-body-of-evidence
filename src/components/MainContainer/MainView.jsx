@@ -67,8 +67,10 @@ const MainView = () => {
             rotationStateManager.setColumnAngle(pending.config.columnAngle)
             
             // Prepare intro state BEFORE initializing pool so images are hidden immediately
-            rotationStateManager.prepareIntro(pending.config.visibleColumns)
-            poolManager.initializePool(pending.config, pending.images)
+            // prepareIntro returns the starting rotation for pool initialization
+            const introStartRotation = rotationStateManager.prepareIntro(pending.config.visibleColumns)
+            rotationStateManager.setRotation(introStartRotation)
+            poolManager.initializePool(pending.config, pending.images, introStartRotation)
 
             // Fade back in
             gsap.to(containerRef.current, {
@@ -89,11 +91,13 @@ const MainView = () => {
         // Play intro on initial load
         if (!rowsChanged) {
           // Prepare intro state BEFORE initializing pool so images are hidden immediately
-          rotationStateManager.prepareIntro(config.visibleColumns)
-          poolManager.initializePool(config, imagesWithThumbs)
+          // prepareIntro returns the starting rotation for pool initialization
+          const introStartRotation = rotationStateManager.prepareIntro(config.visibleColumns)
+          rotationStateManager.setRotation(introStartRotation)
+          poolManager.initializePool(config, imagesWithThumbs, introStartRotation)
           rotationStateManager.playIntro(config.visibleColumns)
         } else {
-          poolManager.initializePool(config, imagesWithThumbs)
+          poolManager.initializePool(config, imagesWithThumbs, 0)
         }
       }
     }
