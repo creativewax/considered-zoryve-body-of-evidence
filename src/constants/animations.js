@@ -1,4 +1,19 @@
-// Animation Constants
+/**
+ * animations.js
+ *
+ * Framer Motion animation constants and presets
+ * Provides reusable animation configs for fade, slide, scale, and interactive animations
+ * Used throughout the app for consistent animation behavior
+ */
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION STATES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Animation state definitions for Framer Motion
+ * Each animation has 'initial' and 'animate' states defining start and end values
+ */
 export const ANIMATIONS = {
   // Common hover/tap interactions
   HOVER_SCALE: { scale: 1.02 },
@@ -49,7 +64,14 @@ export const ANIMATIONS = {
   },
 }
 
-// Transition presets
+// ─────────────────────────────────────────────────────────────────────────────
+// TRANSITION PRESETS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Framer Motion transition configurations
+ * Controls duration, easing, and spring physics for animations
+ */
 export const TRANSITIONS = {
   // Standard transitions
   FAST: { duration: 0.2 },
@@ -107,7 +129,15 @@ export const TRANSITIONS = {
   }),
 }
 
-// Common animation props for components
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION PROPS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Pre-configured animation prop bundles for common use cases
+ * Combine animation states with transitions for easy component usage
+ * Can be spread directly onto motion components: {...ANIMATION_PROPS.INTERACTIVE}
+ */
 export const ANIMATION_PROPS = {
   // Interactive button/clickable
   INTERACTIVE: {

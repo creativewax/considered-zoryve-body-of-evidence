@@ -1,4 +1,20 @@
-// Patient Data Schema Constants
+/**
+ * index.js
+ *
+ * Central constants file for the application
+ * Contains patient data schema, filter options, data sources, asset paths, and app states
+ * Serves as a single source of truth for configuration values used throughout the app
+ */
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PATIENT DATA SCHEMA
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Patient data field names used in JSON data
+ * Maps logical field names to the actual keys in patient data objects
+ * Supports both Clinical Trial and Practice-Based data sources
+ */
 export const PATIENT_SCHEMA = {
   // Common fields
   REFERENCE_ID: 'referenceId',
@@ -52,13 +68,26 @@ export const PATIENT_SCHEMA = {
   WEEK52_IMAGE: 'week52Image',
 }
 
-// Data Types
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA TYPES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Data type constants for schema validation and parsing
+ */
 export const DATA_TYPES = {
   STRING: 'string',
   INTEGER: 'integer',
 }
 
-// Filter Options
+// ─────────────────────────────────────────────────────────────────────────────
+// FILTER OPTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Available filter values for each filter category
+ * These options are displayed in the filter panel and used for patient data filtering
+ */
 export const FILTER_OPTIONS = {
   CONDITION: {
     PLAQUE_PSORIASIS: 'Plaque Psoriasis',
@@ -95,19 +124,31 @@ export const FILTER_OPTIONS = {
   },
 }
 
-// Data Source Types
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA SOURCE CONFIGURATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Data source display names (shown in UI tabs)
+ */
 export const DATA_SOURCE = {
   CLINICAL_TRIAL: 'Clinical Trial',
   PRACTICE_BASED: 'Practice-Based',
 }
 
-// Data Source Keys (JSON keys)
+/**
+ * Data source keys as they appear in the patient data JSON
+ * Maps to the top-level keys in patient_data.json
+ */
 export const DATA_SOURCE_KEYS = {
   CLINICAL_TRIAL: 'iCVA 2.1',
   PRACTICE_BASED: 'Practice-Based Patients',
 }
 
-// Image Fields by Source
+/**
+ * Image field names for each data source
+ * Clinical Trial data has more time points (up to week 52) than Practice-Based data
+ */
 export const IMAGE_FIELDS = {
   CLINICAL_TRIAL: [
     'baselineImage',
@@ -127,13 +168,27 @@ export const IMAGE_FIELDS = {
   ],
 }
 
-// Gender Map for data matching
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA MAPPING
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Gender mapping for data matching
+ * Maps full gender names to abbreviated codes used in patient data
+ */
 export const GENDER_MAP = {
   Male: 'M',
   Female: 'F',
 }
 
-// Asset Paths
+// ─────────────────────────────────────────────────────────────────────────────
+// ASSET PATHS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Static asset file paths for images, icons, backgrounds, and data files
+ * All paths are relative to the public directory
+ */
 export const ASSETS = {
   BACKGROUNDS: {
     CLINICAL_TRIAL: '/UI/bkgd-ct.jpg',
@@ -161,7 +216,14 @@ export const ASSETS = {
   PATIENTS_PATH: '/patients/',
 }
 
-// App States
+// ─────────────────────────────────────────────────────────────────────────────
+// APP STATES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Application state constants
+ * Used to track the current phase of the app lifecycle
+ */
 export const APP_STATE = {
   LOADING: 'loading',
   INTRO: 'intro',
@@ -169,7 +231,14 @@ export const APP_STATE = {
   DETAIL: 'detail',
 }
 
-// Routes
+// ─────────────────────────────────────────────────────────────────────────────
+// ROUTES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Application route paths
+ * Used by React Router for page navigation
+ */
 export const ROUTES = {
   INTRO: '/',
   MAIN: '/main',
