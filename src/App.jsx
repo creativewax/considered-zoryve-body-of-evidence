@@ -1,17 +1,16 @@
 /**
  * App.jsx
  *
- * Main application component handling routing, data initialization, and loading states
- * Manages the app lifecycle from initial data load through navigation between pages
- * Displays a loading screen while patient data is being fetched
+ * Main application component handling routing, data initialisation, and loading states.
+ * Lifecycle: LOADING → INTRO (landing) → MAIN (carousel with filters).
  */
 
-// #region Imports
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PuffLoader } from 'react-spinners'
 import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
+import imageManager from './managers/ImageManager.js'
 import appStateManager from './managers/AppStateManager.js'
 import eventSystem from './utils/EventSystem.js'
 import useEventSubscription from './hooks/common/useEventSubscription.js'
@@ -19,61 +18,67 @@ import Background from './components/common/Background/Background.jsx'
 import IntroPage from './pages/IntroPage/IntroPage.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx'
 import './App.css'
-// #endregion
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// APP COMPONENT
+// ---------------------------------------------------------------------------
 
-/**
- * App Component
- *
- * Root application component that handles:
- * - Initial data loading from patient data JSON
- * - App state management and routing
- * - Loading screen display during initialization
- * - Event system subscriptions for state changes
- *
- * The app follows this lifecycle:
- * 1. LOADING: Display spinner while fetching patient data (minimum 2 seconds)
- * 2. INTRO: Show landing page with "Get Started" button
- * 3. MAIN: Display carousel with filters after user clicks through
- *
- * @component
- * @returns {React.ReactElement} BrowserRouter with app routes or loading screen
- */
-// #region Component
 function App() {
-  // #region State Management
-  // Track current application state (loading, intro, main)
+  // ---------------------------------------------------------------------------
+  // STATE
+  // ---------------------------------------------------------------------------
+
   const [appState, setAppState] = useState(APP_STATE.LOADING)
-  // #endregion
+  const [loadingStage, setLoadingStage] = useState('Loading patient data...')
+  const [loadingProgress, setLoadingProgress] = useState(0)
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
+  // EFFECTS - INITIALISATION
+  // ---------------------------------------------------------------------------
 
-  // #region Effects - Initialization
   useEffect(() => {
     /**
-     * Initialize application by loading patient data and transitioning to intro
-     * Waits for both data load and minimum 2 second delay to prevent flash
+     * Initialise application by loading patient data and preloading thumbnails
+     * Shows real-time loading progress for each stage
+     *
+     * Loading stages:
+     * 1. Load patient data JSON
+     * 2. Preload ALL thumbnail images
+     * 3. Transition to intro page
      */
-    const initializeApp = async () => {
+    const initialiseApp = async () => {
       try {
-        // Wait for both data loading and minimum 2 second delay
-        // This ensures the loading screen is visible long enough to feel intentional
-        await Promise.all([
-          dataManager.loadData(),
-          new Promise(resolve => setTimeout(resolve, 2000))
-        ])
+        // Stage 1: Load patient data
+        setLoadingStage('Loading patient data...')
+        setLoadingProgress(0)
+        await dataManager.loadData()
 
-        // Transition to intro page once data is loaded
+        // Stage 2: Preload thumbnails with progress tracking
+        setLoadingStage('Loading images...')
+
+        // Poll image loading progress every 100ms
+        const progressInterval = setInterval(() => {
+          const progress = imageManager.getProgress()
+          setLoadingProgress(Math.round(progress))
+        }, 100)
+
+        // Start thumbnail preloading
+        await imageManager.preloadThumbnails()
+
+        // Clear progress polling interval
+        clearInterval(progressInterval)
+        setLoadingProgress(100)
+
+        // Transition to intro page once everything is loaded
         setAppState(APP_STATE.INTRO)
         appStateManager.setState(APP_STATE.INTRO)
       } catch (error) {
-        console.error('Failed to initialize app:', error)
+        console.error('Failed to initialise app:', error)
       }
     }
 
-    // Start initialization on mount
-    initializeApp()
+    // Start initialisation on mount
+    initialiseApp()
   }, [])
 
   // Subscribe to app state changes
@@ -82,34 +87,34 @@ function App() {
     (newState) => setAppState(newState),
     []
   )
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
+  // RENDER - LOADING STATE
+  // ---------------------------------------------------------------------------
 
-  // #region Render - Loading State
-  // Show loading screen while data is being fetched
   if (appState === APP_STATE.LOADING) {
     return (
       <div className="app-loading">
         <Background />
         <div className="app-loading-content">
-          {/* Animated puff loader from react-spinners */}
           <PuffLoader
-            color="var(--color-white)"
+            color="var(--colour-white)"
             size={120}
             aria-label="Loading"
           />
         </div>
-        <p className="app-loading-text">Loading</p>
+        <p className="app-loading-text">{loadingStage}</p>
+        {loadingProgress > 0 && (
+          <p className="app-loading-progress">{loadingProgress}%</p>
+        )}
       </div>
     )
   }
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
+  // RENDER - MAIN APPLICATION
+  // ---------------------------------------------------------------------------
 
-  // #region Render - Main Application
-  // Render main app with routing once data is loaded
   return (
     <BrowserRouter>
       <div className="app">
@@ -127,8 +132,6 @@ function App() {
       </div>
     </BrowserRouter>
   )
-  // #endregion
 }
-// #endregion
 
 export default App

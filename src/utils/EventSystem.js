@@ -2,13 +2,13 @@
  * EventSystem.js
  *
  * Simple pub/sub event system for decoupled component communication
- * Provides a centralized event bus for app-wide state change notifications
+ * Provides a centralised event bus for app-wide state change notifications
  * Used throughout the app to coordinate between managers, filters, and UI components
  */
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 // EVENT SYSTEM CLASS
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 
 /**
  * EventSystem
@@ -29,47 +29,48 @@
  * eventSystem.off(eventSystem.constructor.EVENTS.FILTER_CHANGED, handleFilterChange)
  */
 class EventSystem {
-  // #region Initialization
   constructor() {
     // Storage for event listeners: { eventName: [callback1, callback2, ...] }
     this.events = {}
   }
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
 
-  // #region Event Constants
   /**
-   * Centralized event name constants to prevent typos and provide autocomplete
+   * Centralised event name constants to prevent typos and provide autocomplete
    * Used across the application for consistent event naming
+   *
+   * Naming convention:
+   * - Past tense (e.g., filterChanged) - State HAS changed (emitted by managers)
+   * - Present/request (e.g., filterSelected) - User IS requesting action (emitted by components)
    */
   static EVENTS = {
-    // Filter events
+    // User interaction events (requests from UI components)
+    FILTER_SELECTED: 'filterSelected',               // User clicked filter button
+    FILTERS_RESET_REQUESTED: 'filtersResetRequested', // User clicked reset button
+    SOURCE_CHANGED: 'sourceChanged',                 // User changed data source tab
+    IMAGE_SELECTED: 'imageSelected',                 // User clicked carousel image
+    IMAGE_DESELECTED: 'imageDeselected',             // User closed detail overlay
+    NAVIGATION_REQUESTED: 'navigationRequested',     // User clicked nav arrow
+
+    // Manager state change events (notifications from managers)
     CATEGORY_CHANGED: 'categoryChanged',      // Data source tab changed (Clinical Trial / Practice-Based)
     FILTER_CHANGED: 'filterChanged',          // Individual filter value changed
     FILTERS_RESET: 'filtersReset',            // All filters reset to defaults
-
-    // Image/carousel events
-    IMAGE_CLICKED: 'imageClicked',            // User clicked on carousel image
+    IMAGE_CLICKED: 'imageClicked',            // Selected image changed
     IMAGES_UPDATED: 'imagesUpdated',          // Filtered images list changed
 
     // App lifecycle events
     DATA_LOADED: 'dataLoaded',                // Patient data finished loading
+    IMAGES_READY: 'imagesReady',              // All thumbnail images preloaded
     APP_STATE_CHANGED: 'appStateChanged',     // App state changed (loading/intro/main)
   }
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
 
-  // #region Public API - Subscription
   /**
    * Subscribe to an event
    *
-   * Registers a callback function to be called when the specified event is emitted.
-   * Multiple callbacks can be registered for the same event.
-   *
-   * @param {string} eventName - Name of the event to subscribe to
-   * @param {Function} callback - Function to call when event is emitted
+   * Registers a callback for when the event is emitted. Multiple callbacks allowed per event.
+   * eventName - Event to subscribe to, callback - Function to call
    */
   on(eventName, callback) {
     // Create array for this event if it doesn't exist
@@ -84,11 +85,8 @@ class EventSystem {
   /**
    * Unsubscribe from an event
    *
-   * Removes a callback from the event listener list. If no callback is provided,
-   * removes all listeners for that event.
-   *
-   * @param {string} eventName - Name of the event to unsubscribe from
-   * @param {Function} [callback] - Specific callback to remove (optional)
+   * Removes a callback, or all listeners for the event if callback omitted.
+   * eventName - Event to unsubscribe from, callback - Optional specific callback
    */
   off(eventName, callback) {
     // Event doesn't exist, nothing to remove
@@ -103,20 +101,13 @@ class EventSystem {
     // Remove specific callback from listener list
     this.events[eventName] = this.events[eventName].filter(cb => cb !== callback)
   }
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
 
-  // #region Public API - Emission
   /**
    * Emit an event
    *
-   * Calls all registered callbacks for the specified event with the provided data.
-   * Each callback is wrapped in a try/catch to prevent errors in one handler from
-   * affecting others.
-   *
-   * @param {string} eventName - Name of the event to emit
-   * @param {*} data - Data to pass to event handlers
+   * Calls all registered callbacks for the event with the provided data (try/catch per handler).
+   * eventName - Event to emit, data - Payload for handlers
    */
   emit(eventName, data) {
     // No listeners registered for this event
@@ -132,17 +123,12 @@ class EventSystem {
       }
     })
   }
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
 
-  // #region Public API - Cleanup
   /**
    * Remove all listeners for an event (or all events)
    *
-   * Useful for cleanup during app reset or unmounting.
-   *
-   * @param {string} [eventName] - Event to clear (if omitted, clears all events)
+   * eventName - Event to clear, or omit to clear all events.
    */
   clear(eventName) {
     if (eventName) {
@@ -153,12 +139,9 @@ class EventSystem {
       this.events = {}
     }
   }
-  // #endregion
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // SINGLETON INSTANCE
-// ─────────────────────────────────────────────────────────────────────────────
 
 // Create a singleton instance for app-wide use
 const eventSystem = new EventSystem()

@@ -1,35 +1,23 @@
 /**
  * BodyAreaFilter.jsx
  *
- * Filter component for selecting body area locations
- * Displays four body area options using radio-style selection
- * Includes decorative background element for visual enhancement
+ * Filter component for selecting body area locations. Radio-style selection, single select with toggle.
+ * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * selected - Currently selected body area or null if none selected
  */
 
-// #region Imports
-import { FILTER_OPTIONS } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import eventSystem from '../../../utils/EventSystem.js'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import RadioOption from '../shared/RadioOption.jsx'
 import '../shared/RadioFilter.css'
 import './BodyAreaFilter.css'
-// #endregion
 
-// #region Component
-/**
- * BodyAreaFilter
- *
- * Renders body area filter options as radio-style buttons within a FilterComponent container
- * Supports single selection with toggle behavior (click again to deselect)
- * Includes decorative background element
- *
- * @component
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {string|null} selected - Currently selected body area or null if none selected
- * @returns {ReactElement} Filter component with body area radio options
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const BodyAreaFilter = ({ currentSource, selected }) => {
-  // Available body area options for filtering
   const bodyAreas = [
     FILTER_OPTIONS.BODY_AREA.HEAD_NECK,
     FILTER_OPTIONS.BODY_AREA.TORSO,
@@ -37,14 +25,17 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
     FILTER_OPTIONS.BODY_AREA.LEGS_FEET,
   ]
 
-  /**
-   * Handle body area selection
-   * Toggle behavior: if clicking the same area, deselect it; otherwise select the new area
-   * @param {string} bodyArea - Body area to select/deselect
-   */
+  // Handle body area selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (bodyArea) => {
-    appStateManager.setFilter('bodyArea', bodyArea === selected ? null : bodyArea)
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
+      filterType: FILTER_KEYS.BODY_AREA,
+      value: bodyArea === selected ? null : bodyArea
+    })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <FilterComponent title="Body Area" currentSource={currentSource}>
@@ -67,6 +58,5 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
     </FilterComponent>
   )
 }
-// #endregion
 
 export default BodyAreaFilter

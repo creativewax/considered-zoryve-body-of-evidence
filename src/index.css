@@ -3,31 +3,31 @@
 @tailwind utilities;
 
 :root {
-  /* Colors */
-  --color-primary-blue: #1378A8;
-  --color-zoryve-blue: #408BAB;
-  --color-zoryve-midnight-blue: #14365B;
-  --color-zoryve-black: #1F2B2B;
-  --color-zoryve-yellow: #FDE939;
-  --color-white: #FFFFFF;
-  --color-black: #000000;
+  /* Colours */
+  --colour-primary-blue: #1378A8;
+  --colour-zoryve-blue: #408BAB;
+  --colour-zoryve-midnight-blue: #14365B;
+  --colour-zoryve-black: #1F2B2B;
+  --colour-zoryve-yellow: #FDE939;
+  --colour-white: #FFFFFF;
+  --colour-black: #000000;
   
-  /* Clinical Trial Colors */
-  --color-ct-gradient-start: #3d89c3;
-  --color-ct-gradient-end: #21679E;
+  /* Clinical Trial Colours */
+  --colour-ct-gradient-start: #3d89c3;
+  --colour-ct-gradient-end: #21679E;
   
-  /* Practice Based Colors */
-  --color-pb-gradient-start: #224B8C;
-  --color-pb-gradient-end: #112C5A;
-  --color-pb-header: #FFB81C;
+  /* Practice Based Colours */
+  --colour-pb-gradient-start: #224B8C;
+  --colour-pb-gradient-end: #112C5A;
+  --colour-pb-header: #FFB81C;
   
-  /* Condition Colors */
-  --color-plaque-psoriasis: #44988A;
-  --color-atopic-dermatitis: #E57424;
-  --color-seborrheic-dermatitis: #984FBA;
+  /* Condition Colours */
+  --colour-plaque-psoriasis: #44988A;
+  --colour-atopic-dermatitis: #E57424;
+  --colour-seborrheic-dermatitis: #984FBA;
   
   /* Filter Body Background */
-  --color-filter-body: rgba(104, 154, 207, 0.35);
+  --colour-filter-body: rgba(104, 154, 207, 0.35);
   
   /* Shadows */
   --shadow-soft: 0 0 30px rgba(0, 0, 0, 0.25);
@@ -49,6 +49,8 @@
   --font-size-lg: 16px;
   --font-size-xl: 18px;
   --font-size-xxl: 22px;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
   --font-weight-regular: 500;
   --font-weight-semibold: 700;
   --font-weight-bold: 900;
@@ -117,4 +119,47 @@ body {
 .svg-scale {
   transform: scale(0.5);
   transform-origin: center center;
+}
+
+/* Standard text styles H1, H2, H3, H4, H5, H6, P */
+h1 {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-light);
+  color: var(--colour-white);
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+h4 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+h5 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+h6 {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+p {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
 }

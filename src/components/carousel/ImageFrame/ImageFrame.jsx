@@ -1,16 +1,15 @@
-// ImageFrame - 3D image with frame, glow, and lazy loading
-
-// ---------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------
+/**
+ * ImageFrame.jsx
+ *
+ * 3D image with frame, glow, and lazy loading. Used in carousel slots.
+ */
 
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Billboard } from '@react-three/drei'
-import * as THREE from 'three'
-import appStateManager from '../../../managers/AppStateManager'
+import eventSystem from '../../../utils/EventSystem'
+import imageManager from '../../../managers/ImageManager'
 import { CAROUSEL_FRAME } from '../../../constants/carousel'
-import textureCache from '../../../utils/TextureCache'
 import { getRoundedMask, getGlowTexture } from '../../../utils/frameTextures'
 
 // ---------------------------------------------------------------------------
@@ -22,48 +21,28 @@ const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, in
   // HOOKS
   // ---------------------------------------------------------------------------
 
-  const spinnerRef = useRef()
   const { imagePath } = imageData
 
   // ---------------------------------------------------------------------------
   // STATE - Texture Loading
   // ---------------------------------------------------------------------------
 
-  const [texture, setTexture] = useState(() => textureCache.get(imagePath))
-  const [isLoading, setIsLoading] = useState(!textureCache.has(imagePath))
-  const [fadeIn, setFadeIn] = useState(textureCache.has(imagePath) ? 1 : 0)
-  const fadeRef = useRef(textureCache.has(imagePath) ? 1 : 0)
+  // Get preloaded thumbnail from ImageManager
+  // All thumbnails are preloaded during app init, so this is instant
+  // Use useMemo so texture updates when imagePath changes (when pool reassigns images)
+  const texture = useMemo(() => imageManager.getThumbnail(imagePath), [imagePath])
 
+  // Warn if texture not found (shouldn't happen if preloading worked correctly)
   useEffect(() => {
-    if (textureCache.has(imagePath)) {
-      setTexture(textureCache.get(imagePath))
-      setIsLoading(false)
-      fadeRef.current = 1
-      setFadeIn(1)
-      return
+    if (!texture) {
+      console.warn('ImageFrame: Thumbnail not preloaded for:', imagePath)
     }
-
-    setIsLoading(true)
-    fadeRef.current = 0
-    setFadeIn(0)
-
-    textureCache.load(imagePath, (tex) => {
-      setTexture(tex)
-      setIsLoading(false)
-    }, () => setIsLoading(false))
-  }, [imagePath])
+  }, [imagePath, texture])
 
   // ---------------------------------------------------------------------------
-  // EFFECTS - Animation (spinner rotation + image fade-in)
+  // EFFECTS - No fade-in animation needed (textures are preloaded)
   // ---------------------------------------------------------------------------
-
-  useFrame((_, delta) => {
-    if (spinnerRef.current) spinnerRef.current.rotation.z -= delta * 3
-    if (!isLoading && fadeRef.current < 1) {
-      fadeRef.current = Math.min(1, fadeRef.current + delta * 4)
-      setFadeIn(fadeRef.current)
-    }
-  })
+  // useFrame removed - textures display instantly
 
   // ---------------------------------------------------------------------------
   // MEMOS - Frame Dimensions & Textures
@@ -84,18 +63,15 @@ const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, in
   // ---------------------------------------------------------------------------
   // HANDLERS
   // ---------------------------------------------------------------------------
+  // Click emits IMAGE_SELECTED (when not dragging); hover updates cursor.
 
-  // Select image when clicked (if not currently dragging carousel)
   const handleClick = (e) => {
     e.stopPropagation()
     if (onClickRef?.current?.isDragging) return
-    appStateManager.setSelectedImage(imageData)
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_SELECTED, imageData)
   }
 
-  // Show pointer cursor on hover
   const handlePointerOver = () => { document.body.style.cursor = 'pointer' }
-
-  // Reset to default cursor when leaving image
   const handlePointerOut = () => { document.body.style.cursor = 'auto' }
 
   // ---------------------------------------------------------------------------
@@ -121,27 +97,11 @@ const ImageFrame = ({ imageData, position, visibility, imageSize, onClickRef, in
           <meshBasicMaterial color="#ffffff" transparent opacity={opacity} alphaMap={roundedMask} depthWrite={false} />
         </mesh>
 
-        {/* Loading state: blue background with rotating spinner */}
-        {isLoading && (
-          <>
-            {/* Loading background color */}
-            <mesh position={[0, 0, -0.015]}>
-              <planeGeometry args={[frame.imageW, frame.imageH]} />
-              <meshBasicMaterial color={CAROUSEL_FRAME.loadingColor} transparent opacity={opacity} alphaMap={roundedMask} depthWrite={false} />
-            </mesh>
-            {/* Loading spinner - rotates while texture loads */}
-            <mesh ref={spinnerRef} position={[0, 0, -0.01]}>
-              <ringGeometry args={[0.03, 0.045, 24, 1, 0, Math.PI * 1.5]} />
-              <meshBasicMaterial color="#ffffff" transparent opacity={opacity * 0.8} side={THREE.DoubleSide} />
-            </mesh>
-          </>
-        )}
-
         {/* Image texture - main content with click/hover handlers */}
         {texture && (
           <mesh position={[0, 0, -0.01]} onClick={handleClick} onPointerOver={handlePointerOver} onPointerOut={handlePointerOut}>
             <planeGeometry args={[frame.imageW, frame.imageH]} />
-            <meshBasicMaterial map={texture} transparent opacity={opacity * fadeIn} alphaMap={roundedMask} depthWrite={false} />
+            <meshBasicMaterial map={texture} transparent opacity={opacity} alphaMap={roundedMask} depthWrite={false} />
           </mesh>
         )}
 

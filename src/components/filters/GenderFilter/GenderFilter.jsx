@@ -1,46 +1,38 @@
 /**
  * GenderFilter.jsx
  *
- * Filter component for selecting gender
- * Displays gender options with icons as selectable buttons
- * Allows toggling selection on/off for the gender filter
+ * Filter component for gender with icons. Single select with toggle.
+ * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * selected - Currently selected gender or null if none selected
  */
 
-// #region Imports
-import { FILTER_OPTIONS, ASSETS } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, FILTER_KEYS, ASSETS } from '../../../constants/index.js'
+import eventSystem from '../../../utils/EventSystem.js'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import GenderOption from './GenderOption.jsx'
 import './GenderFilter.css'
-// #endregion
 
-// #region Component
-/**
- * GenderFilter
- *
- * Renders gender filter options with icons within a FilterComponent container
- * Supports single selection with toggle behavior (click again to deselect)
- *
- * @component
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {string|null} selected - Currently selected gender or null if none selected
- * @returns {ReactElement} Filter component with gender option buttons
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const GenderFilter = ({ currentSource, selected }) => {
-  // Available gender options with associated icons
   const genders = [
     { value: FILTER_OPTIONS.GENDER.MALE, icon: ASSETS.ICONS.MALE },
     { value: FILTER_OPTIONS.GENDER.FEMALE, icon: ASSETS.ICONS.FEMALE },
   ]
 
-  /**
-   * Handle gender selection
-   * Toggle behavior: if clicking the same gender, deselect it; otherwise select the new gender
-   * @param {string} gender - Gender to select/deselect
-   */
+  // Handle gender selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (gender) => {
-    appStateManager.setFilter('gender', gender === selected ? null : gender)
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
+      filterType: FILTER_KEYS.GENDER,
+      value: gender === selected ? null : gender
+    })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <FilterComponent title="Gender" currentSource={currentSource}>
@@ -60,6 +52,5 @@ const GenderFilter = ({ currentSource, selected }) => {
     </FilterComponent>
   )
 }
-// #endregion
 
 export default GenderFilter

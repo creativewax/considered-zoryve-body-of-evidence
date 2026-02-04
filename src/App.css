@@ -24,7 +24,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + 100px));
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
@@ -33,6 +33,22 @@
   color: #FFFFFF;
   margin: 0;
   letter-spacing: 0.5px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.app-loading-progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 135px));
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 1px;
   z-index: 3;
   pointer-events: none;
 }

@@ -1,43 +1,27 @@
-// Carousel3DScene - R3F scene with drag interaction and image rendering
-// -----------------------------------------------------------------------
-// This component manages a 3D cylindrical carousel using Three.js with:
-// - Drag-based rotation interaction with threshold detection
-// - Smooth camera animation and FOV transitions
-// - Object pooling for performance optimization
-// - State synchronization across managers
-// -----------------------------------------------------------------------
-
-// -----------------------------------------------------------------------
-// IMPORTS
-// -----------------------------------------------------------------------
+/**
+ * Carousel3DScene.jsx
+ *
+ * R3F scene: cylindrical carousel with drag rotation, camera animation, pooling, state sync.
+ */
 
 import { useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import ImageFrame from '../../components/carousel/ImageFrame/ImageFrame'
 import poolManager from '../../managers/PoolManager'
 import rotationStateManager from '../../managers/RotationStateManager'
-import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter } from '../../utils/carouselHelpers'
-import useRotationSync from '../../hooks/carousel/useRotationSync.js'
+import { calculateCylinderPosition, calculateVisibility, getAngleFromCentre } from '../../utils/carouselHelpers'
 import useCameraAnimation from '../../hooks/carousel/useCameraAnimation.js'
 import useDragInteraction from '../../hooks/carousel/useDragInteraction.js'
 import useManagerSubscription from '../../hooks/common/useManagerSubscription.js'
 
-// -----------------------------------------------------------------------
-// COMPONENT DEFINITION
-// -----------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
 
-/**
- * Carousel3DScene - Three.js scene component for cylindrical carousel
- * layoutConfig - Configuration object containing:
- *   - cameraZ: Camera depth position
- *   - columnAngle: Degrees between each carousel column
- *   - cylinderRadius: Radius of the carousel cylinder
- *   - imageSize: Dimensions of individual images
- */
 const Carousel3DScene = ({ layoutConfig }) => {
-  // -----------------------------------------------------------------------
-  // HOOKS / STATE MANAGEMENT
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // HOOKS / STATE
+  // ---------------------------------------------------------------------------
 
   const { gl, camera, size } = useThree()
 
@@ -46,16 +30,16 @@ const Carousel3DScene = ({ layoutConfig }) => {
   const clickRef = useRef({ isDragging: false })
 
   // Use custom hooks for state management and interactions
-  const rotation = useRotationSync()
+  const rotation = useManagerSubscription(rotationStateManager, (mgr) => mgr.getRotation())
   const activeSlots = useManagerSubscription(poolManager, (mgr) => [...mgr.getActiveSlots()])
   const { onPointerDown, onPointerMove, onPointerUp } = useDragInteraction(gl, clickRef)
 
   // Camera animation handled by custom hook
   useCameraAnimation(layoutConfig, camera, size)
 
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // FRAME RENDERING LOOP
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
   /**
    * Update pool assignments on every frame
@@ -65,23 +49,23 @@ const Carousel3DScene = ({ layoutConfig }) => {
   useFrame(() => poolManager.updatePoolAssignments(rotationStateManager.getRotation()))
 
 
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // SLOT CALCULATION - compute visibility and position for each slot
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
   /**
    * Calculate visibility and 3D position for each active carousel slot
    * Maps active slots from pool manager to enrich with computed values
-   * - visibility: Based on angle from viewer center (opacity/scale)
+   * - visibility: Based on angle from viewer centre (opacity/scale)
    * - position: 3D coordinates on cylindrical carousel surface
    */
   const slots = activeSlots.map(slot => {
-    // Calculate angle from center viewer position to this slot's column
-    const angleFromCenter = getAngleFromCenter(slot.virtualColumn, rotation, layoutConfig.columnAngle)
+    // Calculate angle from centre viewer position to this slot's column
+    const angleFromCentre = getAngleFromCentre(slot.virtualColumn, rotation, layoutConfig.columnAngle)
 
     // Calculate visibility multiplier based on angle
     // Slots directly in front are fully visible, sides fade out
-    const visibility = calculateVisibility(angleFromCenter)
+    const visibility = calculateVisibility(angleFromCentre)
 
     // Calculate 3D position on carousel cylinder surface
     // Accounts for column angular position and row vertical position
@@ -94,9 +78,9 @@ const Carousel3DScene = ({ layoutConfig }) => {
     }
   })
 
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // RENDER
-  // -----------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
   return (
     <group>

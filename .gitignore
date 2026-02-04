@@ -35,6 +35,13 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# AI / assistant and rule files (local or personal)
+.claude
+.claude/
+.cursorrules
+.cursorrules-*
+.cursor/
+
 # Vite
 .vite/
 

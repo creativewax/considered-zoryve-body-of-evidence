@@ -26,12 +26,12 @@
 }
 
 .condition-button-dot-selected {
-  background-color: var(--color-white);
+  background-color: var(--colour-white);
   opacity: 1;
 }
 
 .condition-button-dot-unselected {
-  background-color: var(--color-zoryve-midnight-blue);
+  background-color: var(--colour-zoryve-midnight-blue);
   opacity: 0.4;
 }
 
@@ -39,22 +39,22 @@
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
-  color: var(--color-white);
+  color: var(--colour-white);
 }
 
 .condition-button-selected .condition-button-text {
   font-weight: var(--font-weight-bold);
-  color: var(--color-white);
+  color: var(--colour-white);
 }
 
 .condition-button-plaque-psoriasis {
-  background-color: var(--color-plaque-psoriasis);
+  background-color: var(--colour-plaque-psoriasis);
 }
 
 .condition-button-atopic-dermatitis {
-  background-color: var(--color-atopic-dermatitis);
+  background-color: var(--colour-atopic-dermatitis);
 }
 
 .condition-button-seborrheic-dermatitis {
-  background-color: var(--color-seborrheic-dermatitis);
+  background-color: var(--colour-seborrheic-dermatitis);
 }

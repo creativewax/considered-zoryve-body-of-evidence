@@ -1,41 +1,32 @@
 /**
  * FilterComponent.jsx
  *
- * Reusable container component for all filter sections (Age, Gender, Condition)
- * Provides consistent styling, animations, and header layout
- * Adapts header styling based on current data source (Clinical Trial vs Practice-Based)
+ * Container for filter sections with data source-based header styling.
+ * title - Section title; children - Filter options; currentSource - Data source; condensed - Optional.
  */
 
-// #region Imports
 import { motion } from 'framer-motion'
 import { DATA_SOURCE } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
 import './FilterComponent.css'
-// #endregion
 
-// #region Component
-/**
- * FilterComponent
- *
- * Container for filter sections with animated entrance and data source-based styling
- *
- * @component
- * @param {string} title - Filter section title (e.g., "Age", "Gender", "Condition")
- * @param {ReactNode} children - Filter options to be rendered within the body
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {boolean} [condensed=false] - Optional flag to apply condensed body styling
- * @returns {ReactElement} Animated container with header and body sections
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const FilterComponent = ({
   title,
   children,
   currentSource,
   condensed = false
 }) => {
-  // Determine header styling based on data source
   const headerClass = currentSource === DATA_SOURCE.CLINICAL_TRIAL
     ? 'filter-component-header-clinical-trial'
     : 'filter-component-header-practice-based'
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <motion.div
@@ -58,6 +49,5 @@ const FilterComponent = ({
     </motion.div>
   )
 }
-// #endregion
 
 export default FilterComponent

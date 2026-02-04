@@ -4,12 +4,10 @@
  * Animates in from bottom on initial render using motion library
  */
 
-// #region Imports
 import { motion } from 'framer-motion'
 import { ASSETS } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
 import './Footer.css'
-// #endregion
 
 /**
  * Footer Component
@@ -19,25 +17,18 @@ import './Footer.css'
  * - References button (links to citations/sources)
  * - Zoryve branding logo
  *
- * The footer slides up from the bottom on mount using a smooth easing animation.
- *
- * @component
- * @example
- * // Basic usage
- * <Footer />
- *
- * @returns {React.ReactElement} Animated footer with buttons and logo
+ * Slides up from the bottom on mount.
  */
-// #region Component
 const Footer = () => {
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <motion.footer
       className="footer"
-      // Slide up animation: starts below visible area
       initial={{ y: 80 }}
-      // Animate to normal position
       animate={{ y: 0 }}
-      // Use smooth easing transition
       transition={TRANSITIONS.SLOW_EASE}
     >
       {/* Footer action buttons section */}
@@ -58,6 +49,5 @@ const Footer = () => {
     </motion.footer>
   )
 }
-// #endregion
 
 export default Footer

@@ -5,18 +5,19 @@ import {
   DATA_SOURCE,
   DATA_SOURCE_KEYS,
   IMAGE_FIELDS,
+  FILTER_KEYS,
   GENDER_MAP,
   ASSETS
 } from '../constants/index.js'
 import eventSystem from '../utils/EventSystem.js'
 
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // CLASS DEFINITION
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 class DataManager {
   // ---------------------------------------------------------------------------
-  // INITIALIZATION
+  // INITIALISATION
   // ---------------------------------------------------------------------------
 
   constructor() {
@@ -111,47 +112,47 @@ class DataManager {
     let patients = this.getPatientsBySource(source)
 
     // Filter by condition (exact match, case-insensitive)
-    if (filters.condition) {
+    if (filters[FILTER_KEYS.CONDITION]) {
       patients = patients.filter(p => {
         const indication = p[PATIENT_SCHEMA.INDICATION]
         if (!indication) return false
-        return indication.trim().toLowerCase() === filters.condition.toLowerCase().trim()
+        return indication.trim().toLowerCase() === filters[FILTER_KEYS.CONDITION].toLowerCase().trim()
       })
     }
 
     // Filter by formulation (exact match)
-    if (filters.formulation) {
+    if (filters[FILTER_KEYS.FORMULATION]) {
       patients = patients.filter(p => {
         const formulation = p[PATIENT_SCHEMA.FORMULATION]
-        return formulation && formulation.trim() === filters.formulation
+        return formulation && formulation.trim() === filters[FILTER_KEYS.FORMULATION]
       })
     }
 
     // Filter by body area (fuzzy match - contains or is contained)
-    if (filters.bodyArea) {
+    if (filters[FILTER_KEYS.BODY_AREA]) {
       patients = patients.filter(p => {
         const bodyArea = p[PATIENT_SCHEMA.BODY_AREA]
         if (!bodyArea) return false
 
-        const normalizedFilter = filters.bodyArea.toLowerCase().trim()
-        const normalizedBodyArea = bodyArea.toLowerCase().trim()
+        const normalisedFilter = filters[FILTER_KEYS.BODY_AREA].toLowerCase().trim()
+        const normalisedBodyArea = bodyArea.toLowerCase().trim()
 
-        return normalizedBodyArea === normalizedFilter ||
-               normalizedBodyArea.includes(normalizedFilter) ||
-               normalizedFilter.includes(normalizedBodyArea)
+        return normalisedBodyArea === normalisedFilter ||
+               normalisedBodyArea.includes(normalisedFilter) ||
+               normalisedFilter.includes(normalisedBodyArea)
       })
     }
 
     // Filter by baseline severity (exact match)
-    if (filters.baselineSeverity) {
+    if (filters[FILTER_KEYS.BASELINE_SEVERITY]) {
       patients = patients.filter(p => {
         const severity = p[PATIENT_SCHEMA.BASELINE_SEVERITY]
-        return severity && severity.trim() === filters.baselineSeverity
+        return severity && severity.trim() === filters[FILTER_KEYS.BASELINE_SEVERITY]
       })
     }
 
     // Filter by age range (supports formats: "2-5" or "19+")
-    if (filters.age) {
+    if (filters[FILTER_KEYS.AGE]) {
       patients = patients.filter(p => {
         const age = typeof p[PATIENT_SCHEMA.AGE] === 'number'
           ? p[PATIENT_SCHEMA.AGE]
@@ -159,21 +160,21 @@ class DataManager {
 
         if (isNaN(age)) return false
 
-        if (filters.age.includes('+')) {
-          const min = parseInt(filters.age.replace('+', ''))
+        if (filters[FILTER_KEYS.AGE].includes('+')) {
+          const min = parseInt(filters[FILTER_KEYS.AGE].replace('+', ''))
           return age >= min
         } else {
-          const [min, max] = filters.age.split('-').map(n => parseInt(n))
+          const [min, max] = filters[FILTER_KEYS.AGE].split('-').map(n => parseInt(n))
           return age >= min && age <= max
         }
       })
     }
 
-    // Filter by gender (using gender map for normalization)
-    if (filters.gender) {
+    // Filter by gender (using gender map for normalisation)
+    if (filters[FILTER_KEYS.GENDER]) {
       patients = patients.filter(p => {
         const gender = p[PATIENT_SCHEMA.GENDER]
-        return gender && gender.trim().toUpperCase() === GENDER_MAP[filters.gender]
+        return gender && gender.trim().toUpperCase() === GENDER_MAP[filters[FILTER_KEYS.GENDER]]
       })
     }
 
@@ -233,9 +234,9 @@ class DataManager {
   }
 }
 
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // SINGLETON EXPORT
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 // Create singleton instance
 const dataManager = new DataManager()

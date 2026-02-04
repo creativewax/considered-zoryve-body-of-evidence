@@ -1,35 +1,25 @@
-/*
-================================================================================
-  FilterTabs.jsx
+/**
+ * FilterTabs.jsx
+ *
+ * Tabbed navigation for data sources (Clinical Trial / Practice Based).
+ * currentSource - Currently active data source
+ * onSourceChange - Callback when user clicks a tab
+ */
 
-  Tab navigation component for selecting between data sources. Renders two
-  tabs (Clinical Trial and Practice Based) with active state styling and
-  click handlers to switch sources.
-
-  Key Responsibilities:
-  - Display data source selection tabs
-  - Apply active styling based on current source
-  - Notify parent component when source changes
-  - Animate tab interactions with Framer Motion
-
-================================================================================
-*/
-
-// #region Imports
 import { motion } from 'framer-motion'
 import { DATA_SOURCE } from '../../../constants/index.js'
 import { ANIMATION_PROPS } from '../../../constants/animations.js'
 import './FilterTabs.css'
-// #endregion
 
-// #region Component
-/**
- * FilterTabs - Tabbed navigation for switching between data sources
- *
- * @param {string} currentSource - The currently active data source
- * @param {Function} onSourceChange - Callback fired when user clicks a tab
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const FilterTabs = ({ currentSource, onSourceChange }) => {
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <div className="filter-tabs">
       {/* Clinical Trial tab */}
@@ -60,6 +50,5 @@ const FilterTabs = ({ currentSource, onSourceChange }) => {
     </div>
   )
 }
-// #endregion
 
 export default FilterTabs

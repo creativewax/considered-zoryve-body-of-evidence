@@ -6,26 +6,17 @@
  * Supports selected/unselected visual states
  */
 
-// #region Imports
 import { motion } from 'framer-motion'
 import { ANIMATION_PROPS } from '../../../constants/animations.js'
 import '../AgeFilter/AgeFilter.css'
-// #endregion
 
-// #region Component
 /**
- * FilterButton
+ * FilterButton - Animated button for Age/Gender filter options (selected/unselected states)
  *
- * Reusable animated button for Age and Gender filter options
- * Toggles between selected and unselected visual states
- *
- * @component
- * @param {string} value - Button value/identifier
- * @param {string} label - Display text for the button
- * @param {boolean} isSelected - Whether the button is currently selected
- * @param {function} onClick - Callback function triggered when button is clicked
- * @param {string} [className=''] - Additional CSS classes to apply
- * @returns {ReactElement} Animated button element with conditional styling
+ * value, label - Button value and display text
+ * isSelected - Whether the button is currently selected
+ * onClick - Callback when button is clicked
+ * className - Optional additional CSS classes
  */
 const FilterButton = ({
   value,
@@ -34,6 +25,10 @@ const FilterButton = ({
   onClick,
   className = ''
 }) => {
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <motion.button
       className={`age-button ${isSelected ? 'age-button-selected' : ''} ${className}`}
@@ -47,6 +42,5 @@ const FilterButton = ({
     </motion.button>
   )
 }
-// #endregion
 
 export default FilterButton

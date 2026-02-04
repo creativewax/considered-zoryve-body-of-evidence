@@ -1,12 +1,10 @@
 // NavigationArrows - left/right carousel navigation buttons
 
-// ---------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------
-
 import { useCallback } from 'react'
+import eventSystem from '../../../utils/EventSystem'
 import rotationStateManager from '../../../managers/RotationStateManager'
 import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
+import { NAVIGATION_DIRECTION } from '../../../constants/index.js'
 import './NavigationArrows.css'
 
 // ---------------------------------------------------------------------------
@@ -23,12 +21,15 @@ const NavigationArrows = () => {
   // ---------------------------------------------------------------------------
   // HANDLERS
   // ---------------------------------------------------------------------------
+  // Emit NAVIGATION_REQUESTED (prev/next); RotationStateManager handles.
 
-  // Navigate to previous image in carousel
-  const onLeft = useCallback(() => rotationStateManager.navigateLeft(), [])
+  const onLeft = useCallback(() => {
+    eventSystem.emit(eventSystem.constructor.EVENTS.NAVIGATION_REQUESTED, { direction: NAVIGATION_DIRECTION.LEFT })
+  }, [])
 
-  // Navigate to next image in carousel
-  const onRight = useCallback(() => rotationStateManager.navigateRight(), [])
+  const onRight = useCallback(() => {
+    eventSystem.emit(eventSystem.constructor.EVENTS.NAVIGATION_REQUESTED, { direction: NAVIGATION_DIRECTION.RIGHT })
+  }, [])
 
   // ---------------------------------------------------------------------------
   // RENDER

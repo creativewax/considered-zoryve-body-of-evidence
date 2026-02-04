@@ -1,14 +1,14 @@
-// DetailOverlay - displays patient details when image is clicked
-
-// ---------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------
+/**
+ * DetailOverlay.jsx
+ *
+ * Displays patient details when an image is clicked. Subscribes to IMAGE_CLICKED, emits IMAGE_DESELECTED on close.
+ */
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import eventSystem from '../../../utils/EventSystem'
-import appStateManager from '../../../managers/AppStateManager'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
+import { FILTER_OPTIONS, GENDER_CODE } from '../../../constants/index.js'
 import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
 import './DetailOverlay.css'
 
@@ -42,14 +42,13 @@ const DetailOverlay = () => {
   // ---------------------------------------------------------------------------
   // HANDLERS
   // ---------------------------------------------------------------------------
+  // Close overlay and emit IMAGE_DESELECTED; backdrop click also closes.
 
-  // Close overlay and clear selected image from app state
   const close = () => {
     setSelected(null)
-    appStateManager.setSelectedImage(null)
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
   }
 
-  // Close overlay when clicking on backdrop area (outside content)
   const onBackdrop = (e) => { if (e.target === e.currentTarget) close() }
 
   // ---------------------------------------------------------------------------
@@ -59,7 +58,6 @@ const DetailOverlay = () => {
   return (
     <AnimatePresence>
       {selected && (
-        // Backdrop overlay - fades in/out
         <motion.div
           className="detail-overlay"
           initial={ANIMATIONS.FADE_IN.initial}
@@ -98,7 +96,7 @@ const DetailOverlay = () => {
                   <InfoItem label="Baseline Severity" value={selected.patient.baselineSeverity} />
                   <InfoItem label="Formulation" value={selected.patient.formulation} />
                   <InfoItem label="Age" value={selected.patient.age} />
-                  <InfoItem label="Gender" value={selected.patient.gender === 'M' ? 'Male' : 'Female'} />
+                  <InfoItem label="Gender" value={selected.patient.gender === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE} />
                   <InfoItem label="Skin Type" value={selected.patient.fitzpatrickSkinType} />
                   <InfoItem label="Timepoint" value={selected.field && formatField(selected.field)} />
                 </div>
@@ -119,6 +117,11 @@ const DetailOverlay = () => {
 // Returns null if value is empty to avoid displaying empty fields
 const InfoItem = ({ label, value }) => {
   if (!value) return null
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <p>
       <span className="label">{label}:</span>

@@ -28,7 +28,7 @@ on the main page we have a filter system on the left, it is setup like follows
 - tab one - Clinical Trial, linear grad top to bottom - #21679E to #154E80
 - tab two - Practice Based, linear grad top to bottom - #224B8C to #112C5A
 - the body part is responsive in height and can scroll its contents if needed
-- The bottom part holds a basic button component aligned middle center, and is 60px high and anchored to the bottom, it has a background of 10% black
+- The bottom part holds a basic button component aligned middle centre, and is 60px high and anchored to the bottom, it has a background of 10% black
 - inside the top part we have the filter components, these are held in a flex style container in a vertical alignment width equal 45px spacing around each sides, so the main container is 45px equal spacing inside this top part, but the filters themselves are also 45px apart so it all looks correct
 - there is two backgrounds like the main window background and should work the same way public/UI/filter-bkgd-ct.jpg and filter-bkgd-pb.jpg and will stretch 100% on the filter container
 
@@ -104,7 +104,7 @@ filter component - Gender
 
 filter bottom pane
 - full width, 10% #000000 background
-- basic button aligned center middle
+- basic button aligned centre middle
 - RESET FILTERS
 - only active if filters are selected and resets all the state when pressed
 

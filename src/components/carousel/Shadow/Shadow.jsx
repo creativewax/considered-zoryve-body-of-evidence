@@ -1,8 +1,8 @@
-// Shadow - carousel shadow that adjusts position based on row count
-
-// ---------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------
+/**
+ * Shadow.jsx
+ *
+ * Carousel shadow that adjusts position based on row count.
+ */
 
 import './Shadow.css'
 
@@ -10,8 +10,6 @@ import './Shadow.css'
 // CONSTANTS
 // ---------------------------------------------------------------------------
 
-// Bottom position offsets for shadow based on number of image rows
-// Adjusts visual spacing and shadow placement for different carousel layouts
 const BOTTOM_OFFSETS = { 1: '10%', 3: '0%', 5: '-5%' }
 
 // ---------------------------------------------------------------------------

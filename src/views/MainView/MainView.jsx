@@ -1,8 +1,8 @@
-// MainView - main carousel container with R3F canvas and carousel initialization
-
-// ─────────────────────────────────────────────────────────────────────────────
-// IMPORTS
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * MainView.jsx
+ *
+ * Main carousel container with R3F canvas and carousel initialisation.
+ */
 
 import { useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
@@ -14,38 +14,21 @@ import { calculateBestFitFOV } from '../../utils/carouselHelpers'
 import useCarouselManager from '../../hooks/carousel/useCarouselManager.js'
 import './MainView.css'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
 
 const MainView = () => {
-  // ───────────────────────────────────────────────────────────────────────────
-  // HOOKS / STATE MANAGEMENT
-  // ───────────────────────────────────────────────────────────────────────────
-
   const containerRef = useRef(null)
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // HELPER FUNCTIONS
-  // ───────────────────────────────────────────────────────────────────────────
-
-  /**
-   * Converts an image path to its thumbnail version
-   * @param {string} path - Original image path
-   * @returns {string} Path with '_thumb' inserted before file extension
-   */
-  const getThumbnailPath = (path) => {
-    const dot = path.lastIndexOf('.')
-    return dot === -1 ? path : `${path.substring(0, dot)}_thumb${path.substring(dot)}`
-  }
-
-  // Use carousel manager hook to handle all carousel initialization and transitions
+  // Use carousel manager hook to handle all carousel initialisation and transitions
   // Replaces the previous 73-line useEffect with a clean, focused custom hook
-  const { layoutConfig, imageCount } = useCarouselManager(containerRef, getThumbnailPath)
+  // Note: Thumbnails are preloaded by ImageManager during app init
+  const { layoutConfig, imageCount } = useCarouselManager(containerRef)
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
   // RENDER
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
 
   return (
     <div className="main-view">
@@ -68,8 +51,7 @@ const MainView = () => {
             <Shadow rowCount={layoutConfig.rows} />
           </>
         ) : (
-          /* Placeholder when no images match current filters */
-          <div className="main-view-placeholder">
+          <div className="main-view-no-images">
             <h2>No Images Found</h2>
             <p>Adjust filters to see patient images</p>
           </div>

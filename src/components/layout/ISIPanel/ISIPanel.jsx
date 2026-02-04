@@ -4,12 +4,10 @@
  * Features smooth expand/collapse animations and responsive height management
  */
 
-// #region Imports
 import { useState, useEffect, useRef } from 'react'
 import { ASSETS } from '../../../constants/index.js'
 import { gsap } from 'gsap'
 import './ISIPanel.css'
-// #endregion
 
 /**
  * ISIPanel Component
@@ -20,38 +18,21 @@ import './ISIPanel.css'
  * - Overlay darken effect on the content above
  * - Toggle button rotation
  *
- * Height values are controlled by CSS variables:
- * - --isi-panel-collapsed-height: Height when closed
- * - --isi-panel-expanded-height: Height when open
- *
- * @component
- * @example
- * // Basic usage
- * <ISIPanel />
- *
- * @returns {React.ReactElement} Collapsible panel with content
+ * Height controlled by CSS variables --isi-panel-collapsed-height and --isi-panel-expanded-height.
  */
-// #region Component
 const ISIPanel = () => {
-  // #region State Management
   const [isOpen, setIsOpen] = useState(false)
-  // #endregion
 
-  // #region Refs
   const panelRef = useRef(null)
   const overlayRef = useRef(null)
   const toggleRef = useRef(null)
   const scrollableRef = useRef(null)
   const timelineRef = useRef(null)
-  // #endregion
 
-  // #region Event Handlers
   const togglePanel = () => {
     setIsOpen(!isOpen)
   }
-  // #endregion
 
-  // #region Effects - Panel Animation
   useEffect(() => {
     if (!panelRef.current || !overlayRef.current) return
 
@@ -137,10 +118,8 @@ const ISIPanel = () => {
       }
     }
   }, [isOpen])
-  // #endregion
 
-  // #region Effects - Overlay Height Initialization
-  // Initialize overlay height on mount and handle window resize
+  // Initialise overlay height on mount and handle window resize
   useEffect(() => {
     if (panelRef.current && overlayRef.current) {
       const updateOverlayHeight = () => {
@@ -159,9 +138,11 @@ const ISIPanel = () => {
       }
     }
   }, [])
-  // #endregion
 
-  // #region Render
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <div className="isi-panel-wrapper">
       {/* Overlay darkens the content area above when panel opens */}
@@ -198,8 +179,6 @@ const ISIPanel = () => {
       </div>
     </div>
   )
-  // #endregion
 }
-// #endregion
 
 export default ISIPanel

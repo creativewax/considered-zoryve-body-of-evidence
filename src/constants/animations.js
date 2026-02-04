@@ -3,12 +3,10 @@
  *
  * Framer Motion animation constants and presets
  * Provides reusable animation configs for fade, slide, scale, and interactive animations
- * Used throughout the app for consistent animation behavior
+ * Used throughout the app for consistent animation behaviour
  */
 
-// ─────────────────────────────────────────────────────────────────────────────
 // ANIMATION STATES
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Animation state definitions for Framer Motion
@@ -64,9 +62,7 @@ export const ANIMATIONS = {
   },
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TRANSITION PRESETS
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Framer Motion transition configurations
@@ -129,9 +125,7 @@ export const TRANSITIONS = {
   }),
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // ANIMATION PROPS
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Pre-configured animation prop bundles for common use cases

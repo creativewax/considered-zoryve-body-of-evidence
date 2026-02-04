@@ -6,25 +6,18 @@
  * Composed of sub-components for radio button and text elements
  */
 
-// #region Imports
 import { motion } from 'framer-motion'
 import { ANIMATION_PROPS } from '../../../constants/animations.js'
 import ScaleIn from '../../animations/ScaleIn.jsx'
 import './RadioFilter.css'
-// #endregion
 
-// #region Main Component
 /**
- * RadioOption
+ * RadioOption - Main radio option button with animated checkmark and label
  *
- * Main radio option button component with animated checkmark and label
- *
- * @component
- * @param {string} value - Option value/identifier
- * @param {string} label - Display text for the option
- * @param {boolean} isSelected - Whether the option is currently selected
- * @param {function} onClick - Callback function triggered when option is clicked
- * @returns {ReactElement} Animated radio button with checkmark and text
+ * value - Option value/identifier
+ * label - Display text for the option
+ * isSelected - Whether the option is currently selected
+ * onClick - Callback when option is clicked
  */
 const RadioOption = ({
   value,
@@ -32,6 +25,10 @@ const RadioOption = ({
   isSelected,
   onClick
 }) => {
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <motion.button
       className="radio-option"
@@ -45,18 +42,10 @@ const RadioOption = ({
     </motion.button>
   )
 }
-// #endregion
 
-// #region Sub-Components
 /**
- * RadioButton
- *
- * Radio button indicator with animated checkmark icon
- * Shows checkmark animation when selected, empty circle when unselected
- *
- * @component
- * @param {boolean} isSelected - Whether the radio button is selected
- * @returns {ReactElement} Radio button circle with optional animated checkmark
+ * RadioButton - Radio indicator with animated checkmark when selected.
+ * isSelected - Whether the radio button is selected
  */
 const RadioButton = ({ isSelected }) => {
   return (
@@ -70,7 +59,7 @@ const RadioButton = ({ isSelected }) => {
           >
             <path
               d="M1.5 4.5 L3.5 6.5 L7.5 2"
-              stroke="var(--color-zoryve-black)"
+              stroke="var(--colour-zoryve-black)"
               strokeWidth="1.5"
               fill="none"
               strokeLinecap="round"
@@ -84,14 +73,8 @@ const RadioButton = ({ isSelected }) => {
 }
 
 /**
- * RadioOptionText
- *
- * Text label for radio option with selected state styling
- *
- * @component
- * @param {string} label - Display text
- * @param {boolean} isSelected - Whether the option is selected
- * @returns {ReactElement} Styled text span with conditional selected class
+ * RadioOptionText - Text label for radio option with selected state styling
+ * label - Display text, isSelected - Whether the option is selected
  */
 const RadioOptionText = ({ label, isSelected }) => {
   return (
@@ -100,7 +83,6 @@ const RadioOptionText = ({ label, isSelected }) => {
     </span>
   )
 }
-// #endregion
 
 export default RadioOption
 export { RadioButton, RadioOptionText }

@@ -9,8 +9,8 @@
   height: var(--button-height);
   border: none;
   border-radius: var(--radius-sm);
-  background-color: var(--color-primary-blue);
-  color: var(--color-white);
+  background-color: var(--colour-primary-blue);
+  color: var(--colour-white);
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
@@ -26,9 +26,9 @@
 }
 
 .gender-button-selected {
-  background-color: var(--color-white);
-  color: var(--color-zoryve-black);
-  box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
+  background-color: var(--colour-white);
+  color: var(--colour-zoryve-black);
+  box-shadow: 0 0 var(--radio-glow) var(--colour-zoryve-yellow);
 }
 
 .gender-button-icon {
@@ -48,10 +48,10 @@
 
 .gender-button-text {
   font-weight: var(--font-weight-regular);
-  color: var(--color-white);
+  color: var(--colour-white);
 }
 
 .gender-button-text-selected {
   font-weight: var(--font-weight-bold);
-  color: var(--color-zoryve-black);
+  color: var(--colour-zoryve-black);
 }

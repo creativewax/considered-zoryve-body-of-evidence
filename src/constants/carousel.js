@@ -11,7 +11,7 @@ export const CAROUSEL_LAYOUT = {
 }
 
 // -----------------------------------------------------------------------------
-// CAROUSEL SETTINGS - dimensions, timing, and behavior
+// CAROUSEL SETTINGS - dimensions, timing, and behaviour
 // -----------------------------------------------------------------------------
 
 export const CAROUSEL_SETTINGS = {
@@ -56,11 +56,11 @@ export const CAROUSEL_FRAME = {
   glowSpread: 0.2,
   cornerRadiusRatio: 0.08,
   glowOpacity: 0.4,
-  loadingColor: '#116B95'
+  loadingColour: '#116B95'
 }
 
 // -----------------------------------------------------------------------------
 // INTERACTION
 // -----------------------------------------------------------------------------
 
-export const DRAG_THRESHOLD = 10 // pixels before drag is recognized
+export const DRAG_THRESHOLD = 10 // pixels before drag is recognised

@@ -17,7 +17,7 @@
   width: var(--radio-size);
   height: var(--radio-size);
   border-radius: var(--radio-radius);
-  border: 2px solid var(--color-white);
+  border: 2px solid var(--colour-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,18 +27,18 @@
 }
 
 .radio-button-selected {
-  background-color: var(--color-white);
-  box-shadow: 0 0 var(--radio-glow) var(--color-zoryve-yellow);
+  background-color: var(--colour-white);
+  box-shadow: 0 0 var(--radio-glow) var(--colour-zoryve-yellow);
 }
 
 .radio-option-text {
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
-  color: var(--color-white);
+  color: var(--colour-white);
 }
 
 .radio-option-text-selected {
   font-weight: var(--font-weight-bold);
-  color: var(--color-white);
+  color: var(--colour-white);
 }

@@ -24,3 +24,12 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+.main-view-no-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}

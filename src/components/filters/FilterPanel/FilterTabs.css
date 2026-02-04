@@ -32,18 +32,18 @@
 }
 
 .filter-tab-clinical-trial {
-  background: linear-gradient(to bottom, var(--color-ct-gradient-start), var(--color-ct-gradient-end));
+  background: linear-gradient(to bottom, var(--colour-ct-gradient-start), var(--colour-ct-gradient-end));
 }
 
 .filter-tab-practice-based {
-  background: linear-gradient(to bottom, var(--color-pb-gradient-start), var(--color-pb-gradient-end));
+  background: linear-gradient(to bottom, var(--colour-pb-gradient-start), var(--colour-pb-gradient-end));
 }
 
 .filter-tab-text {
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-white);
+  color: var(--colour-white);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

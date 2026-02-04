@@ -1,48 +1,39 @@
 /**
  * BaselineSeverityFilter.jsx
  *
- * Filter component for selecting baseline disease severity
- * Displays three severity levels using radio-style selection
- * Allows toggling selection on/off for the baseline severity filter
+ * Filter component for baseline disease severity (Mild, Moderate, Severe). Single select with toggle.
+ * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * selected - Currently selected severity or null if none selected
  */
 
-// #region Imports
-import { FILTER_OPTIONS } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import eventSystem from '../../../utils/EventSystem.js'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import RadioOption from '../shared/RadioOption.jsx'
 import '../shared/RadioFilter.css'
-// #endregion
 
-// #region Component
-/**
- * BaselineSeverityFilter
- *
- * Renders baseline severity filter options as radio-style buttons within a FilterComponent container
- * Supports single selection with toggle behavior (click again to deselect)
- * Displays severity levels: Mild, Moderate, and Severe
- *
- * @component
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {string|null} selected - Currently selected severity level or null if none selected
- * @returns {ReactElement} Filter component with severity radio options
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const BaselineSeverityFilter = ({ currentSource, selected }) => {
-  // Available severity level options for filtering
   const severities = [
     FILTER_OPTIONS.BASELINE_SEVERITY.MILD,
     FILTER_OPTIONS.BASELINE_SEVERITY.MODERATE,
     FILTER_OPTIONS.BASELINE_SEVERITY.SEVERE,
   ]
 
-  /**
-   * Handle severity selection
-   * Toggle behavior: if clicking the same severity, deselect it; otherwise select the new severity
-   * @param {string} severity - Severity level to select/deselect
-   */
+  // Handle severity selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (severity) => {
-    appStateManager.setFilter('baselineSeverity', severity === selected ? null : severity)
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
+      filterType: FILTER_KEYS.BASELINE_SEVERITY,
+      value: severity === selected ? null : severity
+    })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <FilterComponent title="Baseline Severity" currentSource={currentSource}>
@@ -61,6 +52,5 @@ const BaselineSeverityFilter = ({ currentSource, selected }) => {
     </FilterComponent>
   )
 }
-// #endregion
 
 export default BaselineSeverityFilter

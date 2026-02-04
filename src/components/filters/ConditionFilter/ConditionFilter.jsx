@@ -1,59 +1,50 @@
 /**
  * ConditionFilter.jsx
  *
- * Filter component for selecting dermatological conditions
- * Displays three condition types with color-coded styling
- * Allows toggling selection on/off for the condition filter
+ * Filter component for dermatological conditions with colour-coded styling. Single select with toggle.
+ * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * selected - Currently selected condition or null if none selected
  */
 
-// #region Imports
-import { FILTER_OPTIONS } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import eventSystem from '../../../utils/EventSystem.js'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import ConditionOption from './ConditionOption.jsx'
 import './ConditionFilter.css'
-// #endregion
 
-// #region Component
-/**
- * ConditionFilter
- *
- * Renders condition filter options with color-coded styling within a FilterComponent container
- * Supports single selection with toggle behavior (click again to deselect)
- * Uses condensed layout for more compact display
- *
- * @component
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {string|null} selected - Currently selected condition or null if none selected
- * @returns {ReactElement} Filter component with condition option buttons
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const ConditionFilter = ({ currentSource, selected }) => {
-  // Available conditions with associated color-coding classes
   const conditions = [
-    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colorClass: 'condition-button-plaque-psoriasis' },
-    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colorClass: 'condition-button-atopic-dermatitis' },
-    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colorClass: 'condition-button-seborrheic-dermatitis' },
+    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colourClass: 'condition-button-plaque-psoriasis' },
+    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colourClass: 'condition-button-atopic-dermatitis' },
+    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colourClass: 'condition-button-seborrheic-dermatitis' },
   ]
 
-  /**
-   * Handle condition selection
-   * Toggle behavior: if clicking the same condition, deselect it; otherwise select the new condition
-   * @param {string} condition - Condition to select/deselect
-   */
+  // Handle condition selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (condition) => {
-    appStateManager.setFilter('condition', condition === selected ? null : condition)
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
+      filterType: FILTER_KEYS.CONDITION,
+      value: condition === selected ? null : condition
+    })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <FilterComponent title="Condition" currentSource={currentSource} condensed>
       <div className="condition-filter">
-        {/* Render color-coded condition option buttons */}
+        {/* Render colour-coded condition option buttons */}
         {conditions.map((condition) => (
           <ConditionOption
             key={condition.value}
             value={condition.value}
             label={condition.value}
-            colorClass={condition.colorClass}
+            colourClass={condition.colourClass}
             isSelected={selected === condition.value}
             onClick={() => handleSelect(condition.value)}
           />
@@ -62,6 +53,5 @@ const ConditionFilter = ({ currentSource, selected }) => {
     </FilterComponent>
   )
 }
-// #endregion
 
 export default ConditionFilter

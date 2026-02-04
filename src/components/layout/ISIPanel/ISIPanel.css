@@ -9,7 +9,7 @@
 
 .isi-panel {
   width: 100%;
-  background-color: var(--color-zoryve-midnight-blue);
+  background-color: var(--colour-zoryve-midnight-blue);
   overflow: hidden;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
   pointer-events: auto;
@@ -45,7 +45,7 @@
   width: 100%;
   height: 100%;
   padding: var(--spacing-lg);
-  color: var(--color-white);
+  color: var(--colour-white);
 }
 
 .isi-panel-scrollable {

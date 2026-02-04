@@ -4,8 +4,8 @@
   padding: 0 var(--button-padding-horizontal);
   border: none;
   border-radius: var(--radius-sm);
-  background-color: var(--color-primary-blue);
-  color: var(--color-white);
+  background-color: var(--colour-primary-blue);
+  color: var(--colour-white);
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
@@ -25,9 +25,9 @@
 }
 
 .basic-button-selected {
-  background-color: var(--color-white);
-  color: var(--color-zoryve-black);
-  box-shadow: 0 0 var(--button-selected-glow) var(--color-zoryve-yellow);
+  background-color: var(--colour-white);
+  color: var(--colour-zoryve-black);
+  box-shadow: 0 0 var(--button-selected-glow) var(--colour-zoryve-yellow);
 }
 
 .basic-button:not(.basic-button-disabled):not(.basic-button-selected):hover {

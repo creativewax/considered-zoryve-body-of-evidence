@@ -1,8 +1,8 @@
-// MainContainer - layout wrapper for carousel, footer, and ISI panel
-
-// ─────────────────────────────────────────────────────────────────────────────
-// IMPORTS
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * MainContainer.jsx
+ *
+ * Layout wrapper for carousel (MainView), footer, and ISI panel. Fade-in on mount.
+ */
 
 import { motion } from 'framer-motion'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
@@ -11,18 +11,14 @@ import ISIPanel from '../../components/layout/ISIPanel/ISIPanel.jsx'
 import MainView from '../MainView/MainView.jsx'
 import './MainContainer.css'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
 
-/**
- * MainContainer - Main layout container that combines the carousel view,
- * footer, and ISI panel with fade-in animation on mount
- */
 const MainContainer = () => {
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
   // RENDER
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
 
   return (
     <motion.div

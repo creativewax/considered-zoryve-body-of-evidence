@@ -6,32 +6,18 @@
  * Manages pointer capture, drag state, and rotation updates
  */
 
-// #region Imports
 import { useRef, useCallback } from 'react'
 import rotationStateManager from '../../managers/RotationStateManager.js'
 import { isDragThresholdMet } from '../../utils/carouselHelpers.js'
 import { CAROUSEL_SETTINGS } from '../../constants/carousel.js'
-// #endregion
 
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * useDragInteraction
  *
- * Provides pointer event handlers for carousel drag interaction.
- * Handles drag threshold detection to differentiate clicks from drags,
- * pointer capture for smooth interaction, and rotation snapping.
- *
- * @param {Object} gl - WebGL renderer from useThree()
- * @param {Object} clickRef - Ref object to track click vs drag state
- * @returns {Object} { onPointerDown, onPointerMove, onPointerUp } - Event handlers
- *
- * @example
- * const clickRef = useRef({ isDragging: false })
- * const { gl } = useThree()
- * const { onPointerDown, onPointerMove, onPointerUp } = useDragInteraction(gl, clickRef)
- *
- * <mesh onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} />
+ * Provides pointer event handlers for carousel drag (threshold, capture, snap).
+ * gl - WebGL renderer from useThree(), clickRef - Ref to track click vs drag
+ * Returns { onPointerDown, onPointerMove, onPointerUp }.
  */
 export const useDragInteraction = (gl, clickRef) => {
   // Drag state reference tracks pointer interaction details
@@ -42,7 +28,7 @@ export const useDragInteraction = (gl, clickRef) => {
   const dragRef = useRef({ active: false, moved: false, startX: 0, startRotation: 0 })
 
   /**
-   * onPointerDown - Initialize drag interaction
+   * onPointerDown - Initialise drag interaction
    * Captures pointer, stores initial position and rotation, and prepares
    * drag state for potential carousel rotation
    */
@@ -55,7 +41,7 @@ export const useDragInteraction = (gl, clickRef) => {
     // Interrupt any ongoing rotation animation to allow immediate user control
     rotationStateManager.interruptAnimation()
 
-    // Initialize drag reference with current pointer position and carousel rotation
+    // Initialise drag reference with current pointer position and carousel rotation
     // This serves as the baseline for calculating rotation delta on pointer move
     dragRef.current = {
       active: true,
@@ -100,7 +86,7 @@ export const useDragInteraction = (gl, clickRef) => {
   }, [clickRef])
 
   /**
-   * onPointerUp - Finalize drag interaction
+   * onPointerUp - Finalise drag interaction
    * Releases pointer capture and snaps carousel to nearest column if drag
    * threshold was exceeded. Includes small delay to debounce drag state
    */

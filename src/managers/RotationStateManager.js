@@ -3,6 +3,8 @@
 import { gsap } from 'gsap'
 import { calculateSnapTarget } from '../utils/carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../constants/carousel'
+import { NAVIGATION_DIRECTION } from '../constants/index.js'
+import eventSystem from '../utils/EventSystem.js'
 
 class RotationStateManager {
   constructor() {
@@ -11,6 +13,12 @@ class RotationStateManager {
     this.isAnimating = false
     this.currentTween = null
     this.listeners = new Set()
+
+    // Listen to navigation events (event-driven architecture)
+    eventSystem.on(
+      eventSystem.constructor.EVENTS.NAVIGATION_REQUESTED,
+      this.handleNavigationRequested.bind(this)
+    )
   }
 
   // ---------------------------------------------------------------------------
@@ -63,6 +71,18 @@ class RotationStateManager {
     this.interruptAnimation()
     const currentColumn = Math.round(this.rotation / this.columnAngle)
     this.animateTo((currentColumn + 1) * this.columnAngle, CAROUSEL_SETTINGS.snapDuration)
+  }
+
+  /**
+   * Handle navigation request event from UI
+   * Responds to NAVIGATION_REQUESTED event emitted by NavigationArrows component
+   */
+  handleNavigationRequested({ direction }) {
+    if (direction === NAVIGATION_DIRECTION.LEFT) {
+      this.navigateLeft()
+    } else if (direction === NAVIGATION_DIRECTION.RIGHT) {
+      this.navigateRight()
+    }
   }
 
   // ---------------------------------------------------------------------------

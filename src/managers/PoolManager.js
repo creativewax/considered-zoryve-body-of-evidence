@@ -8,18 +8,18 @@ class PoolManager {
     this.pool = []
     this.imageData = []
     this.layoutConfig = null
-    this.lastCenterColumn = null
+    this.lastCentreColumn = null
     this.listeners = new Set()
   }
 
   // ---------------------------------------------------------------------------
-  // INITIALIZATION
+  // INITIALISATION
   // ---------------------------------------------------------------------------
 
-  initializePool(layoutConfig, imageData, initialRotation = 0) {
+  initialisePool(layoutConfig, imageData, initialRotation = 0) {
     this.layoutConfig = layoutConfig
     this.imageData = imageData
-    this.lastCenterColumn = null
+    this.lastCentreColumn = null
     this.pool = []
 
     const { rows, visibleColumns } = layoutConfig
@@ -51,11 +51,11 @@ class PoolManager {
     if (!this.layoutConfig || this.imageData.length === 0) return
 
     const { visibleColumns, columnAngle, rows } = this.layoutConfig
-    const { startColumn, centerColumn } = getPoolingRange(currentRotation, visibleColumns, columnAngle)
+    const { startColumn, centreColumn } = getPoolingRange(currentRotation, visibleColumns, columnAngle)
 
-    // Skip update if center column hasn't changed
-    if (this.lastCenterColumn === centerColumn) return
-    this.lastCenterColumn = centerColumn
+    // Skip update if centre column hasn't changed
+    if (this.lastCentreColumn === centreColumn) return
+    this.lastCentreColumn = centreColumn
 
     const totalSlots = visibleColumns + CAROUSEL_SETTINGS.poolBuffer * 2
     const totalImageColumns = Math.ceil(this.imageData.length / rows)
@@ -112,7 +112,7 @@ class PoolManager {
     this.pool = []
     this.imageData = []
     this.layoutConfig = null
-    this.lastCenterColumn = null
+    this.lastCentreColumn = null
     this.notifyListeners()
   }
 }

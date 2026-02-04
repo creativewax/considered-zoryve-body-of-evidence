@@ -10,13 +10,13 @@ when there is 2 and over results it will be 1 row deep and roughly a maximum 5 v
 
 so as you can see it will be adaptive to the amount of content we have to show, i want a pooling system that is also adaptive, we now we will only need X amount of image holders and we will know we have only Y amount of results and between them we want to form what feels like a never ending pan and rotate 3D caorusel we can click and drag left to right and click and image to view more details
 
-when we click and drag we want a threshold to be met that means it will not be registered as a press up event, in this case of dragging, when the user lets go, we want to understand what column should line up in the middle view and use GSAP to softly tween it back to the middle, if another click and pan event happens then we stop this animation
+when we click and drag we want a threshold to be met that means it will not be recognised as a press up event, in this case of dragging, when the user lets go, we want to understand what column should line up in the middle view and use GSAP to softly tween it back to the centre, if another click and pan event happens then we stop this animation
 
-the carousel itself like i said is 3D, its like the image rows/cols are all spaced around a 3D circle, so the front image closest is the largest and as your can imagine the ones either side of the center get smaller due to perspective etc
+the carousel itself like i said is 3D, its like the image rows/cols are all spaced around a 3D circle, so the front image closest is the largest and as your can imagine the ones either side of the centre get smaller due to perspective etc
 
 and as the images are bigger the less rows we have, this is why we have less viewable columns
 
-so as the virtual cylinder carousel gets panned left to right etc the image rows become there largest in the center and as they get to the sides start to vanish away, so if you imagine the front is 0 degress and the left might be 90 and the right might be -90, as the image rows reach these extremes they are faded away and repooled
+so as the virtual cylinder carousel gets panned left to right etc the image rows become there largest in the centre and as they get to the sides start to vanish away, so if you imagine the front is 0 degress and the left might be 90 and the right might be -90, as the image rows reach these extremes they are faded away and repooled
 
 the pan rotate system does not need a complex mechanic for keeping on top of it, all we need is a base variable we are tracking for its global rotation, and based on X amount of image rows spaced along the virtual round edge we know the angle lock for moving to an image row when we have stopped panning
 
@@ -26,7 +26,7 @@ in the same main component i would like a arrow button to the left and right tha
 
 i would prefer the logic being split into smaller components etc, we could have one managing the image and data pooling, one managing the rotation state and have getters and setters for easy updates, viewable components etc
 
-underneath the main component we have a fake shadow image, it would be nice if this is around 900px wide and perfectly centered underneath and a component itself which can move up and down depending on how many images we show in rows, so it feels attached to the current state of the viewable images etc the shadow is via an image in public/UI/shadow.png
+underneath the main component we have a fake shadow image, it would be nice if this is around 900px wide and perfectly centred underneath and a component itself which can move up and down depending on how many images we show in rows, so it feels attached to the current state of the viewable images etc the shadow is via an image in public/UI/shadow.png
 
 when we click and image for now please lets just have a global overlay component which shows a message to some of the relatable data for that image via the main json in the datamanager
 

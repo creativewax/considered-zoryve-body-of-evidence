@@ -1,7 +1,7 @@
 .footer {
   width: 100%;
   height: var(--footer-height);
-  background-color: var(--color-zoryve-blue);
+  background-color: var(--colour-zoryve-blue);
   display: flex;
   align-items: center;
   justify-content: space-between;

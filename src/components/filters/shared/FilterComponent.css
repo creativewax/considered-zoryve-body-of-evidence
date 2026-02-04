@@ -6,7 +6,7 @@
 }
 
 .filter-component-body {
-  background: var(--color-filter-body);
+  background: var(--colour-filter-body);
   padding: var(--filter-body-padding);
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
@@ -17,13 +17,13 @@
 }
 
 .filter-component-header-clinical-trial {
-  background: var(--color-zoryve-midnight-blue);
-  color: var(--color-white);
+  background: var(--colour-zoryve-midnight-blue);
+  color: var(--colour-white);
 }
 
 .filter-component-header-practice-based {
-  background: var(--color-pb-header);
-  color: var(--color-zoryve-midnight-blue);
+  background: var(--colour-pb-header);
+  color: var(--colour-zoryve-midnight-blue);
 }
 
 .filter-component-title {

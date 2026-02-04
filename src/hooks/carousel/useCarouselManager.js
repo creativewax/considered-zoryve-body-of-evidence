@@ -2,64 +2,54 @@
  * useCarouselManager.js
  *
  * Comprehensive carousel management hook extracted from MainView.jsx
- * Handles image fetching, layout calculation, manager initialization, and fade transitions
+ * Handles image fetching, layout calculation, manager initialisation, and fade transitions
  * Encapsulates the complex 73-line useEffect into a focused, reusable hook
  */
 
-// #region Imports
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { gsap } from 'gsap'
 import dataManager from '../../managers/DataManager.js'
 import appStateManager from '../../managers/AppStateManager.js'
+import filterManager from '../../managers/FilterManager.js'
 import poolManager from '../../managers/PoolManager.js'
 import rotationStateManager from '../../managers/RotationStateManager.js'
 import { getLayoutConfig } from '../../utils/carouselHelpers.js'
 import { CAROUSEL_SETTINGS } from '../../constants/carousel.js'
 import useEventSubscription from '../common/useEventSubscription.js'
 import eventSystem from '../../utils/EventSystem.js'
-// #endregion
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * useCarouselManager
+ * useCarouselManager - Carousel data, layout, fade transitions.
+ * containerRef - Ref for fade animations.
+ * Returns { layoutConfig, imageCount }.
  *
- * Manages carousel data, layout, and transitions with fade animations.
- * Handles both initial load (no animation) and filter changes (with fade transition).
- * Automatically subscribes to data update events and manages carousel state.
- *
- * @param {React.RefObject} containerRef - Ref to container element for fade animations
- * @param {Function} getThumbnailPath - Function to convert image paths to thumbnail paths
- * @returns {Object} { layoutConfig, imageCount } - Current carousel configuration
- *
- * @example
- * const containerRef = useRef(null)
- * const { layoutConfig, imageCount } = useCarouselManager(containerRef, getThumbnailPath)
+ * Note: Thumbnails are preloaded by ImageManager during app init
  */
-export const useCarouselManager = (containerRef, getThumbnailPath) => {
-  // #region State Management
+export const useCarouselManager = (containerRef) => {
+  // ---------------------------------------------------------------------------
+  // STATE
+  // ---------------------------------------------------------------------------
+
   const [layoutConfig, setLayoutConfig] = useState(null)
   const [imageCount, setImageCount] = useState(0)
   const pendingRef = useRef(null)
   const currentRowsRef = useRef(null)
-  // #endregion
+  const isInitialisedRef = useRef(false)
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
+  // CAROUSEL INIT
+  // ---------------------------------------------------------------------------
 
-  // #region Carousel Initialization
-  /**
-   * Initialize or update carousel with current filter state
-   * Handles data fetching, layout calculation, manager updates, and transitions
-   */
   const initCarousel = useCallback(() => {
-    // Fetch filtered images and add thumbnail paths
-    const filters = appStateManager.getFilters()
+    // Fetch filtered images
+    // Combine filters from FilterManager with source from AppStateManager
+    // Note: Thumbnails already preloaded by ImageManager, no need to add paths
+    const filters = {
+      ...filterManager.getFilters(),
+      source: appStateManager.getSource()
+    }
     const images = dataManager.getFilteredImages(filters)
-    const imagesWithThumbs = images.map(img => ({
-      ...img,
-      thumbnailPath: getThumbnailPath(img.imagePath)
-    }))
-    const count = imagesWithThumbs.length
+    const count = images.length
 
     // Handle empty state - reset all carousel state
     if (count === 0) {
@@ -77,7 +67,7 @@ export const useCarouselManager = (containerRef, getThumbnailPath) => {
     // Apply fade transition for filter changes (skip on initial load)
     if (!isInitialLoad && containerRef.current) {
       // Store pending update and fade out current carousel
-      pendingRef.current = { config, images: imagesWithThumbs, count }
+      pendingRef.current = { config, images, count }
 
       gsap.to(containerRef.current, {
         opacity: 0,
@@ -94,7 +84,7 @@ export const useCarouselManager = (containerRef, getThumbnailPath) => {
           currentRowsRef.current = pending.config.rows
           rotationStateManager.setColumnAngle(pending.config.columnAngle)
           rotationStateManager.setRotation(0)
-          poolManager.initializePool(pending.config, pending.images, 0)
+          poolManager.initialisePool(pending.config, pending.images, 0)
 
           // Fade back in with new content
           gsap.to(containerRef.current, {
@@ -111,15 +101,14 @@ export const useCarouselManager = (containerRef, getThumbnailPath) => {
       currentRowsRef.current = config.rows
       rotationStateManager.setColumnAngle(config.columnAngle)
       rotationStateManager.setRotation(0)
-      poolManager.initializePool(config, imagesWithThumbs, 0)
+      poolManager.initialisePool(config, images, 0)
     }
-  }, [containerRef, getThumbnailPath])
-  // #endregion
+  }, [containerRef])
 
-  // ───────────────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTIONS & MOUNT
+  // ---------------------------------------------------------------------------
 
-  // #region Event Subscriptions & Initial Load
-  // Subscribe to data update events
   useEventSubscription(
     eventSystem.constructor.EVENTS.IMAGES_UPDATED,
     initCarousel,
@@ -132,12 +121,13 @@ export const useCarouselManager = (containerRef, getThumbnailPath) => {
     [initCarousel]
   )
 
-  // Initialize carousel on component mount
-  // Call initCarousel once on mount to load initial data
   useEffect(() => {
-    initCarousel()
-  }, [initCarousel])
-  // #endregion
+    if (!isInitialisedRef.current) {
+      isInitialisedRef.current = true
+      initCarousel()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return { layoutConfig, imageCount }
 }

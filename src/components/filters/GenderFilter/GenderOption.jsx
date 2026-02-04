@@ -6,26 +6,17 @@
  * Displays gender-specific icon and text within the button
  */
 
-// #region Imports
 import { motion } from 'framer-motion'
 import { ANIMATION_PROPS } from '../../../constants/animations.js'
 import './GenderFilter.css'
-// #endregion
 
-// #region Main Component
 /**
- * GenderOption
+ * GenderOption - Gender option button with icon and label
  *
- * Gender option button with icon and label
- * Supports visual transitions for selected and unselected states
- *
- * @component
- * @param {string} value - Option value/identifier (e.g., "male", "female")
- * @param {string} label - Display text for the gender option
- * @param {string} icon - Image URL for the gender icon
- * @param {boolean} isSelected - Whether the option is currently selected
- * @param {function} onClick - Callback function triggered when option is clicked
- * @returns {ReactElement} Animated button with gender icon and label
+ * value, label - Option value and display text
+ * icon - Image URL for the gender icon
+ * isSelected - Whether the option is currently selected
+ * onClick - Callback when option is clicked
  */
 const GenderOption = ({
   value,
@@ -34,6 +25,10 @@ const GenderOption = ({
   isSelected,
   onClick
 }) => {
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
+
   return (
     <motion.button
       className={`gender-button ${isSelected ? 'gender-button-selected' : ''}`}
@@ -47,19 +42,10 @@ const GenderOption = ({
     </motion.button>
   )
 }
-// #endregion
 
-// #region Sub-Components
 /**
- * GenderIcon
- *
- * Gender icon image with selected/unselected state styling
- * Image styling changes based on selection state
- *
- * @component
- * @param {string} icon - Image URL for the gender icon
- * @param {boolean} isSelected - Whether the option is selected
- * @returns {ReactElement} Image element with conditional styling
+ * GenderIcon - Gender icon image with selected/unselected styling
+ * icon - Image URL, isSelected - Whether the option is selected
  */
 const GenderIcon = ({ icon, isSelected }) => {
   return (
@@ -72,14 +58,8 @@ const GenderIcon = ({ icon, isSelected }) => {
 }
 
 /**
- * GenderText
- *
- * Gender label text with selected state styling
- *
- * @component
- * @param {string} label - Display text
- * @param {boolean} isSelected - Whether the option is selected
- * @returns {ReactElement} Styled text span with conditional selected class
+ * GenderText - Gender label with selected state styling
+ * label - Display text, isSelected - Whether the option is selected
  */
 const GenderText = ({ label, isSelected }) => {
   return (
@@ -88,7 +68,6 @@ const GenderText = ({ label, isSelected }) => {
     </span>
   )
 }
-// #endregion
 
 export default GenderOption
 export { GenderIcon, GenderText }

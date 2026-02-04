@@ -1,33 +1,22 @@
 /**
  * AgeFilter.jsx
  *
- * Filter component for selecting age ranges
- * Displays multiple age range options as selectable buttons
- * Allows toggling selection on/off for the age filter
+ * Filter component for age ranges. Single select with toggle.
+ * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * selected - Currently selected age range or null if none selected
  */
 
-// #region Imports
-import { FILTER_OPTIONS } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import eventSystem from '../../../utils/EventSystem.js'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import FilterButton from '../shared/FilterButton.jsx'
 import './AgeFilter.css'
-// #endregion
 
-// #region Component
-/**
- * AgeFilter
- *
- * Renders age range filter options as selectable buttons within a FilterComponent container
- * Supports single selection with toggle behavior (click again to deselect)
- *
- * @component
- * @param {string} currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * @param {string|null} selected - Currently selected age range or null if none selected
- * @returns {ReactElement} Filter component with age range buttons
- */
+// ---------------------------------------------------------------------------
+// MAIN COMPONENT
+// ---------------------------------------------------------------------------
+
 const AgeFilter = ({ currentSource, selected }) => {
-  // Available age ranges for filtering
   const ageRanges = [
     FILTER_OPTIONS.AGE_RANGES.RANGE_2_5,
     FILTER_OPTIONS.AGE_RANGES.RANGE_6_18,
@@ -36,14 +25,17 @@ const AgeFilter = ({ currentSource, selected }) => {
     FILTER_OPTIONS.AGE_RANGES.RANGE_50_PLUS,
   ]
 
-  /**
-   * Handle age range selection
-   * Toggle behavior: if clicking the same range, deselect it; otherwise select the new range
-   * @param {string} age - Age range to select/deselect
-   */
+  // Handle age range selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (age) => {
-    appStateManager.setFilter('age', age === selected ? null : age)
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
+      filterType: FILTER_KEYS.AGE,
+      value: age === selected ? null : age
+    })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <FilterComponent title="Age" currentSource={currentSource}>
@@ -62,6 +54,5 @@ const AgeFilter = ({ currentSource, selected }) => {
     </FilterComponent>
   )
 }
-// #endregion
 
 export default AgeFilter

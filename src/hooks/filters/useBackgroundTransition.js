@@ -6,39 +6,20 @@
  * Creates, animates, and cleans up background elements on source changes
  */
 
-// #region Imports
 import { useEffect } from 'react'
 import { gsap } from 'gsap'
 import { TRANSITIONS } from '../../constants/animations.js'
 import useEventSubscription from '../common/useEventSubscription.js'
 import eventSystem from '../../utils/EventSystem.js'
-// #endregion
 
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * useBackgroundTransition
  *
- * Manages animated background image transitions when data source changes.
- * Creates new background elements with fade-in animation and removes old ones.
- * Prevents memory buildup by cleaning up old backgrounds after animation.
- *
- * @param {React.RefObject} backgroundRef - Ref to background container element
- * @param {Function} getBackgroundUrl - Function that returns background URL for a source
- * @param {string} initialSource - Initial data source for first background
- * @param {string} [className='filter-panel-background'] - CSS class name for background elements
- *
- * @example
- * const backgroundRef = useRef(null)
- * useBackgroundTransition(
- *   backgroundRef,
- *   (source) => source === 'Clinical Trial' ? '/ct-bg.jpg' : '/pb-bg.jpg',
- *   currentSource,
- *   'background-image' // custom className
- * )
+ * Animated background transitions when data source changes. Fade-in new image, cleanup old.
+ * backgroundRef - Container ref, getBackgroundUrl - (source) => url, initialSource, className - optional
  */
 export const useBackgroundTransition = (backgroundRef, getBackgroundUrl, initialSource, className = 'filter-panel-background') => {
-  // #region Initial Background Setup
   // Create initial background on mount
   useEffect(() => {
     if (!backgroundRef.current) return
@@ -49,11 +30,8 @@ export const useBackgroundTransition = (backgroundRef, getBackgroundUrl, initial
     initialBg.style.opacity = '1'
     backgroundRef.current.appendChild(initialBg)
   }, [backgroundRef, getBackgroundUrl, initialSource, className])
-  // #endregion
 
-  // ───────────────────────────────────────────────────────────────────────────
 
-  // #region Background Transition Handler
   /**
    * Handles category change events by animating the background transition
    * Fades in the new background and removes old ones to prevent memory buildup
@@ -87,7 +65,6 @@ export const useBackgroundTransition = (backgroundRef, getBackgroundUrl, initial
     handleCategoryChange,
     [backgroundRef, getBackgroundUrl, className]
   )
-  // #endregion
 }
 
 export default useBackgroundTransition

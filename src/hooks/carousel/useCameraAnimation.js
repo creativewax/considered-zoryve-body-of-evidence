@@ -6,28 +6,16 @@
  * Animates camera depth (Z) and field of view when layout changes
  */
 
-// #region Imports
 import { useEffect } from 'react'
 import { gsap } from 'gsap'
 import { calculateBestFitFOV } from '../../utils/carouselHelpers.js'
 import { CAROUSEL_SETTINGS } from '../../constants/carousel.js'
-// #endregion
 
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * useCameraAnimation
  *
- * Animates Three.js camera position and FOV when layout configuration changes.
- * Ensures carousel fits properly in viewport after layout updates.
- *
- * @param {Object} layoutConfig - Carousel layout configuration
- * @param {Object} camera - Three.js camera instance from useThree()
- * @param {Object} size - Viewport size from useThree()
- *
- * @example
- * const { camera, size } = useThree()
- * useCameraAnimation(layoutConfig, camera, size)
+ * Animates camera position and FOV when layout changes. layoutConfig, camera, size from useThree().
  */
 export const useCameraAnimation = (layoutConfig, camera, size) => {
   useEffect(() => {

@@ -55,7 +55,7 @@ export function calculateCylinderPosition(columnIndex, rowIndex, config) {
 // VISIBILITY & DEPTH
 // -----------------------------------------------------------------------------
 
-// Calculate visibility (opacity, darkOverlay) based on angle from center
+// Calculate visibility (opacity, darkOverlay) based on angle from centre
 export function calculateVisibility(angleFromCenter) {
   const absAngle = Math.abs(angleFromCenter)
   const v = CAROUSEL_VISIBILITY
@@ -109,13 +109,13 @@ export function isDragThresholdMet(startX, currentX) {
 
 // Get column range for pooling based on current rotation
 export function getPoolingRange(rotation, visibleColumns, columnAngle) {
-  const centerColumn = Math.round(rotation / columnAngle)
+  const centreColumn = Math.round(rotation / columnAngle)
   const buffer = Math.ceil(visibleColumns / 2) + CAROUSEL_SETTINGS.poolBuffer
 
   return {
-    startColumn: centerColumn - buffer,
-    endColumn: centerColumn + buffer,
-    centerColumn
+    startColumn: centreColumn - buffer,
+    endColumn: centreColumn + buffer,
+    centreColumn
   }
 }
 
@@ -128,17 +128,17 @@ export function wrapIndex(index, total) {
 // ANGLE UTILITIES
 // -----------------------------------------------------------------------------
 
-// Normalize rotation to [-PI, PI] range
-export function normalizeRotation(rotation) {
+// Normalise rotation to [-PI, PI] range
+export function normaliseRotation(rotation) {
   let r = rotation
   while (r > Math.PI) r -= Math.PI * 2
   while (r < -Math.PI) r += Math.PI * 2
   return r
 }
 
-// Get angle from center for a specific column
-export function getAngleFromCenter(columnIndex, currentRotation, columnAngle) {
-  return normalizeRotation(columnIndex * columnAngle - currentRotation)
+// Get angle from centre for a specific column
+export function getAngleFromCentre(columnIndex, currentRotation, columnAngle) {
+  return normaliseRotation(columnIndex * columnAngle - currentRotation)
 }
 
 // -----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ export function calculateBestFitFOV(layoutConfig, viewportAspectRatio, padding =
   const carouselHeight = (rows - 1) * rowSpacing + imageSize
 
   // Calculate carousel width (chord of visible arc on cylinder)
-  // Visible arc is roughly 120 degrees (±60° from center) for comfortable viewing
+  // Visible arc is roughly 120 degrees (±60° from centre) for comfortable viewing
   const visibleArcAngle = Math.PI * 0.65 // ~117 degrees
   const carouselWidth = 2 * cylinderRadius * Math.sin(visibleArcAngle / 2)
 
