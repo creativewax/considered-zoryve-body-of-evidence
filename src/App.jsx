@@ -14,6 +14,7 @@ import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
 import appStateManager from './managers/AppStateManager.js'
 import eventSystem from './utils/EventSystem.js'
+import useEventSubscription from './hooks/common/useEventSubscription.js'
 import Background from './components/common/Background/Background.jsx'
 import IntroPage from './pages/IntroPage/IntroPage.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx'
@@ -73,23 +74,14 @@ function App() {
 
     // Start initialization on mount
     initializeApp()
-
-    /**
-     * Handle app state changes from global state manager
-     * Updates local state to trigger re-render
-     */
-    const handleStateChange = (newState) => {
-      setAppState(newState)
-    }
-
-    // Subscribe to app state changes
-    eventSystem.on(eventSystem.constructor.EVENTS.APP_STATE_CHANGED, handleStateChange)
-
-    // Cleanup: unsubscribe on unmount
-    return () => {
-      eventSystem.off(eventSystem.constructor.EVENTS.APP_STATE_CHANGED, handleStateChange)
-    }
   }, [])
+
+  // Subscribe to app state changes
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.APP_STATE_CHANGED,
+    (newState) => setAppState(newState),
+    []
+  )
   // #endregion
 
   // ───────────────────────────────────────────────────────────────────────────

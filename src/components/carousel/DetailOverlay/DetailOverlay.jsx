@@ -4,11 +4,12 @@
 // IMPORTS
 // ---------------------------------------------------------------------------
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import eventSystem from '../../../utils/EventSystem'
 import appStateManager from '../../../managers/AppStateManager'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
+import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
 import './DetailOverlay.css'
 
 // ---------------------------------------------------------------------------
@@ -31,16 +32,12 @@ const formatField = (field) => field
 const DetailOverlay = () => {
   const [selected, setSelected] = useState(null)
 
-  // ---------------------------------------------------------------------------
-  // EFFECTS
-  // ---------------------------------------------------------------------------
-
   // Subscribe to image selection events and display detail overlay
-  useEffect(() => {
-    const onImageClicked = (data) => setSelected(data)
-    eventSystem.on(eventSystem.constructor.EVENTS.IMAGE_CLICKED, onImageClicked)
-    return () => eventSystem.off(eventSystem.constructor.EVENTS.IMAGE_CLICKED, onImageClicked)
-  }, [])
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.IMAGE_CLICKED,
+    (data) => setSelected(data),
+    []
+  )
 
   // ---------------------------------------------------------------------------
   // HANDLERS

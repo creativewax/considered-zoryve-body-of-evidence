@@ -4,8 +4,9 @@
 // IMPORTS
 // ---------------------------------------------------------------------------
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import rotationStateManager from '../../../managers/RotationStateManager'
+import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import './NavigationArrows.css'
 
 // ---------------------------------------------------------------------------
@@ -13,18 +14,11 @@ import './NavigationArrows.css'
 // ---------------------------------------------------------------------------
 
 const NavigationArrows = () => {
-  const [visible, setVisible] = useState(rotationStateManager.canInteract())
-
-  // ---------------------------------------------------------------------------
-  // EFFECTS
-  // ---------------------------------------------------------------------------
-
   // Subscribe to rotation state changes and update navigation visibility
-  useEffect(() => {
-    const checkVisibility = () => setVisible(rotationStateManager.canInteract())
-    checkVisibility()
-    return rotationStateManager.subscribe(checkVisibility)
-  }, [])
+  const visible = useManagerSubscription(
+    rotationStateManager,
+    (mgr) => mgr.canInteract()
+  )
 
   // ---------------------------------------------------------------------------
   // HANDLERS

@@ -11,14 +11,16 @@
 // IMPORTS
 // -----------------------------------------------------------------------
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { gsap } from 'gsap'
 import ImageFrame from '../../components/carousel/ImageFrame/ImageFrame'
 import poolManager from '../../managers/PoolManager'
 import rotationStateManager from '../../managers/RotationStateManager'
-import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isDragThresholdMet, calculateBestFitFOV } from '../../utils/carouselHelpers'
-import { CAROUSEL_SETTINGS } from '../../constants/carousel'
+import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter } from '../../utils/carouselHelpers'
+import useRotationSync from '../../hooks/carousel/useRotationSync.js'
+import useCameraAnimation from '../../hooks/carousel/useCameraAnimation.js'
+import useDragInteraction from '../../hooks/carousel/useDragInteraction.js'
+import useManagerSubscription from '../../hooks/common/useManagerSubscription.js'
 
 // -----------------------------------------------------------------------
 // COMPONENT DEFINITION
@@ -39,175 +41,29 @@ const Carousel3DScene = ({ layoutConfig }) => {
 
   const { gl, camera, size } = useThree()
 
-  // Drag state reference tracks pointer interaction details
-  // - active: Whether a drag is currently in progress
-  // - moved: Whether drag threshold has been exceeded
-  // - startX: Initial pointer X coordinate
-  // - startRotation: Carousel rotation when drag started
-  const dragRef = useRef({ active: false, moved: false, startX: 0, startRotation: 0 })
-
   // Click reference tracks click intent separate from drag state
   // Used to differentiate between clicks and drags on image elements
   const clickRef = useRef({ isDragging: false })
 
-  // Rotation state synchronized with rotation state manager
-  const [rotation, setRotation] = useState(rotationStateManager.getRotation())
+  // Use custom hooks for state management and interactions
+  const rotation = useRotationSync()
+  const activeSlots = useManagerSubscription(poolManager, (mgr) => [...mgr.getActiveSlots()])
+  const { onPointerDown, onPointerMove, onPointerUp } = useDragInteraction(gl, clickRef)
 
-  // Active slots currently being rendered (managed by pool manager)
-  const [activeSlots, setActiveSlots] = useState([])
+  // Camera animation handled by custom hook
+  useCameraAnimation(layoutConfig, camera, size)
 
   // -----------------------------------------------------------------------
-  // EFFECTS
+  // FRAME RENDERING LOOP
   // -----------------------------------------------------------------------
 
   /**
-   * CAMERA ANIMATION - smooth transition when layout changes or window resizes
-   * Animates both camera depth (Z position) and field of view (FOV) to ensure
-   * carousel fits properly in viewport after layout changes
-   */
-  useEffect(() => {
-    if (!layoutConfig || !camera) return
-
-    // Animate camera Z position to new layout depth
-    gsap.to(camera.position, {
-      z: layoutConfig.cameraZ,
-      duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-      ease: 'power2.inOut'
-    })
-
-    // Calculate best-fit FOV based on carousel dimensions and viewport
-    // Uses aspect ratio to convert horizontal FOV to vertical FOV
-    const aspectRatio = size.width / size.height
-    const verticalFOV = calculateBestFitFOV(layoutConfig, aspectRatio)
-
-    // Animate FOV with GSAP to ensure smooth transition
-    // Uses a separate target object to avoid directly modifying camera.fov
-    // which would skip the updateProjectionMatrix call
-    const targetFOV = { value: camera.fov }
-    gsap.to(targetFOV, {
-      value: verticalFOV,
-      duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        camera.fov = targetFOV.value
-        // updateProjectionMatrix is required after manual FOV changes
-        camera.updateProjectionMatrix()
-      }
-    })
-  }, [layoutConfig, camera, size.width, size.height])
-
-  /**
-   * ROTATION STATE SUBSCRIPTION - subscribe to rotation changes
-   * Keeps component in sync with global rotation state when changed by
-   * other components or managers
-   */
-  useEffect(() => rotationStateManager.subscribe(setRotation), [])
-
-  /**
-   * POOL MANAGER SUBSCRIPTION - subscribe to active slots changes
-   * Keeps component in sync with object pool assignments
-   * Creates a copy of active slots array to trigger re-render on updates
-   */
-  useEffect(() => {
-    const update = () => setActiveSlots([...poolManager.getActiveSlots()])
-    update()
-    return poolManager.subscribe(update)
-  }, [])
-
-  /**
-   * FRAME RENDERING LOOP - update pool assignments on every frame
+   * Update pool assignments on every frame
    * Synchronizes object pool with current carousel rotation to ensure
    * correct images are assigned to visible carousel slots
    */
   useFrame(() => poolManager.updatePoolAssignments(rotationStateManager.getRotation()))
 
-  // -----------------------------------------------------------------------
-  // EVENT HANDLERS
-  // -----------------------------------------------------------------------
-
-  /**
-   * onPointerDown - Initialize drag interaction
-   * Captures pointer, stores initial position and rotation, and prepares
-   * drag state for potential carousel rotation
-   */
-  const onPointerDown = useCallback((e) => {
-    // Check if rotation state manager allows interaction (e.g., not animating)
-    if (!rotationStateManager.canInteract()) return
-
-    e.stopPropagation()
-
-    // Interrupt any ongoing rotation animation to allow immediate user control
-    rotationStateManager.interruptAnimation()
-
-    // Initialize drag reference with current pointer position and carousel rotation
-    // This serves as the baseline for calculating rotation delta on pointer move
-    dragRef.current = {
-      active: true,
-      moved: false,
-      startX: e.clientX,
-      startRotation: rotationStateManager.getRotation()
-    }
-
-    // Reset dragging flag (used to differentiate drag from click)
-    clickRef.current.isDragging = false
-
-    // Capture pointer to ensure move events are received even outside viewport
-    gl.domElement.setPointerCapture(e.pointerId)
-  }, [gl])
-
-  /**
-   * onPointerMove - Handle carousel rotation during drag
-   * Updates carousel rotation based on pointer movement, with threshold
-   * detection to distinguish intentional drags from accidental movements
-   */
-  const onPointerMove = useCallback((e) => {
-    // Only process if pointer is actively down on carousel
-    if (!dragRef.current.active) return
-
-    // Calculate horizontal movement from starting position
-    const deltaX = e.clientX - dragRef.current.startX
-
-    // Detect if user has intentionally dragged past threshold
-    // This prevents small accidental movements from triggering rotation
-    if (!dragRef.current.moved && isDragThresholdMet(dragRef.current.startX, e.clientX)) {
-      dragRef.current.moved = true
-      clickRef.current.isDragging = true
-    }
-
-    // Only update rotation if drag threshold has been met
-    // Converts pixel delta to rotation delta using sensitivity multiplier
-    if (dragRef.current.moved) {
-      rotationStateManager.setRotation(
-        dragRef.current.startRotation - deltaX * CAROUSEL_SETTINGS.dragSensitivity
-      )
-    }
-  }, [])
-
-  /**
-   * onPointerUp - Finalize drag interaction
-   * Releases pointer capture and snaps carousel to nearest column if drag
-   * threshold was exceeded. Includes small delay to debounce drag state
-   */
-  const onPointerUp = useCallback((e) => {
-    // Only process if pointer was actively down
-    if (!dragRef.current.active) return
-
-    // Release captured pointer
-    gl.domElement.releasePointerCapture(e.pointerId)
-
-    // If user dragged past threshold, snap to nearest carousel column
-    // This provides nice alignment after manual rotation
-    if (dragRef.current.moved) {
-      rotationStateManager.snapToNearestColumn()
-    }
-
-    // Clear active state immediately
-    dragRef.current.active = false
-
-    // Debounce dragging flag with 50ms delay to allow event order to settle
-    // This ensures click handlers see the correct isDragging state
-    setTimeout(() => { clickRef.current.isDragging = false }, 50)
-  }, [gl])
 
   // -----------------------------------------------------------------------
   // SLOT CALCULATION - compute visibility and position for each slot

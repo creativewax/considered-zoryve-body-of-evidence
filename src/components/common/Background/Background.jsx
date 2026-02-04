@@ -6,12 +6,10 @@
  */
 
 // #region Imports
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { DATA_SOURCE, ASSETS } from '../../../constants/index.js'
-import { TRANSITIONS } from '../../../constants/animations.js'
 import appStateManager from '../../../managers/AppStateManager.js'
-import eventSystem from '../../../utils/EventSystem.js'
-import { gsap } from 'gsap'
+import useBackgroundTransition from '../../../hooks/filters/useBackgroundTransition.js'
 import './Background.css'
 // #endregion
 
@@ -36,13 +34,9 @@ import './Background.css'
  */
 // #region Component
 const Background = () => {
-  // #region State
-  const [currentSource, setCurrentSource] = useState(appStateManager.getSource())
-  // #endregion
-
   // #region Refs
   const backgroundRef = useRef(null)
-  const oldBackgroundRef = useRef(null)
+  const currentSource = appStateManager.getSource()
   // #endregion
 
   // #region Helpers
@@ -58,56 +52,9 @@ const Background = () => {
   }
   // #endregion
 
-  // #region Effects
-  useEffect(() => {
-    // Handle category change event and animate background transition
-    const handleCategoryChange = (source) => {
-      if (backgroundRef.current) {
-        // Create new background element (initially invisible)
-        const newBg = document.createElement('div')
-        newBg.className = 'background-image'
-        newBg.style.backgroundImage = `url(${getBackgroundImage(source)})`
-        newBg.style.opacity = '0'
-        backgroundRef.current.appendChild(newBg)
-
-        // Animate new background in with fade transition
-        gsap.to(newBg, {
-          opacity: 1,
-          duration: TRANSITIONS.FADE_SLOW.duration,
-          ease: TRANSITIONS.FADE_SLOW.ease,
-          onComplete: () => {
-            // Clean up: remove old background elements after fade completes
-            if (oldBackgroundRef.current) {
-              oldBackgroundRef.current.remove()
-            }
-            // Get all old background images and remove them
-            oldBackgroundRef.current = backgroundRef.current.querySelector('.background-image:not(:last-child)')
-            if (oldBackgroundRef.current) {
-              oldBackgroundRef.current.remove()
-            }
-          }
-        })
-      }
-      setCurrentSource(source)
-    }
-
-    // Initialize background on mount with current source
-    if (backgroundRef.current) {
-      const initialBg = document.createElement('div')
-      initialBg.className = 'background-image'
-      initialBg.style.backgroundImage = `url(${getBackgroundImage(currentSource)})`
-      initialBg.style.opacity = '1'
-      backgroundRef.current.appendChild(initialBg)
-    }
-
-    // Listen for category change events
-    eventSystem.on(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChange)
-
-    // Cleanup: unsubscribe from events
-    return () => {
-      eventSystem.off(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChange)
-    }
-  }, [])
+  // #region Custom Hooks
+  // Handle animated background transitions on source changes
+  useBackgroundTransition(backgroundRef, getBackgroundImage, currentSource, 'background-image')
   // #endregion
 
   // #region Render

@@ -21,6 +21,7 @@ import FadeIn from '../../animations/FadeIn.jsx'
 import appStateManager from '../../../managers/AppStateManager.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import Button from '../../common/Button/Button.jsx'
+import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
 import './FilterBottom.css'
 // #endregion
 
@@ -29,45 +30,32 @@ const FilterBottom = () => {
   // #region State Management
   // Track whether any filters are currently selected
   const [hasActiveFilters, setHasActiveFilters] = useState(false)
+
+  // Helper to check filter state
+  const checkFilters = () => {
+    setHasActiveFilters(appStateManager.hasActiveFilters())
+  }
   // #endregion
 
-  // #region Effects - Event Subscriptions
+  // #region Effects - Initial Check and Event Subscriptions
+  // Check initial filter state on component mount
   useEffect(() => {
-    /**
-     * Checks current filter state and updates component state
-     * Called on mount and whenever filter state changes
-     */
-    const checkFilters = () => {
-      setHasActiveFilters(appStateManager.hasActiveFilters())
-    }
-
-    /**
-     * Handles filter change events by re-checking filter state
-     */
-    const handleFilterChange = () => {
-      checkFilters()
-    }
-
-    /**
-     * Handles filter reset events by re-checking filter state
-     */
-    const handleFiltersReset = () => {
-      checkFilters()
-    }
-
-    // Check initial filter state on component mount
     checkFilters()
-
-    // Subscribe to global events
-    eventSystem.on(eventSystem.constructor.EVENTS.FILTER_CHANGED, handleFilterChange)
-    eventSystem.on(eventSystem.constructor.EVENTS.FILTERS_RESET, handleFiltersReset)
-
-    // Cleanup: unsubscribe from events on unmount
-    return () => {
-      eventSystem.off(eventSystem.constructor.EVENTS.FILTER_CHANGED, handleFilterChange)
-      eventSystem.off(eventSystem.constructor.EVENTS.FILTERS_RESET, handleFiltersReset)
-    }
   }, [])
+
+  // Subscribe to filter change events
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.FILTER_CHANGED,
+    checkFilters,
+    []
+  )
+
+  // Subscribe to filter reset events
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.FILTERS_RESET,
+    checkFilters,
+    []
+  )
   // #endregion
 
   // #region Event Handlers

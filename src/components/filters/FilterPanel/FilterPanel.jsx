@@ -17,16 +17,17 @@
 */
 
 // #region Imports
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { DATA_SOURCE, ASSETS } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
 import appStateManager from '../../../managers/AppStateManager.js'
 import eventSystem from '../../../utils/EventSystem.js'
-import { gsap } from 'gsap'
 import FilterTabs from './FilterTabs.jsx'
 import FilterBody from './FilterBody.jsx'
 import FilterBottom from './FilterBottom.jsx'
+import useBackgroundTransition from '../../../hooks/filters/useBackgroundTransition.js'
+import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
 import './FilterPanel.css'
 // #endregion
 
@@ -56,73 +57,33 @@ const FilterPanel = () => {
   }
   // #endregion
 
-  // #region Effects - Event Subscriptions and Background Management
-  useEffect(() => {
-    /**
-     * Handles category/source change events by animating the background transition
-     * Fades in the new background and removes old ones to prevent memory buildup
-     */
-    const handleCategoryChange = (source) => {
-      if (backgroundRef.current) {
-        // Create new background element with initial zero opacity
-        const newBg = document.createElement('div')
-        newBg.className = 'filter-panel-background'
-        newBg.style.backgroundImage = `url(${getFilterBackground(source)})`
-        newBg.style.opacity = '0'
-        backgroundRef.current.appendChild(newBg)
+  // #region Custom Hooks - Background and Event Management
+  // Handle animated background transitions on source changes
+  useBackgroundTransition(backgroundRef, getFilterBackground, currentSource)
 
-        // Animate new background in with fade effect
-        gsap.to(newBg, {
-          opacity: 1,
-          duration: TRANSITIONS.FADE_NORMAL.duration,
-          ease: TRANSITIONS.FADE_NORMAL.ease,
-          onComplete: () => {
-            // Clean up old background elements after animation completes
-            const oldBgs = backgroundRef.current.querySelectorAll('.filter-panel-background:not(:last-child)')
-            oldBgs.forEach(bg => bg.remove())
-          }
-        })
-      }
-      // Update component state with new source and associated filters
+  // Subscribe to category change events
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.CATEGORY_CHANGED,
+    (source) => {
       setCurrentSource(source)
       setFilters(appStateManager.getFilters())
-    }
+    },
+    []
+  )
 
-    /**
-     * Handles individual filter changes by updating the filters state
-     */
-    const handleFilterChange = ({ filters: newFilters }) => {
-      setFilters(newFilters)
-    }
+  // Subscribe to filter change events
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.FILTER_CHANGED,
+    ({ filters: newFilters }) => setFilters(newFilters),
+    []
+  )
 
-    /**
-     * Handles filter reset event by updating state with cleared filters
-     */
-    const handleFiltersReset = (newFilters) => {
-      setFilters(newFilters)
-    }
-
-    // Initialize background on component mount
-    if (backgroundRef.current) {
-      const initialBg = document.createElement('div')
-      initialBg.className = 'filter-panel-background'
-      initialBg.style.backgroundImage = `url(${getFilterBackground(currentSource)})`
-      initialBg.style.opacity = '1'
-      backgroundRef.current.appendChild(initialBg)
-    }
-
-    // Subscribe to global events
-    eventSystem.on(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChange)
-    eventSystem.on(eventSystem.constructor.EVENTS.FILTER_CHANGED, handleFilterChange)
-    eventSystem.on(eventSystem.constructor.EVENTS.FILTERS_RESET, handleFiltersReset)
-
-    // Cleanup: unsubscribe from events on unmount
-    return () => {
-      eventSystem.off(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChange)
-      eventSystem.off(eventSystem.constructor.EVENTS.FILTER_CHANGED, handleFilterChange)
-      eventSystem.off(eventSystem.constructor.EVENTS.FILTERS_RESET, handleFiltersReset)
-    }
-  }, [])
+  // Subscribe to filter reset events
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.FILTERS_RESET,
+    (newFilters) => setFilters(newFilters),
+    []
+  )
   // #endregion
 
   // #region Event Handlers
