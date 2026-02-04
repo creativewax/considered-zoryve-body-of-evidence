@@ -19,15 +19,11 @@ const ISIPanel = () => {
     if (!panelRef.current || !overlayRef.current) return
 
     // Get CSS variable values
-    const collapsedHeight = parseInt(getComputedStyle(document.documentElement)
-      .getPropertyValue('--isi-panel-collapsed-height').replace('px', ''))
-    const expandedHeight = parseInt(getComputedStyle(document.documentElement)
-      .getPropertyValue('--isi-panel-expanded-height').replace('px', ''))
+    const collapsedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--isi-panel-collapsed-height').replace('px', ''))
+    const expandedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--isi-panel-expanded-height').replace('px', ''))
 
     // Kill any existing timeline
-    if (timelineRef.current) {
-      timelineRef.current.kill()
-    }
+    if (timelineRef.current) timelineRef.current.kill()
 
     // Create new timeline
     const tl = gsap.timeline()

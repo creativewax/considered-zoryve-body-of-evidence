@@ -6,7 +6,7 @@ import { gsap } from 'gsap'
 import ImageFrame from './ImageFrame'
 import poolManager from './PoolManager'
 import rotationStateManager from './RotationStateManager'
-import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isDragThresholdMet, horizontalToVerticalFOV } from './carouselHelpers'
+import { calculateCylinderPosition, calculateVisibility, getAngleFromCenter, isDragThresholdMet, calculateBestFitFOV } from './carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../../constants/carousel'
 
 const CarouselScene = ({ layoutConfig }) => {
@@ -31,9 +31,9 @@ const CarouselScene = ({ layoutConfig }) => {
       ease: 'power2.inOut'
     })
 
-    // Calculate vertical FOV from horizontal FOV based on aspect ratio
+    // Calculate best-fit FOV based on carousel dimensions and viewport
     const aspectRatio = size.width / size.height
-    const verticalFOV = horizontalToVerticalFOV(layoutConfig.fovHorizontal, aspectRatio)
+    const verticalFOV = calculateBestFitFOV(layoutConfig, aspectRatio)
 
     // Animate FOV (vertical, calculated from horizontal)
     const targetFOV = { value: camera.fov }

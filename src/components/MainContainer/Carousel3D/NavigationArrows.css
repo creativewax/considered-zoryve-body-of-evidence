@@ -17,8 +17,8 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.0);
+  background: rgba(0, 0, 0, 0.2);
   color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   display: flex;
@@ -30,7 +30,7 @@
 
 .carousel-nav-arrow:hover {
   background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: scale(1.1);
 }
 

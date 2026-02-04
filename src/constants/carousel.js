@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------------
 
 export const CAROUSEL_LAYOUT = {
-  LARGE: { minImages: 45, rows: 5, visibleColumns: 9 },
+  LARGE: { minImages: 45, rows: 5, visibleColumns: 11 },
   MEDIUM: { minImages: 21, rows: 3, visibleColumns: 7 },
   SMALL: { minImages: 2, rows: 1, visibleColumns: 5 }
 }
@@ -16,9 +16,8 @@ export const CAROUSEL_LAYOUT = {
 
 export const CAROUSEL_SETTINGS = {
   // Camera & cylinder per row count
-  cylinderRadius: { 1: 2, 3: 2.5, 5: 3.0 },
-  cameraZ: { 1: 4.25, 3: 6, 5: 8 },
-  fovHorizontal: { 1: 90, 3: 80, 5: 70 }, // Horizontal FOV in degrees (width-based)
+  cylinderRadius: { 1: 2, 3: 3, 5: 4 },
+  cameraZ: { 1: 6, 3: 9, 5: 12},
 
   // Image sizing
   rowSpacingMultiplier: 1.25,

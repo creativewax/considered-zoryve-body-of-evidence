@@ -2,7 +2,7 @@
 
 import './Shadow.css'
 
-const BOTTOM_OFFSETS = { 1: '15%', 3: '10%', 5: '5%' }
+const BOTTOM_OFFSETS = { 1: '10%', 3: '0%', 5: '-5%' }
 
 const Shadow = ({ rowCount }) => (
   <div className="carousel-shadow" style={{ bottom: BOTTOM_OFFSETS[rowCount] || '10%' }}>

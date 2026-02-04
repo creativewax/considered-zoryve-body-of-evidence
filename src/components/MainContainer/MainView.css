@@ -4,9 +4,7 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
-  /* Account for footer and ISI panel collapsed height */
-  height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
-  min-height: calc(100vh - var(--footer-height) - var(--isi-panel-collapsed-height));
+  padding-bottom: var(--isi-panel-collapsed-height); /* space for collapsed ISI panel */
 }
 
 .main-view-content {

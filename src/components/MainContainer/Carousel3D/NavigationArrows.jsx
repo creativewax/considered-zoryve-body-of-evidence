@@ -17,7 +17,7 @@ const NavigationArrows = () => {
   const onLeft = useCallback(() => rotationStateManager.navigateLeft(), [])
   const onRight = useCallback(() => rotationStateManager.navigateRight(), [])
 
-  if (!visible) return null
+  // if (!visible) return null
 
   return (
     <div className="carousel-navigation">

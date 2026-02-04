@@ -12,7 +12,7 @@ import Shadow from './Carousel3D/Shadow'
 import DetailOverlay from './Carousel3D/DetailOverlay'
 import poolManager from './Carousel3D/PoolManager'
 import rotationStateManager from './Carousel3D/RotationStateManager'
-import { getLayoutConfig, horizontalToVerticalFOV } from './Carousel3D/carouselHelpers'
+import { getLayoutConfig, calculateBestFitFOV } from './Carousel3D/carouselHelpers'
 import { CAROUSEL_SETTINGS } from '../../constants/carousel'
 import './MainView.css'
 
@@ -116,9 +116,9 @@ const MainView = () => {
         {layoutConfig && imageCount > 0 ? (
           <>
             <Canvas
-              camera={{ 
-                position: [0, 0, layoutConfig.cameraZ], 
-                fov: horizontalToVerticalFOV(layoutConfig.fovHorizontal, window.innerWidth / window.innerHeight)
+              camera={{
+                position: [0, 0, layoutConfig.cameraZ],
+                fov: calculateBestFitFOV(layoutConfig, window.innerWidth / window.innerHeight)
               }}
               style={{ background: 'transparent' }}
               gl={{ alpha: true, antialias: true }}

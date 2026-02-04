@@ -31,8 +31,7 @@ export function getLayoutConfig(imageCount) {
     rowSpacing: (s.imageSizeBase - (rows - 1) * s.imageSizeRowReduction) * s.rowSpacingMultiplier,
     columnAngle: Math.PI / visibleColumns, // columns spread across 180 degrees
     poolSize: (visibleColumns + s.poolBuffer * 2) * rows,
-    cameraZ: s.cameraZ[rows],
-    fovHorizontal: s.fovHorizontal[rows] || 50 // Horizontal FOV, will be converted to vertical based on aspect ratio
+    cameraZ: s.cameraZ[rows]
   }
 }
 
@@ -146,10 +145,29 @@ export function getAngleFromCenter(columnIndex, currentRotation, columnAngle) {
 // CAMERA UTILITIES
 // -----------------------------------------------------------------------------
 
-// Convert horizontal FOV (degrees) to vertical FOV (degrees) based on aspect ratio
-// Formula: verticalFOV = 2 * atan(tan(horizontalFOV / 2) / aspectRatio)
-export function horizontalToVerticalFOV(horizontalFOVDegrees, aspectRatio) {
-  const horizontalFOVRad = (horizontalFOVDegrees * Math.PI) / 180
-  const verticalFOVRad = 2 * Math.atan(Math.tan(horizontalFOVRad / 2) / aspectRatio)
-  return (verticalFOVRad * 180) / Math.PI
+// Calculate best-fit vertical FOV to ensure carousel fits in viewport
+// Takes into account both carousel height (rows) and width (cylinder arc)
+export function calculateBestFitFOV(layoutConfig, viewportAspectRatio, padding = 1.75) {
+  const { rows, rowSpacing, cylinderRadius, cameraZ } = layoutConfig
+
+  // Calculate carousel height (distance from top row to bottom row + image size)
+  const imageSize = CAROUSEL_SETTINGS.imageSizeBase - (rows - 1) * CAROUSEL_SETTINGS.imageSizeRowReduction
+  const carouselHeight = (rows - 1) * rowSpacing + imageSize
+
+  // Calculate carousel width (chord of visible arc on cylinder)
+  // Visible arc is roughly 120 degrees (±60° from center) for comfortable viewing
+  const visibleArcAngle = Math.PI * 0.65 // ~117 degrees
+  const carouselWidth = 2 * cylinderRadius * Math.sin(visibleArcAngle / 2)
+
+  // Calculate FOV needed to fit height
+  const fovForHeight = 2 * Math.atan((carouselHeight * padding) / (2 * cameraZ))
+
+  // Calculate FOV needed to fit width (convert to vertical FOV via aspect ratio)
+  const fovForWidth = 2 * Math.atan((carouselWidth * padding) / (2 * cameraZ * viewportAspectRatio))
+
+  // Use the larger FOV to ensure both dimensions fit
+  const bestFitFOV = Math.max(fovForHeight, fovForWidth)
+
+  // Convert to degrees
+  return (bestFitFOV * 180) / Math.PI
 }
