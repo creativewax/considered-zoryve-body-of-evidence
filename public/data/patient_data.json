@@ -32,7 +32,8 @@
       "week8Image": "dc_ear_week8.jpg",
       "week1Image": "dc_ear_week1.jpg",
       "baselineImage": "dc_ear_baseline.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -66,7 +67,8 @@
       "week1Image": "ay_eyelids_week1.jpg",
       "baselineImage": "ay_eyelids_baseline.jpg",
       "week4Image": "ay_eyelids_week4.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -100,7 +102,8 @@
       "baselineImage": "kb_face_baseline.jpg",
       "week8Image": "kb_face_week8.jpg",
       "week1Image": "kb_face_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -134,7 +137,8 @@
       "week4Image": "ja_arms_week4.jpg",
       "week1Image": "ja_arms_week1.jpg",
       "baselineImage": "ja_arms_baseline.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -168,7 +172,8 @@
       "week1Image": "pkg_scalp_week1.jpg",
       "baselineImage": "pkg_scalp_baseline.jpg",
       "week8Image": "pkg_scalp_week8.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -202,7 +207,8 @@
       "week8Image": "he_scalp_week8.jpg",
       "week1Image": "he_scalp_week1.jpg",
       "baselineImage": "he_scalp_baseline.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -236,7 +242,8 @@
       "week8Image": "scp_lower-leg_week8.jpg",
       "baselineImage": "scp_lower-leg_baseline.jpg",
       "week1Image": "scp_lower-leg_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -270,7 +277,8 @@
       "baselineImage": "tm_popliteal-fossa_baseline.jpg",
       "week4Image": "tm_popliteal-fossa_week4.jpg",
       "week1Image": "tm_popliteal-fossa_week1.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -304,7 +312,8 @@
       "baselineImage": "kk_foot_baseline.jpg",
       "week4Image": "kk_foot_week4.jpg",
       "week1Image": "kk_foot_week1.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -338,7 +347,8 @@
       "week1Image": "sh_hand_week1.jpg",
       "week8Image": "sh_hand_week8.jpg",
       "baselineImage": "sh_hand_baseline.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -372,7 +382,8 @@
       "week4Image": "ja_hands_week4.jpg",
       "baselineImage": "ja_hands_baseline.jpg",
       "week1Image": "ja_hands_week1.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -406,7 +417,8 @@
       "week1Image": "nm_shin_week1.jpg",
       "baselineImage": "nm_shin_baseline.jpg",
       "week8Image": "nm_shin_week8.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -440,7 +452,8 @@
       "baselineImage": "gb_chest_baseline.jpg",
       "week1Image": "gb_chest_week1.jpg",
       "week8Image": "gb_chest_week8.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -474,7 +487,8 @@
       "week1Image": "rl_lower-back_week1.jpg",
       "baselineImage": "rl_lower-back_baseline.jpg",
       "week4Image": "rl_lower-back_week4.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -508,7 +522,8 @@
       "week1Image": "jf_face_week1.jpg",
       "week8Image": "jf_face_week8.jpg",
       "baselineImage": "jf_face_baseline.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -542,7 +557,8 @@
       "baselineImage": "kk_neck_baseline.jpg",
       "week8Image": "kk_neck_week8.jpg",
       "week1Image": "kk_neck_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -576,7 +592,8 @@
       "baselineImage": "jf_scalp_baseline.jpg",
       "week1Image": "jf_scalp_week1.jpg",
       "week8Image": "jf_scalp_week8.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -610,7 +627,8 @@
       "baselineImage": "am_scalp_baseline.jpg",
       "week8Image": "am_scalp_week8.jpg",
       "week1Image": "am_scalp_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -644,7 +662,8 @@
       "week8Image": "js_scalp_week8.jpg",
       "baselineImage": "js_scalp_baseline.jpg",
       "week1Image": "js_scalp_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -678,7 +697,8 @@
       "week8Image": "gb_scalp_week8.jpg",
       "baselineImage": "gb_scalp_baseline.jpg",
       "week1Image": "gb_scalp_week1.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -712,7 +732,8 @@
       "week1Image": "jb_face_week1.jpg",
       "baselineImage": "jb_face_baseline.jpg",
       "week8Image": "jb_face_week8.jpg",
-      "week4Image": null
+      "week4Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "DOF Authentic Voices Photos and Survey Results",
@@ -746,7 +767,8 @@
       "week4Image": "rl_hands_week4.jpg",
       "week1Image": "rl_hands_week1.jpg",
       "baselineImage": "rl_hands_baseline.jpg",
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Arms and hands"
     }
   ],
   "iCVA 2.1": [
@@ -798,7 +820,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-1052",
@@ -848,7 +871,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2105",
@@ -898,7 +922,8 @@
       "week2Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2026",
@@ -948,7 +973,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1964",
@@ -998,7 +1024,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2387",
@@ -1048,7 +1075,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2111",
@@ -1098,7 +1126,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-00631 and REF-1037",
@@ -1148,7 +1177,8 @@
       "week8Image": "130-008_axilla_week8.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2104",
@@ -1198,7 +1228,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2112",
@@ -1248,7 +1279,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-1054",
@@ -1298,7 +1330,8 @@
       "baselineImage": "133-023_shin_baseline.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-1056",
@@ -1348,7 +1381,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1294",
@@ -1398,7 +1432,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-00631 and REF-1037",
@@ -1448,7 +1483,8 @@
       "week2Image": "133-001_elbow_week2.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1962",
@@ -1498,7 +1534,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1966",
@@ -1548,7 +1585,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-1963",
@@ -1598,7 +1636,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1293",
@@ -1648,7 +1687,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2326",
@@ -1698,7 +1738,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2389",
@@ -1748,7 +1789,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2395",
@@ -1798,7 +1840,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2391",
@@ -1848,7 +1891,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2797",
@@ -1898,7 +1942,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2798",
@@ -1948,7 +1993,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2799",
@@ -1998,7 +2044,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2819",
@@ -2048,7 +2095,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2800",
@@ -2098,7 +2146,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2801",
@@ -2148,7 +2197,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2802",
@@ -2198,7 +2248,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2803",
@@ -2248,7 +2299,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2804",
@@ -2298,7 +2350,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2805",
@@ -2348,7 +2401,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2390",
@@ -2398,7 +2452,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2388",
@@ -2448,7 +2503,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1541",
@@ -2498,7 +2554,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1393",
@@ -2548,7 +2605,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2393",
@@ -2598,7 +2656,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2394",
@@ -2648,7 +2707,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2267",
@@ -2698,7 +2758,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2103",
@@ -2748,7 +2809,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2396",
@@ -2798,7 +2860,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2392",
@@ -2848,7 +2911,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1397",
@@ -2898,7 +2962,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2397",
@@ -2948,7 +3013,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-00631 and REF-1037",
@@ -2998,7 +3064,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-1052",
@@ -3048,7 +3115,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2105",
@@ -3098,7 +3166,8 @@
       "week2Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week8Image": null
+      "week8Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2026",
@@ -3148,7 +3217,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1964",
@@ -3198,7 +3268,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2387",
@@ -3248,7 +3319,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2111",
@@ -3298,7 +3370,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-00631 and REF-1037",
@@ -3348,7 +3421,8 @@
       "week8Image": "130-008_axilla_week8.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2104",
@@ -3398,7 +3472,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2112",
@@ -3448,7 +3523,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-1054",
@@ -3498,7 +3574,8 @@
       "baselineImage": "133-023_shin_baseline.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-1056",
@@ -3548,7 +3625,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1294",
@@ -3598,7 +3676,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-00631 and REF-1037",
@@ -3648,7 +3727,8 @@
       "week2Image": "133-001_elbow_week2.jpg",
       "week1Image": null,
       "week3Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1962",
@@ -3698,7 +3778,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1966",
@@ -3748,7 +3829,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-1963",
@@ -3798,7 +3880,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-1293",
@@ -3848,7 +3931,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2326",
@@ -3898,7 +3982,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2389",
@@ -3948,7 +4033,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2395",
@@ -3998,7 +4084,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2391",
@@ -4048,7 +4135,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2797",
@@ -4098,7 +4186,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2798",
@@ -4148,7 +4237,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2799",
@@ -4198,7 +4288,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2819",
@@ -4248,7 +4339,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2800",
@@ -4298,7 +4390,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2801",
@@ -4348,7 +4441,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2802",
@@ -4398,7 +4492,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2803",
@@ -4448,7 +4543,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2804",
@@ -4498,7 +4594,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Arms and hands"
     },
     {
       "referenceId": "REF-2805",
@@ -4548,7 +4645,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2390",
@@ -4598,7 +4696,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2388",
@@ -4648,7 +4747,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1541",
@@ -4698,7 +4798,8 @@
       "week4Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1393",
@@ -4748,7 +4849,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2393",
@@ -4798,7 +4900,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Torso"
     },
     {
       "referenceId": "REF-2394",
@@ -4848,7 +4951,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2267",
@@ -4898,7 +5002,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2103",
@@ -4948,7 +5053,8 @@
       "week3Image": null,
       "week6Image": null,
       "week8Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2396",
@@ -4998,7 +5104,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Legs and feet"
     },
     {
       "referenceId": "REF-2392",
@@ -5048,7 +5155,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-1397",
@@ -5098,7 +5206,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     },
     {
       "referenceId": "REF-2397",
@@ -5148,7 +5257,8 @@
       "week1Image": null,
       "week3Image": null,
       "week6Image": null,
-      "week52Image": null
+      "week52Image": null,
+      "bodyAreaSimple": "Head and neck"
     }
   ]
 }

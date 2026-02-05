@@ -28,6 +28,8 @@ export const PATIENT_SCHEMA = {
   RACE: 'race',
   ETHNICITY: 'ethnicity',
   BODY_AREA: 'bodyArea',
+  /** One of four filter categories (Head and neck, Torso, Arms and hands, Legs and feet). Populate from bodyArea e.g. via AI so filtering works without guessing spellings. */
+  BODY_AREA_SIMPLE: 'bodyAreaSimple',
   TREATMENTS_TRIED_AND_FAILED: 'treatmentsTriedAndFailed',
   BASELINE_SEVERITY: 'baselineSeverity',
   BASELINE_BSA: 'baselineBsa',
@@ -224,7 +226,9 @@ export const ASSETS = {
     MALE: '/UI/icon-male.svg',
     FEMALE: '/UI/icon-female.svg',
     BODY_AREA_PERSON: '/UI/body-area-person.svg',
-    PLUS_BUTTON: '/UI/plus_button.svg',
+    CLOSE_BUTTON: '/UI/close_button.svg',
+    PLUS_BUTTON: '/UI/plus-button.svg',
+    PLUS_BUTTON_BLUE: '/UI/plus-button-blue.svg',
     FOOTER_INFO: '/UI/footer-info.svg',
     FOOTER_REFS: '/UI/footer-refs.svg',
     LOGO_ZORYVE: '/UI/logo-zoryve.svg',
@@ -279,3 +283,109 @@ export const NAVIGATION_DIRECTION = {
   LEFT: 'left',
   RIGHT: 'right',
 }
+
+// ---------------------------------------------------------------------------
+// TIMEPOINT DATA SCHEMA
+// ---------------------------------------------------------------------------
+
+/**
+ * Timepoint data structure returned by splitPatientData() utility
+ * Used in DetailOverlay, ImageCard, and ScoreDisplay components
+ *
+ * splitPatientData() returns an object with:
+ * - timepoints: Array of TimepointData objects
+ * - showWiNrs: boolean flag indicating if WI-NRS section should display (true if any timepoint has WI-NRS)
+ * - showSiNrs: boolean flag indicating if SI-NRS section should display (true if any timepoint has SI-NRS)
+ *
+ * Each timepoint represents a single measurement (e.g., Baseline, Week 2, Week 8) with all
+ * associated image and scoring data for display in the patient detail view.
+ *
+ * @typedef {Object} TimepointData
+ * @property {string} timepoint - Internal timepoint identifier (e.g., 'baseline', 'week2', 'week8')
+ * @property {string} label - Human-readable label for display (e.g., 'Baseline', 'Week 2', 'Week 8')
+ * @property {string} image - Full-size image filename (e.g., 'dc_ear_baseline.jpg')
+ * @property {string} thumb - Thumbnail image filename (e.g., 'dc_ear_baseline_thumb.jpg')
+ * @property {Object} scale - Main severity scale score
+ * @property {string} scale.name - Scale name (e.g., 'IGA', 'v-IGA-AD', 'S-IGA')
+ * @property {string|number|null} scale.score - Score value (null shown as "-" in UI)
+ *   - Clinical Trial: numeric (e.g., 0, 1, 2, 3)
+ *   - Practice-Based: text severity (e.g., 'Clear', 'Mild', 'Moderate', 'Severe')
+ * @property {string|number|null} wiNrs - WI-NRS (Worst Itch Numerical Rating Scale) score
+ *   - null if not available or "Not Reported" (shown as "-" in UI when section is displayed)
+ *   - numeric value 0-10 if available
+ * @property {string|number|null} siNrs - SI-NRS (Skin Itch Numerical Rating Scale) score
+ *   - null if not available or "Not Reported" (shown as "-" in UI when section is displayed)
+ *   - numeric value 0-10 if available
+ *
+ * @example
+ * // splitPatientData() return structure for Clinical Trial patient
+ * {
+ *   timepoints: [
+ *     {
+ *       timepoint: 'baseline',
+ *       label: 'Baseline',
+ *       image: '110-005_baseline.jpg',
+ *       thumb: '110-005_baseline_thumb.jpg',
+ *       scale: { name: 'IGA', score: 3 },
+ *       wiNrs: 4,
+ *       siNrs: null
+ *     },
+ *     {
+ *       timepoint: 'week2',
+ *       label: 'Week 2',
+ *       image: '110-005_week2.jpg',
+ *       thumb: '110-005_week2_thumb.jpg',
+ *       scale: { name: 'IGA', score: 2 },
+ *       wiNrs: null,  // Will display as "-" because showWiNrs is true
+ *       siNrs: null
+ *     },
+ *     {
+ *       timepoint: 'week8',
+ *       label: 'Week 8',
+ *       image: '110-005_week8.jpg',
+ *       thumb: '110-005_week8_thumb.jpg',
+ *       scale: { name: 'IGA', score: 1 },
+ *       wiNrs: 2,
+ *       siNrs: null
+ *     }
+ *   ],
+ *   showWiNrs: true,   // At least one timepoint has WI-NRS data
+ *   showSiNrs: false   // No timepoints have SI-NRS data
+ * }
+ *
+ * @example
+ * // splitPatientData() return structure for Practice-Based patient
+ * {
+ *   timepoints: [
+ *     {
+ *       timepoint: 'baseline',
+ *       label: 'Baseline',
+ *       image: 'dc_ear_baseline.jpg',
+ *       thumb: 'dc_ear_baseline_thumb.jpg',
+ *       scale: { name: 'IGA', score: 'Moderate' },
+ *       wiNrs: null,
+ *       siNrs: null
+ *     },
+ *     {
+ *       timepoint: 'week2',
+ *       label: 'Week 2',
+ *       image: 'dc_ear_week2.jpg',
+ *       thumb: 'dc_ear_week2_thumb.jpg',
+ *       scale: { name: 'IGA', score: 'Mild' },
+ *       wiNrs: null,
+ *       siNrs: null
+ *     },
+ *     {
+ *       timepoint: 'week8',
+ *       label: 'Week 8',
+ *       image: 'dc_ear_week8.jpg',
+ *       thumb: 'dc_ear_week8_thumb.jpg',
+ *       scale: { name: 'IGA', score: 'Clear' },
+ *       wiNrs: null,
+ *       siNrs: null
+ *     }
+ *   ],
+ *   showWiNrs: false,  // No WI-NRS data for practice-based patients
+ *   showSiNrs: false   // No SI-NRS data for practice-based patients
+ * }
+ */

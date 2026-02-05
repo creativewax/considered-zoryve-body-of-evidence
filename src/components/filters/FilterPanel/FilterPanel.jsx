@@ -78,6 +78,13 @@ const FilterPanel = () => {
   // ---------------------------------------------------------------------------
 
   const handleSourceChange = (source) => {
+    // Close any visible detail overlay
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
+
+    // Reset filters when switching between sources
+    eventSystem.emit(eventSystem.constructor.EVENTS.FILTERS_RESET_REQUESTED)
+
+    // Change the data source
     eventSystem.emit(eventSystem.constructor.EVENTS.SOURCE_CHANGED, { source })
   }
 

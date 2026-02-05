@@ -12,6 +12,17 @@
   --colour-white: #FFFFFF;
   --colour-black: #000000;
   
+  /* Opacity Colours */
+  --colour-zoryve-primary-75: rgba(20, 54, 91, 0.75);
+  --colour-zoryve-primary-50: rgba(20, 54, 91, 0.5);
+  --colour-zoryve-primary-25: rgba(20, 54, 91, 0.25);
+  --colour-zoryve-blue-75: rgb(64, 139, 171, 0.75);
+  --colour-zoryve-blue-50: rgba(64, 139, 171, 0.5);
+  --colour-zoryve-blue-25: rgba(64, 139, 171, 0.25);
+  --colour-zoryve-midnight-blue-75: rgba(20, 54, 91, 0.75);
+  --colour-zoryve-midnight-blue-50: rgba(20, 54, 91, 0.5);
+  --colour-zoryve-midnight-blue-25: rgba(20, 54, 91, 0.25);
+
   /* Clinical Trial Colours */
   --colour-ct-gradient-start: #3d89c3;
   --colour-ct-gradient-end: #21679E;
@@ -32,6 +43,14 @@
   /* Shadows */
   --shadow-soft: 0 0 30px rgba(0, 0, 0, 0.25);
   --shadow-filter: 0 0 15px rgba(0, 0, 0, 0.15);
+  --shadow-detail: 0 0 20px rgba(0, 0, 0, 0.1);
+  --shadow-button: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  /* Detail overlay gradient (90% opacity) */
+  --colour-detail-gradient-left: #2172A9;
+  --colour-detail-gradient-right: #145686;
+  --colour-detail-gradient-left-90: rgba(33, 114, 169, 0.9);
+  --colour-detail-gradient-right-90: rgba(20, 86, 134, 0.9);
   
   /* Spacing */
   --spacing-xs: 5px;

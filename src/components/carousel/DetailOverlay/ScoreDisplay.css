@@ -1,0 +1,73 @@
+/**
+ * ScoreDisplay.css
+ * Styles for the patient score display component
+ */
+
+.score-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
+/* Main score container - 40% black background */
+.score-display-main {
+  background-color: var(--colour-zoryve-midnight-blue-50);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Secondary scores container - 20% black background */
+.score-display-secondary {
+  background-color: var(--colour-zoryve-midnight-blue-25);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Score item - label and value in a flex row */
+.score-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+/* Score label text */
+.score-item-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 80px;
+  height: 40px;
+  background-color: var(--colour-zoryve-midnight-blue-25);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Score value box - 40x40px midnight blue */
+.score-item-value {
+  width: 40px;
+  height: 40px;
+  background-color: var(--colour-zoryve-midnight-blue);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}

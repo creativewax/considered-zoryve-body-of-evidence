@@ -128,18 +128,12 @@ class DataManager {
       })
     }
 
-    // Filter by body area (fuzzy match - contains or is contained)
+    // Filter by body area: use bodyAreaSimple when present (one of four categories); no mapping so typos/edge cases are avoided
     if (filters[FILTER_KEYS.BODY_AREA]) {
+      const selectedCategory = filters[FILTER_KEYS.BODY_AREA]
       patients = patients.filter(p => {
-        const bodyArea = p[PATIENT_SCHEMA.BODY_AREA]
-        if (!bodyArea) return false
-
-        const normalisedFilter = filters[FILTER_KEYS.BODY_AREA].toLowerCase().trim()
-        const normalisedBodyArea = bodyArea.toLowerCase().trim()
-
-        return normalisedBodyArea === normalisedFilter ||
-               normalisedBodyArea.includes(normalisedFilter) ||
-               normalisedFilter.includes(normalisedBodyArea)
+        const simple = p[PATIENT_SCHEMA.BODY_AREA_SIMPLE]
+        return simple && simple.trim() === selectedCategory
       })
     }
 

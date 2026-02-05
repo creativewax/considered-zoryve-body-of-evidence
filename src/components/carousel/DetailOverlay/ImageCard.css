@@ -1,0 +1,85 @@
+/**
+ * ImageCard.css
+ * Styles for the patient image card component
+ */
+
+.image-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0; /* Allow flex shrink */
+}
+
+.image-card-image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.image-card-image {
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--colour-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  display: block;
+}
+
+/* Label in top-left corner with TR and BL radius only */
+.image-card-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 36px;
+  background-color: var(--colour-white);
+  border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-card-label-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-zoryve-black);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Plus button positioned outside bottom-right corner */
+.image-card-expand-button {
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-button);
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.image-card-expand-button:hover {
+  transform: scale(1.1);
+}
+
+.image-card-expand-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Title below image */
+.image-card-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-zoryve-black);
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.5px;
+}

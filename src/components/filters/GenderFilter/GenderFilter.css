@@ -32,8 +32,8 @@
 }
 
 .gender-button-icon {
-  width: 45px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   flex-shrink: 0;
 }

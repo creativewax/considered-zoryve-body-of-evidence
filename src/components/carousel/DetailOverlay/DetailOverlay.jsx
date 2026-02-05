@@ -8,22 +8,14 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import eventSystem from '../../../utils/EventSystem'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
-import { FILTER_OPTIONS, GENDER_CODE } from '../../../constants/index.js'
 import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
+import PatientDetailData from './PatientDetailData.jsx'
+import ImageCard from './ImageCard.jsx'
+import ScoreDisplay from './ScoreDisplay.jsx'
+import { splitPatientData } from '../../../utils/patientDataSplitter.js'
+import appStateManager from '../../../managers/AppStateManager.js'
+import { ASSETS } from '../../../constants/index.js'
 import './DetailOverlay.css'
-
-// ---------------------------------------------------------------------------
-// HELPERS
-// ---------------------------------------------------------------------------
-
-// Format field name for display (e.g. "baselineImage" -> "Baseline")
-// Removes 'Image' suffix, adds spaces before capitals, formats week numbers
-const formatField = (field) => field
-  .replace('Image', '')
-  .replace(/([A-Z])/g, ' $1')
-  .replace(/week(\d+)/i, 'Week $1')
-  .trim()
-  .replace(/^./, s => s.toUpperCase())
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
@@ -32,10 +24,29 @@ const formatField = (field) => field
 const DetailOverlay = () => {
   const [selected, setSelected] = useState(null)
 
-  // Subscribe to image selection events and display detail overlay
   useEventSubscription(
     eventSystem.constructor.EVENTS.IMAGE_CLICKED,
     (data) => setSelected(data),
+    []
+  )
+
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.IMAGE_DESELECTED,
+    () => setSelected(null),
+    []
+  )
+
+  // Close overlay when filters change to prevent showing stale data
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.FILTER_CHANGED,
+    () => setSelected(null),
+    []
+  )
+
+  // Close overlay when images are updated to prevent showing stale data
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.IMAGES_UPDATED,
+    () => setSelected(null),
     []
   )
 
@@ -50,6 +61,11 @@ const DetailOverlay = () => {
   }
 
   const onBackdrop = (e) => { if (e.target === e.currentTarget) close() }
+
+  const onExpandImage = (timepointData) => {
+    // TODO: Implement full-screen image view or additional detail view
+    console.log('Expand image:', timepointData)
+  }
 
   // ---------------------------------------------------------------------------
   // RENDER
@@ -66,7 +82,6 @@ const DetailOverlay = () => {
           transition={TRANSITIONS.NORMAL}
           onClick={onBackdrop}
         >
-          {/* Content card - scales and fades in/out */}
           <motion.div
             className="detail-overlay-content"
             initial={{ scale: 0.9, opacity: 0 }}
@@ -74,59 +89,80 @@ const DetailOverlay = () => {
             exit={{ scale: 0.9, opacity: 0 }}
             transition={TRANSITIONS.NORMAL}
           >
-            {/* Close button */}
+{selected.patient && (() => {
+              const { timepoints, showWiNrs, showSiNrs } = splitPatientData(selected.patient, appStateManager.getSource())
+
+              return (
+                <>
+                  <PatientDetailData patient={selected.patient} />
+
+                  {/* Timepoint cards section - 3 columns with staggered animation */}
+                  <motion.div
+                    className="detail-overlay-timepoints"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.1
+                        }
+                      }
+                    }}
+                  >
+                    {timepoints.map((timepointData, index) => (
+                      <motion.div
+                        key={timepointData.timepoint}
+                        className="detail-overlay-timepoint-card"
+                        variants={{
+                          hidden: { opacity: 0, y: 20 },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            transition: {
+                              duration: 0.3,
+                              delay: (index+1) * 0.2,
+                              ease: 'easeOut'
+                            }
+                          }
+                        }}
+                      >
+                        <ImageCard
+                          image={timepointData.image}
+                          thumb={timepointData.thumb}
+                          label={timepointData.label}
+                          title={timepointData.scale.name}
+                          onExpand={() => onExpandImage(timepointData)}
+                        />
+                        <ScoreDisplay
+                          scale={timepointData.scale}
+                          wiNrs={timepointData.wiNrs}
+                          siNrs={timepointData.siNrs}
+                          showWiNrs={showWiNrs}
+                          showSiNrs={showSiNrs}
+                        />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </>
+              )
+            })()}
+          </motion.div>
+          <motion.div
+            className="detail-bottom-bar"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={TRANSITIONS.NORMAL}
+          >
             <button className="detail-overlay-close" onClick={close} aria-label="Close">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <img src={ASSETS.ICONS.CLOSE_BUTTON} alt="Close" />
             </button>
-
-            {/* Selected image display */}
-            <div className="detail-overlay-image-container">
-              <img src={selected.imagePath} alt="Patient" className="detail-overlay-image" />
-            </div>
-
-            {/* Patient details section */}
-            {selected.patient && (
-              <div className="detail-overlay-data">
-                <h3>Patient Information</h3>
-                <div className="detail-overlay-info">
-                  <InfoItem label="Indication" value={selected.patient.indication} />
-                  <InfoItem label="Body Area" value={selected.patient.bodyArea} />
-                  <InfoItem label="Baseline Severity" value={selected.patient.baselineSeverity} />
-                  <InfoItem label="Formulation" value={selected.patient.formulation} />
-                  <InfoItem label="Age" value={selected.patient.age} />
-                  <InfoItem label="Gender" value={selected.patient.gender === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE} />
-                  <InfoItem label="Skin Type" value={selected.patient.fitzpatrickSkinType} />
-                  <InfoItem label="Timepoint" value={selected.field && formatField(selected.field)} />
-                </div>
-              </div>
-            )}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
-
-// ---------------------------------------------------------------------------
-// INFO ITEM COMPONENT
-// ---------------------------------------------------------------------------
-
-// Display a single label-value pair in patient details
-// Returns null if value is empty to avoid displaying empty fields
-const InfoItem = ({ label, value }) => {
-  if (!value) return null
-
-  // ---------------------------------------------------------------------------
-  // RENDER
-  // ---------------------------------------------------------------------------
-
-  return (
-    <p>
-      <span className="label">{label}:</span>
-      <span className="value">{value}</span>
-    </p>
   )
 }
 

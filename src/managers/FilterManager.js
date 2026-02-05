@@ -59,6 +59,10 @@ class FilterManager {
   handleFilterSelected({ filterType, value }) {
     // Only update if value actually changed
     if (this.filters[filterType] !== value) {
+      // Close any visible detail overlay BEFORE updating filters
+      // This ensures the overlay closes with old data before carousel refreshes
+      eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
+
       this.filters[filterType] = value
 
       // Emit filter changed event for UI updates
@@ -85,6 +89,10 @@ class FilterManager {
 
     // No filters active, nothing to reset
     if (!hasActiveFilters) return
+
+    // Close any visible detail overlay BEFORE resetting filters
+    // This ensures the overlay closes with old data before carousel refreshes
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
 
     // Reset all filters to null
     this.filters = {

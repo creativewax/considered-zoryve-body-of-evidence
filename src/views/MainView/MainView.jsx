@@ -41,7 +41,7 @@ const MainView = () => {
                 position: [0, 0, layoutConfig.cameraZ],
                 fov: calculateBestFitFOV(layoutConfig, window.innerWidth / window.innerHeight)
               }}
-              style={{ background: 'transparent' }}
+              style={{ background: 'transparent', touchAction: 'none' }}
               gl={{ alpha: true, antialias: true }}
             >
               <Carousel3DScene layoutConfig={layoutConfig} />
