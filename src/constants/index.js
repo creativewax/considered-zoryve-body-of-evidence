@@ -234,6 +234,7 @@ export const ASSETS = {
     LOGO_ZORYVE: '/UI/logo-zoryve.svg',
     LOGO_APP: '/UI/logo-app.svg',
     SHADOW: '/UI/shadow.png',
+    ISI_TITLE_SHAPE: '/UI/isi-title-shape.svg',
   },
   DATA: {
     PATIENT_DATA: '/data/patient_data.json',

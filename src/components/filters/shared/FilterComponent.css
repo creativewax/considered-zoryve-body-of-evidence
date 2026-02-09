@@ -7,12 +7,12 @@
 
 .filter-component-body {
   background: var(--colour-filter-body);
-  padding: var(--filter-body-padding);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
 .filter-component-header {
-  padding: var(--spacing-xs) var(--filter-body-padding);
+  padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
@@ -22,17 +22,17 @@
 }
 
 .filter-component-header-practice-based {
-  background: var(--colour-pb-header);
+  background: var(--colour-zoryve-blue);
   color: var(--colour-zoryve-midnight-blue);
 }
 
 .filter-component-title {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
 .filter-component-body-condensed {
-  padding: var(--filter-body-padding-condensed);
+  padding: var(--spacing-xs);
 }

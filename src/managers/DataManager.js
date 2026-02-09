@@ -12,6 +12,13 @@ import {
 import eventSystem from '../utils/EventSystem.js'
 
 // ---------------------------------------------------------------------------
+// TESTING CONFIGURATION
+// ---------------------------------------------------------------------------
+// For testing purposes: duplicate patient data to simulate larger datasets
+// Set to 1 for no duplication, 2 to double, 3 to triple, etc.
+const DATA_DUPLICATION_FACTOR = 2
+
+// ---------------------------------------------------------------------------
 // CLASS DEFINITION
 // ---------------------------------------------------------------------------
 
@@ -40,6 +47,24 @@ class DataManager {
 
       this.patientData = await dataResponse.json()
       this.schema = await schemaResponse.json()
+
+      // For testing: duplicate patient data if factor > 1
+      if (DATA_DUPLICATION_FACTOR > 1) {
+        for (const key of Object.keys(this.patientData)) {
+          if (!Array.isArray(this.patientData[key])) continue
+          const originalPatients = this.patientData[key]
+          const duplicated = []
+          for (let i = 0; i < DATA_DUPLICATION_FACTOR; i++) {
+            originalPatients.forEach((patient) => {
+              const copy = { ...patient }
+              if (i > 0) copy.patientId = `${patient.patientId}-dup${i}`
+              duplicated.push(copy)
+            })
+          }
+          this.patientData[key] = duplicated
+        }
+      }
+
       this.isLoaded = true
 
       eventSystem.emit(eventSystem.constructor.EVENTS.DATA_LOADED, {

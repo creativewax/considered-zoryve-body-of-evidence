@@ -8,15 +8,18 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PuffLoader } from 'react-spinners'
+import { AnimatePresence } from 'framer-motion'
 import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
 import imageManager from './managers/ImageManager.js'
 import appStateManager from './managers/AppStateManager.js'
 import eventSystem from './utils/EventSystem.js'
-import useEventSubscription from './hooks/common/useEventSubscription.js'
+import useMultipleEventSubscriptions from './hooks/common/useMultipleEventSubscriptions.js'
 import Background from './components/common/Background/Background.jsx'
+import DraftWatermark from './components/common/DraftWatermark/DraftWatermark.jsx'
 import IntroPage from './pages/IntroPage/IntroPage.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx'
+import ImageViewer from './components/carousel/DetailOverlay/ImageViewer.jsx'
 import './App.css'
 
 // ---------------------------------------------------------------------------
@@ -31,6 +34,7 @@ function App() {
   const [appState, setAppState] = useState(APP_STATE.LOADING)
   const [loadingStage, setLoadingStage] = useState('Loading patient data...')
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [imageViewerState, setImageViewerState] = useState(null) // { timepoints, index }
 
   // ---------------------------------------------------------------------------
   // EFFECTS - INITIALISATION
@@ -81,12 +85,11 @@ function App() {
     initialiseApp()
   }, [])
 
-  // Subscribe to app state changes
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.APP_STATE_CHANGED,
-    (newState) => setAppState(newState),
-    []
-  )
+  useMultipleEventSubscriptions([
+    [eventSystem.constructor.EVENTS.APP_STATE_CHANGED, (newState) => setAppState(newState)],
+    [eventSystem.constructor.EVENTS.IMAGE_VIEWER_OPENED, ({ timepoints, index }) => setImageViewerState({ timepoints, index })],
+    [eventSystem.constructor.EVENTS.IMAGE_VIEWER_CLOSED, () => setImageViewerState(null)],
+  ], [])
 
   // ---------------------------------------------------------------------------
   // RENDER - LOADING STATE
@@ -96,6 +99,7 @@ function App() {
     return (
       <div className="app-loading">
         <Background />
+        <DraftWatermark />
         <div className="app-loading-content">
           <PuffLoader
             color="var(--colour-white)"
@@ -118,17 +122,22 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app">
-        {/* Background gradient/image displayed on all pages */}
         <Background />
+        <DraftWatermark />
 
-        {/* Route configuration */}
         <Routes>
-          {/* Landing page with "Get Started" button */}
           <Route path={ROUTES.INTRO} element={<IntroPage />} />
-
-          {/* Main carousel view with filters */}
           <Route path={ROUTES.MAIN} element={<MainPage />} />
         </Routes>
+
+        <AnimatePresence>
+          {imageViewerState && (
+            <ImageViewer
+              timepoints={imageViewerState.timepoints}
+              initialIndex={imageViewerState.index}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </BrowserRouter>
   )

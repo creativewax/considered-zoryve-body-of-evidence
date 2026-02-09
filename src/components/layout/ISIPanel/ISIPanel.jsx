@@ -7,6 +7,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ASSETS } from '../../../constants/index.js'
 import { gsap } from 'gsap'
+import ISIContent from './ISIContent.jsx'
 import './ISIPanel.css'
 
 /**
@@ -173,7 +174,7 @@ const ISIPanel = () => {
             ref={scrollableRef}
             className="isi-panel-scrollable"
           >
-            <p>Important Safety Information content will be populated here.</p>
+            <ISIContent />
           </div>
         </div>
       </div>

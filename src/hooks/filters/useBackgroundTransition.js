@@ -34,29 +34,36 @@ export const useBackgroundTransition = (backgroundRef, getBackgroundUrl, initial
 
   /**
    * Handles category change events by animating the background transition
-   * Fades in the new background and removes old ones to prevent memory buildup
+   * Preloads the image first to prevent flashing, then fades in smoothly
    */
   const handleCategoryChange = (source) => {
     if (!backgroundRef.current) return
 
-    // Create new background element with initial zero opacity
-    const newBg = document.createElement('div')
-    newBg.className = className
-    newBg.style.backgroundImage = `url(${getBackgroundUrl(source)})`
-    newBg.style.opacity = '0'
-    backgroundRef.current.appendChild(newBg)
+    const imageUrl = getBackgroundUrl(source)
 
-    // Animate new background in with fade effect
-    gsap.to(newBg, {
-      opacity: 1,
-      duration: TRANSITIONS.FADE_NORMAL.duration,
-      ease: TRANSITIONS.FADE_NORMAL.ease,
-      onComplete: () => {
-        // Clean up old background elements after animation completes
-        const oldBgs = backgroundRef.current?.querySelectorAll(`.${className}:not(:last-child)`)
-        oldBgs?.forEach(bg => bg.remove())
-      }
-    })
+    // Preload the image before creating the background element
+    const img = new Image()
+    img.onload = () => {
+      // Create new background element with initial zero opacity
+      const newBg = document.createElement('div')
+      newBg.className = className
+      newBg.style.backgroundImage = `url(${imageUrl})`
+      newBg.style.opacity = '0'
+      backgroundRef.current.appendChild(newBg)
+
+      // Animate new background in with fade effect
+      gsap.to(newBg, {
+        opacity: 1,
+        duration: TRANSITIONS.FADE_NORMAL.duration,
+        ease: TRANSITIONS.FADE_NORMAL.ease,
+        onComplete: () => {
+          // Clean up old background elements after animation completes
+          const oldBgs = backgroundRef.current?.querySelectorAll(`.${className}:not(:last-child)`)
+          oldBgs?.forEach(bg => bg.remove())
+        }
+      })
+    }
+    img.src = imageUrl
   }
 
   // Subscribe to category change events

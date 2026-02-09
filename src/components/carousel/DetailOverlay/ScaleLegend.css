@@ -1,0 +1,36 @@
+/**
+ * ScaleLegend.css
+ * Displays scale definitions with gradient background
+ */
+
+.scale-legend {
+  background: linear-gradient(
+    to right,
+    var(--colour-detail-gradient-left-90),
+    var(--colour-detail-gradient-right-90)
+  );
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  min-height: 90px;
+  text-align: right;
+}
+
+.scale-legend-header {
+  font-size: var(--font-size-xxs);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+}
+
+.scale-legend-definitions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+
+.scale-legend-item {
+  font-size: var(--font-size-xxs);
+  font-weight: var(--font-weight-regular);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+}

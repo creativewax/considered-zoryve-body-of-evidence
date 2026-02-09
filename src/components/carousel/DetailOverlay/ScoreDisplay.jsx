@@ -6,6 +6,8 @@
  */
 
 import './ScoreDisplay.css'
+import { DATA_SOURCE } from '../../../constants/index.js'
+import appStateManager from '../../../managers/AppStateManager.js'
 
 // ---------------------------------------------------------------------------
 // SCORE ITEM COMPONENT
@@ -38,8 +40,13 @@ const ScoreItem = ({ label, value }) => (
  * @param {boolean} showSiNrs - Whether to show SI-NRS section (if any timepoint has SI-NRS data)
  */
 const ScoreDisplay = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs }) => {
+  const source = appStateManager.getSource()
+
   // Show secondary scores section if either WI-NRS or SI-NRS should be displayed
   const hasSecondaryScores = showWiNrs || showSiNrs
+
+  // hide for patient based patients for now
+  if (source === DATA_SOURCE.PRACTICE_BASED) return null;
 
   return (
     <div className="score-display">

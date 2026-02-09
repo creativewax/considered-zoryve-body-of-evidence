@@ -97,6 +97,22 @@ function formatTimepointLabel(timepoint) {
 }
 
 /**
+ * Sorts timepoints chronologically (baseline first, then by week number)
+ */
+function sortTimepointsChronologically(timepoints) {
+  return [...timepoints].sort((a, b) => {
+    // Baseline always comes first
+    if (a === 'baseline') return -1
+    if (b === 'baseline') return 1
+
+    // Extract week numbers and compare
+    const weekA = parseInt(a.replace('week', ''))
+    const weekB = parseInt(b.replace('week', ''))
+    return weekA - weekB
+  })
+}
+
+/**
  * Finds available timepoints that have both an image and a score
  */
 function getAvailableTimepoints(patient, source) {
@@ -118,6 +134,7 @@ function getAvailableTimepoints(patient, source) {
 /**
  * Selects 3 timepoints to display, preferring baseline, week2, week8
  * Always includes baseline if available
+ * Returns timepoints sorted chronologically
  */
 function selectTimepoints(availableTimepoints) {
   // Always try to include baseline first
@@ -146,7 +163,8 @@ function selectTimepoints(availableTimepoints) {
     }
   }
 
-  return selected
+  // Sort chronologically before returning
+  return sortTimepointsChronologically(selected)
 }
 
 // ---------------------------------------------------------------------------
@@ -185,9 +203,9 @@ export function splitPatientData(patient, source) {
     const imagePath = getImageForTimepoint(patient, timepoint)
     const thumbPath = imageManager.getThumbnailPath(imagePath)
 
-    // For NRS scores, treat 0 as missing data (0 is often used to represent "not measured" in datasets)
-    const validWiNrs = isValidValue(wiNrs) && wiNrs !== 0 && wiNrs !== '0' ? wiNrs : null
-    const validSiNrs = isValidValue(siNrs) && siNrs !== 0 && siNrs !== '0' ? siNrs : null
+    // For NRS scores, 0 is a valid score (no itch); only null/undefined/"Not Reported" are treated as missing
+    const validWiNrs = isValidValue(wiNrs) ? wiNrs : null
+    const validSiNrs = isValidValue(siNrs) ? siNrs : null
 
     return {
       timepoint,

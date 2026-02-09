@@ -16,7 +16,7 @@ import FilterTabs from './FilterTabs.jsx'
 import FilterBody from './FilterBody.jsx'
 import FilterBottom from './FilterBottom.jsx'
 import useBackgroundTransition from '../../../hooks/filters/useBackgroundTransition.js'
-import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
+import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
 import './FilterPanel.css'
 
 // ---------------------------------------------------------------------------
@@ -48,30 +48,15 @@ const FilterPanel = () => {
 
   useBackgroundTransition(backgroundRef, getFilterBackground, currentSource)
 
-  // Subscribe to category change events
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.CATEGORY_CHANGED,
-    (source) => {
-      setCurrentSource(source)
-      // Note: Filters themselves don't change when source changes,
-      // only the source selection changes
-    },
-    []
-  )
+  const handleCategoryChanged = (source) => {
+    setCurrentSource(source)
+  }
 
-  // Subscribe to filter change events
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.FILTER_CHANGED,
-    ({ filters: newFilters }) => setFilters(newFilters),
-    []
-  )
-
-  // Subscribe to filter reset events
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.FILTERS_RESET,
-    (newFilters) => setFilters(newFilters),
-    []
-  )
+  useMultipleEventSubscriptions([
+    [eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChanged],
+    [eventSystem.constructor.EVENTS.FILTER_CHANGED, ({ filters: newFilters }) => setFilters(newFilters)],
+    [eventSystem.constructor.EVENTS.FILTERS_RESET, (newFilters) => setFilters(newFilters)],
+  ], [])
 
   // ---------------------------------------------------------------------------
   // HANDLERS

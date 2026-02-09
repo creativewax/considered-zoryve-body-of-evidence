@@ -26,12 +26,20 @@ function displayValue(value) {
 // INFO ITEM
 // ---------------------------------------------------------------------------
 
-const InfoItem = ({ label, value }) => (
-  <div className="detail-overlay-info-item">
-    <div className="detail-overlay-info-label">{label}:</div>
-    <div className="detail-overlay-info-value">{value}</div>
-  </div>
-)
+const InfoItem = ({ label, value }) => {
+  const source = appStateManager.getSource()
+  return source === DATA_SOURCE.CLINICAL_TRIAL ? (
+    <div className="detail-overlay-info-item">
+      <span className="detail-overlay-info-label">{label}:</span>
+      <span className="detail-overlay-info-value">{value}</span>
+    </div>
+  ) : (
+    <div className="detail-overlay-info-item detail-overlay-info-item-practice-based">
+      <div className="detail-overlay-info-label">{label}:</div>
+      <div className="detail-overlay-info-value">{value}</div>
+    </div>
+  )
+}
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT

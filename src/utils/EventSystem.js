@@ -50,6 +50,8 @@ class EventSystem {
     SOURCE_CHANGED: 'sourceChanged',                 // User changed data source tab
     IMAGE_SELECTED: 'imageSelected',                 // User clicked carousel image
     IMAGE_DESELECTED: 'imageDeselected',             // User closed detail overlay
+    IMAGE_VIEWER_OPENED: 'imageViewerOpened',        // User opened full-screen image viewer
+    IMAGE_VIEWER_CLOSED: 'imageViewerClosed',        // User closed image viewer
     NAVIGATION_REQUESTED: 'navigationRequested',     // User clicked nav arrow
 
     // Manager state change events (notifications from managers)

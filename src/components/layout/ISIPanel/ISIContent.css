@@ -1,0 +1,33 @@
+.isi-content {
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.isi-content-section-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--colour-zoryve-yellow);
+}
+
+.isi-content-section-title:not(:first-child) {
+  margin-top: var(--spacing-md);
+}
+
+.isi-content-title-shape {
+  flex-shrink: 0;
+  height: 13px;
+  width: auto;
+  object-fit: contain;
+}
+
+p {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+strong {
+  color: var(--colour-white);
+}

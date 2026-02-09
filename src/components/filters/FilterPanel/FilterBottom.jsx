@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import FadeIn from '../../animations/FadeIn.jsx'
 import eventSystem from '../../../utils/EventSystem.js'
 import Button from '../../common/Button/Button.jsx'
-import useEventSubscription from '../../../hooks/common/useEventSubscription.js'
+import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
 import filterManager from '../../../managers/FilterManager.js'
 import './FilterBottom.css'
 
@@ -35,17 +35,10 @@ const FilterBottom = () => {
     checkFilters()
   }, [])
 
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.FILTER_CHANGED,
-    checkFilters,
-    []
-  )
-
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.FILTERS_RESET,
-    checkFilters,
-    []
-  )
+  useMultipleEventSubscriptions([
+    [eventSystem.constructor.EVENTS.FILTER_CHANGED, checkFilters],
+    [eventSystem.constructor.EVENTS.FILTERS_RESET, checkFilters],
+  ], [])
 
   // ---------------------------------------------------------------------------
   // HANDLERS

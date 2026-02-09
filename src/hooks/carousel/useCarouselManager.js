@@ -15,7 +15,7 @@ import poolManager from '../../managers/PoolManager.js'
 import rotationStateManager from '../../managers/RotationStateManager.js'
 import { getLayoutConfig } from '../../utils/carouselHelpers.js'
 import { CAROUSEL_SETTINGS } from '../../constants/carousel.js'
-import useEventSubscription from '../common/useEventSubscription.js'
+import useMultipleEventSubscriptions from '../common/useMultipleEventSubscriptions.js'
 import eventSystem from '../../utils/EventSystem.js'
 
 /**
@@ -109,17 +109,10 @@ export const useCarouselManager = (containerRef) => {
   // SUBSCRIPTIONS & MOUNT
   // ---------------------------------------------------------------------------
 
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.IMAGES_UPDATED,
-    initCarousel,
-    [initCarousel]
-  )
-
-  useEventSubscription(
-    eventSystem.constructor.EVENTS.CATEGORY_CHANGED,
-    initCarousel,
-    [initCarousel]
-  )
+  useMultipleEventSubscriptions([
+    [eventSystem.constructor.EVENTS.IMAGES_UPDATED, initCarousel],
+    [eventSystem.constructor.EVENTS.CATEGORY_CHANGED, initCarousel],
+  ], [initCarousel])
 
   useEffect(() => {
     if (!isInitialisedRef.current) {

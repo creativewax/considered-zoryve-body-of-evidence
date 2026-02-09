@@ -26,8 +26,8 @@ const ImageCard = ({ image, thumb, label, title, onExpand }) => {
 
   return (
     <div className="image-card">
-      <div className="image-card-image-wrapper">
-        {/* Thumbnail with border, radius, and shadow */}
+      <div className="image-card-image-wrapper" onClick={onExpand} style={{ cursor: 'pointer' }}>
+        {/* Thumbnail with border, radius, and shadow - clickable */}
         <img
           src={thumbPath}
           alt={`${label} - ${title}`}
@@ -42,7 +42,10 @@ const ImageCard = ({ image, thumb, label, title, onExpand }) => {
         {/* Plus button in bottom-right corner */}
         <button
           className="image-card-expand-button"
-          onClick={onExpand}
+          onClick={(e) => {
+            e.stopPropagation() // Prevent double trigger from wrapper click
+            onExpand()
+          }}
           aria-label={`Expand ${label}`}
         >
           <img src={ASSETS.ICONS.PLUS_BUTTON_BLUE} alt="Expand" />

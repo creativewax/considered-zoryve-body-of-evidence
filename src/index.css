@@ -30,7 +30,6 @@
   /* Practice Based Colours */
   --colour-pb-gradient-start: #224B8C;
   --colour-pb-gradient-end: #112C5A;
-  --colour-pb-header: #FFB81C;
   
   /* Condition Colours */
   --colour-plaque-psoriasis: #44988A;
@@ -44,13 +43,13 @@
   --shadow-soft: 0 0 30px rgba(0, 0, 0, 0.25);
   --shadow-filter: 0 0 15px rgba(0, 0, 0, 0.15);
   --shadow-detail: 0 0 20px rgba(0, 0, 0, 0.1);
-  --shadow-button: 0 0 10px rgba(0, 0, 0, 0.5);
+  --shadow-button: 0 0 10px rgba(0, 0, 0, 0.35);
 
   /* Detail overlay gradient (90% opacity) */
-  --colour-detail-gradient-left: #2172A9;
-  --colour-detail-gradient-right: #145686;
-  --colour-detail-gradient-left-90: rgba(33, 114, 169, 0.9);
-  --colour-detail-gradient-right-90: rgba(20, 86, 134, 0.9);
+  --colour-detail-gradient-left: rgba(34, 99, 145, 1.0);
+  --colour-detail-gradient-right: rgba(33, 114, 169, 1.0);
+  --colour-detail-gradient-left-90: rgba(34, 99, 145, 0.9);
+  --colour-detail-gradient-right-90: rgba(33, 114, 169, 0.9);
   
   /* Spacing */
   --spacing-xs: 5px;
@@ -62,9 +61,10 @@
   
   /* Typography */
   --font-family: 'Inter', sans-serif;
+  --font-size-xxs: 9px;
   --font-size-xs: 11px;
-  --font-size-sm: 13px;
-  --font-size-md: 14px;
+  --font-size-sm: 12px;
+  --font-size-md: 13px;
   --font-size-lg: 16px;
   --font-size-xl: 18px;
   --font-size-xxl: 22px;
@@ -93,7 +93,7 @@
   --filter-panel-width: 300px;
   --filter-tab-height: 60px;
   --filter-tab-padding: 20px;
-  --filter-body-padding: 15px;
+  --filter-body-padding: 10px;
   --filter-body-padding-condensed: 10px;
   --filter-spacing: 45px;
   --filter-bottom-height: 60px;
@@ -104,7 +104,7 @@
   
   /* ISI Panel */
   --isi-panel-collapsed-height: 100px;
-  --isi-panel-expanded-height: 800px;
+  --isi-panel-expanded-height: 440px;
   
   /* Radio Button */
   --radio-size: 15px;
