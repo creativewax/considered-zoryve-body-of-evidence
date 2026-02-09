@@ -83,3 +83,12 @@
   text-align: center;
   letter-spacing: 0.5px;
 }
+
+/* Last timepoint styling (Clinical Trial only) */
+.image-card-last-timepoint .image-card-image {
+  border-color: var(--colour-last-timepoint-highlight);
+}
+
+.image-card-label-last-timepoint {
+  background-color: var(--colour-last-timepoint-highlight) !important;
+}

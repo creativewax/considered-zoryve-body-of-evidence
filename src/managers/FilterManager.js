@@ -69,6 +69,11 @@ class FilterManager {
       EventSystem.EVENTS.SOURCE_CHANGED,
       this.handleSourceChanged.bind(this)
     )
+    // Listen to data loading event to calculate initial availability
+    eventSystem.on(
+      EventSystem.EVENTS.DATA_LOADED,
+      this.handleDataLoaded.bind(this)
+    )
   }
 
   // ---------------------------------------------------------------------------
@@ -76,11 +81,24 @@ class FilterManager {
   // ---------------------------------------------------------------------------
 
   /**
+   * Handle data loaded event
+   * Calculate initial filter availability when patient data loads
+   */
+  handleDataLoaded() {
+    this.updateAvailability()
+  }
+
+  /**
    * Handle data source change (Clinical Trial <-> Practice-Based)
    * Recalculates filter availability for new dataset
+   * @param {Object} payload - Event payload containing source
+   * @param {string} payload.source - New data source
    */
-  handleSourceChanged() {
-    this.updateAvailability()
+  handleSourceChanged({ source }) {
+    // Small delay to let React finish rendering before updating availability
+    setTimeout(() => {
+      this.updateAvailability(source)
+    }, 50)
   }
 
 
@@ -168,9 +186,10 @@ class FilterManager {
   /**
    * Update filter availability based on current filter state
    * Calculates which filter options would yield results and emits availability map
+   * @param {string} [sourceOverride] - Optional source to use instead of getting from AppStateManager
    */
-  updateAvailability() {
-    const source = appStateManager.getSource()
+  updateAvailability(sourceOverride) {
+    const source = sourceOverride || appStateManager.getSource()
     const filtersWithSource = { ...this.filters, source }
 
     // Calculate available options for each filter type

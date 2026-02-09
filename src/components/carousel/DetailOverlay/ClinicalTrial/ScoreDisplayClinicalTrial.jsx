@@ -1,13 +1,13 @@
 /**
- * ScoreDisplay.jsx
+ * ScoreDisplayClinicalTrial.jsx
  *
- * Displays patient scale scores (IGA, v-IGA-AD, etc.) and optional WI-NRS/SI-NRS scores.
+ * Displays patient scale scores (IGA, v-IGA-AD, etc.) and optional WI-NRS/SI-NRS scores for Clinical Trial patients.
  * Features: Main score with 40% black background, optional secondary scores with 20% black background.
  */
 
-import './ScoreDisplay.css'
-import { DATA_SOURCE } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import './ScoreDisplayClinicalTrial.css'
+import { DATA_SOURCE } from '../../../../constants/index.js'
+import appStateManager from '../../../../managers/AppStateManager.js'
 
 // ---------------------------------------------------------------------------
 // SCORE ITEM COMPONENT
@@ -31,25 +31,23 @@ const ScoreItem = ({ label, value }) => (
 // ---------------------------------------------------------------------------
 
 /**
- * ScoreDisplay Component
+ * ScoreDisplayClinicalTrial Component
  *
  * @param {Object} scale - Main scale object with name and score
  * @param {string|number|null} wiNrs - WI-NRS score (shows "-" if null)
  * @param {string|number|null} siNrs - SI-NRS score (shows "-" if null)
  * @param {boolean} showWiNrs - Whether to show WI-NRS section (if any timepoint has WI-NRS data)
  * @param {boolean} showSiNrs - Whether to show SI-NRS section (if any timepoint has SI-NRS data)
+ * @param {boolean} isLastTimepoint - Whether this is the last timepoint (for special styling)
  */
-const ScoreDisplay = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs }) => {
+const ScoreDisplayClinicalTrial = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs, isLastTimepoint = false }) => {
   const source = appStateManager.getSource()
 
   // Show secondary scores section if either WI-NRS or SI-NRS should be displayed
   const hasSecondaryScores = showWiNrs || showSiNrs
 
-  // hide for patient based patients for now
-  if (source === DATA_SOURCE.PRACTICE_BASED) return null;
-
   return (
-    <div className="score-display">
+    <div className={`score-display ${isLastTimepoint ? 'score-display-last-timepoint' : ''}`}>
       {/* Main scale score - 50% midnight blue background */}
       <div className="score-display-main">
         <ScoreItem label={scale.name} value={scale.score} />
@@ -66,4 +64,4 @@ const ScoreDisplay = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs }) => {
   )
 }
 
-export default ScoreDisplay
+export default ScoreDisplayClinicalTrial

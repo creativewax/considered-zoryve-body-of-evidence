@@ -1,0 +1,77 @@
+/**
+ * ImageCardPracticeBased.css
+ * Styles for the Practice-Based patient image card
+ */
+
+.image-card-pb {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--colour-grey);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-image-card);
+}
+
+/* Header with severity - 45px height */
+.image-card-pb-header {
+  height: 45px;
+  background-color: var(--colour-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  color: var(--colour-zoryve-midnight-blue);
+}
+
+.image-card-pb-timepoint {
+  font-weight: var(--font-weight-regular);
+}
+
+.image-card-pb-severity {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Patient image */
+.image-card-pb-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Footer with itch score - 75px height with gradient */
+.image-card-pb-footer {
+  height: 75px;
+  background: linear-gradient(to bottom, #14365B, #0F2845);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+.image-card-pb-itch-label {
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.image-card-pb-itch-value {
+  width: 40px;
+  height: 40px;
+  background-color: var(--colour-zoryve-midnight-blue);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+  flex-shrink: 0;
+}

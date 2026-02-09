@@ -6,7 +6,7 @@
  * selected - Currently selected gender or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS, ASSETS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -20,16 +20,13 @@ import './GenderFilter.css'
 const GenderFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.GENDER)
 
-  const genders = [
-    { value: FILTER_OPTIONS.GENDER.MALE, icon: ASSETS.ICONS.MALE },
-    { value: FILTER_OPTIONS.GENDER.FEMALE, icon: ASSETS.ICONS.FEMALE },
-  ]
+  const genderOptions = FILTER_DEFINITIONS[FILTER_KEYS.GENDER].options
 
   // Handle gender selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (gender) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.GENDER,
-      value: gender === selected ? null : gender
+      value: index === selected ? null : index
     })
   }
 
@@ -41,15 +38,15 @@ const GenderFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Gender" currentSource={currentSource}>
       <div className="gender-filter">
         {/* Render gender option buttons with icons */}
-        {genders.map((gender) => (
+        {genderOptions.map((option, index) => (
           <GenderOption
-            key={gender.value}
-            value={gender.value}
-            label={gender.value}
-            icon={gender.icon}
-            isSelected={selected === gender.value}
-            isDisabled={!isAvailable(gender.value)}
-            onClick={() => handleSelect(gender.value)}
+            key={index}
+            value={option.display}
+            label={option.display}
+            icon={option.icon}
+            isSelected={selected === index}
+            isDisabled={!isAvailable(index)}
+            onClick={() => handleSelect(index)}
           />
         ))}
       </div>

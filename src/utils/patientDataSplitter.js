@@ -53,16 +53,29 @@ function getScoreForTimepoint(patient, timepoint, source) {
 }
 
 /**
- * Gets WI-NRS score for a specific timepoint
+ * Gets WI-NRS/Itch score for a specific timepoint
+ * Clinical Trial: uses 'wi-nrsBaseline', 'wi-nrsWeek1', etc.
+ * Practice-Based: uses 'itchScoreBaseline', 'itchScoreWeek1', etc.
  */
-function getWiNrsForTimepoint(patient, timepoint) {
+function getWiNrsForTimepoint(patient, timepoint, source) {
+  const isPracticeBased = source === DATA_SOURCE.PRACTICE_BASED
+
   if (timepoint === 'baseline') {
-    return patient['wi-nrsBaseline']
+    return isPracticeBased ? patient['itchScoreBaseline'] : patient['wi-nrsBaseline']
   }
+
   // Extract week number (e.g., 'week2' -> '2')
   const weekNum = timepoint.replace('week', '')
-  const key = `wi-nrsWeek${weekNum}`
-  return patient[key]
+
+  if (isPracticeBased) {
+    // Practice-Based uses camelCase: itchScoreWeek1, itchScoreWeek4, etc.
+    const key = `itchScoreWeek${weekNum}`
+    return patient[key]
+  } else {
+    // Clinical Trial uses hyphenated: wi-nrsWeek1, wi-nrsWeek2, etc.
+    const key = `wi-nrsWeek${weekNum}`
+    return patient[key]
+  }
 }
 
 /**
@@ -198,7 +211,7 @@ export function splitPatientData(patient, source) {
 
   // Build the result array
   const result = selectedTimepoints.map(timepoint => {
-    const wiNrs = getWiNrsForTimepoint(patient, timepoint)
+    const wiNrs = getWiNrsForTimepoint(patient, timepoint, source)
     const siNrs = getSiNrsForTimepoint(patient, timepoint)
     const imagePath = getImageForTimepoint(patient, timepoint)
     const thumbPath = imageManager.getThumbnailPath(imagePath)

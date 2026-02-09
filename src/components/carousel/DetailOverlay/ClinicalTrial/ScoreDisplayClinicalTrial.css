@@ -71,3 +71,12 @@
   font-weight: var(--font-weight-bold);
   color: var(--colour-white);
 }
+
+/* Last timepoint styling (Clinical Trial only) */
+.score-display-last-timepoint .score-display-main {
+  border: 2px solid var(--colour-last-timepoint-highlight);
+}
+
+.score-display-last-timepoint .score-display-secondary {
+  border: 2px solid var(--colour-last-timepoint-highlight);
+}

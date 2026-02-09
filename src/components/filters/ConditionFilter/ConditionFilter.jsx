@@ -6,7 +6,7 @@
  * selected - Currently selected condition or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -21,16 +21,16 @@ const ConditionFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.INDICATION)
 
   const conditions = [
-    { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colourClass: 'condition-button-plaque-psoriasis' },
-    { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colourClass: 'condition-button-atopic-dermatitis' },
-    { value: FILTER_OPTIONS.CONDITION.SEBORRHEIC_DERMATITIS, colourClass: 'condition-button-seborrheic-dermatitis' },
+    { colourClass: 'condition-button-plaque-psoriasis' },
+    { colourClass: 'condition-button-atopic-dermatitis' },
+    { colourClass: 'condition-button-seborrheic-dermatitis' },
   ]
 
   // Handle condition selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (condition) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.INDICATION,
-      value: condition === selected ? null : condition
+      value: index === selected ? null : index
     })
   }
 
@@ -42,17 +42,20 @@ const ConditionFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Indication" currentSource={currentSource} condensed>
       <div className="condition-filter">
         {/* Render colour-coded condition option buttons */}
-        {conditions.map((condition) => (
-          <ConditionOption
-            key={condition.value}
-            value={condition.value}
-            label={condition.value}
-            colourClass={condition.colourClass}
-            isSelected={selected === condition.value}
-            isDisabled={!isAvailable(condition.value)}
-            onClick={() => handleSelect(condition.value)}
-          />
-        ))}
+        {conditions.map((condition, index) => {
+          const option = FILTER_DEFINITIONS[FILTER_KEYS.INDICATION].options[index]
+          return (
+            <ConditionOption
+              key={index}
+              value={option.display}
+              label={option.display}
+              colourClass={condition.colourClass}
+              isSelected={selected === index}
+              isDisabled={!isAvailable(index)}
+              onClick={() => handleSelect(index)}
+            />
+          )
+        })}
       </div>
     </FilterComponent>
   )

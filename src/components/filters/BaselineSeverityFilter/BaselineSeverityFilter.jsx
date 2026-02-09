@@ -6,7 +6,7 @@
  * selected - Currently selected severity or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -20,17 +20,13 @@ import '../shared/RadioFilter.css'
 const BaselineSeverityFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.BASELINE_SEVERITY)
 
-  const severities = [
-    FILTER_OPTIONS.BASELINE_SEVERITY.MILD,
-    FILTER_OPTIONS.BASELINE_SEVERITY.MODERATE,
-    FILTER_OPTIONS.BASELINE_SEVERITY.SEVERE,
-  ]
+  const severityOptions = FILTER_DEFINITIONS[FILTER_KEYS.BASELINE_SEVERITY].options
 
   // Handle severity selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (severity) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.BASELINE_SEVERITY,
-      value: severity === selected ? null : severity
+      value: index === selected ? null : index
     })
   }
 
@@ -42,14 +38,14 @@ const BaselineSeverityFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Baseline Severity" currentSource={currentSource}>
       <div className="radio-filter">
         {/* Render severity level radio option buttons */}
-        {severities.map((severity) => (
+        {severityOptions.map((option, index) => (
           <RadioOption
-            key={severity}
-            value={severity}
-            label={severity}
-            isSelected={selected === severity}
-            isDisabled={!isAvailable(severity)}
-            onClick={() => handleSelect(severity)}
+            key={index}
+            value={option.display}
+            label={option.display}
+            isSelected={selected === index}
+            isDisabled={!isAvailable(index)}
+            onClick={() => handleSelect(index)}
           />
         ))}
       </div>

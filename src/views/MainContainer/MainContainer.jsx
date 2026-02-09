@@ -27,11 +27,8 @@ const MainContainer = () => {
       animate={ANIMATIONS.FADE_IN.animate}
       transition={{ ...TRANSITIONS.SLOW_EASE, delay: 0.3 }}
     >
-      {/* Carousel with interactive 3D model view */}
       <MainView />
-      {/* Footer with navigation and controls */}
       <Footer />
-      {/* Important Safety Information panel */}
       <ISIPanel />
     </motion.div>
   )

@@ -1,13 +1,14 @@
 /**
- * PatientDetailData.jsx
+ * PatientDetailDataClinicalTrial.jsx
  *
- * Renders patient info in the detail overlay: 9 fields in 3 columns of 3.
+ * Renders patient info in the detail overlay for Clinical Trial patients: 9 fields in 3 columns of 3.
  * Type, Condition, Formulation | Gender, Age, Race | Body Area, Treatments, Ethnicity.
  * Uses N/A for missing or "Not Reported" values.
  */
 
-import { DATA_SOURCE, FILTER_OPTIONS, GENDER_CODE } from '../../../constants/index.js'
-import appStateManager from '../../../managers/AppStateManager.js'
+import { DATA_SOURCE, FILTER_OPTIONS, GENDER_CODE } from '../../../../constants/index.js'
+import appStateManager from '../../../../managers/AppStateManager.js'
+import './PatientDetailDataClinicalTrial.css'
 
 // ---------------------------------------------------------------------------
 // HELPERS
@@ -45,7 +46,7 @@ const InfoItem = ({ label, value }) => {
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const PatientDetailData = ({ patient }) => {
+const PatientDetailDataClinicalTrial = ({ patient }) => {
   const source = appStateManager.getSource()
   const typeLabel = source === DATA_SOURCE.CLINICAL_TRIAL ? 'Clinical Trial Patient' : 'Practice-Based Patient'
   const genderDisplay = patient.gender === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE
@@ -89,4 +90,4 @@ const PatientDetailData = ({ patient }) => {
   )
 }
 
-export default PatientDetailData
+export default PatientDetailDataClinicalTrial

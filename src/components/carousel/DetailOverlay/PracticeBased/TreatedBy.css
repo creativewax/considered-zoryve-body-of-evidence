@@ -1,0 +1,54 @@
+/**
+ * TreatedBy.css
+ * Styles for the treating provider component
+ */
+
+.treated-by {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: var(--spacing-sm) var(--spacing-lg);
+}
+
+.treated-by-image {
+  flex-shrink: 0;
+}
+
+.treated-by-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.treated-by-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.treated-by-label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  opacity: 0.8;
+}
+
+.treated-by-name {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--colour-white);
+}
+
+.treated-by-location {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  opacity: 0.9;
+}

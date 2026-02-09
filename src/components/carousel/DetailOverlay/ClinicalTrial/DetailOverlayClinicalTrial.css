@@ -1,0 +1,45 @@
+/**
+ * DetailOverlayClinicalTrial.css
+ * Styles specific to Clinical Trial patient detail overlay
+ */
+
+/* Clinical Trial overlay content wrapper - 960px max */
+.detail-overlay-content {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-detail);
+  background: linear-gradient(
+    to right,
+    var(--colour-detail-gradient-left-90),
+    var(--colour-detail-gradient-right-90)
+  );
+}
+
+/* Timepoints section - 3 columns for Clinical Trial */
+.detail-overlay-timepoints {
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+}
+
+.detail-overlay-timepoint-card {
+  flex: 0 1 calc((100% - (2 * var(--spacing-lg))) / 3);
+  max-width: calc((100% - (2 * var(--spacing-lg))) / 3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 600px) {
+  .detail-overlay-timepoints {
+    flex-direction: column;
+  }
+}

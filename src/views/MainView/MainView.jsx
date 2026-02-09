@@ -9,7 +9,7 @@ import { Canvas } from '@react-three/fiber'
 import Carousel3DScene from '../Carousel3DScene/Carousel3DScene'
 import NavigationArrows from '../../components/carousel/NavigationArrows/NavigationArrows'
 import Shadow from '../../components/carousel/Shadow/Shadow'
-import DetailOverlay from '../../components/carousel/DetailOverlay/DetailOverlay'
+import DetailOverlayContainer from '../../components/carousel/DetailOverlay/DetailOverlayContainer'
 import { calculateBestFitFOV } from '../../utils/carouselHelpers'
 import useCarouselManager from '../../hooks/carousel/useCarouselManager.js'
 import './MainView.css'
@@ -57,8 +57,9 @@ const MainView = () => {
           </div>
         )}
       </div>
+      
       {/* Overlay for detailed image information */}
-      <DetailOverlay />
+      <DetailOverlayContainer />
     </div>
   )
 }

@@ -6,7 +6,7 @@
  * selected - Currently selected body area or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -21,18 +21,13 @@ import './BodyAreaFilter.css'
 const BodyAreaFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.BODY_AREA)
 
-  const bodyAreas = [
-    FILTER_OPTIONS.BODY_AREA.HEAD_NECK,
-    FILTER_OPTIONS.BODY_AREA.TORSO,
-    FILTER_OPTIONS.BODY_AREA.ARMS_HANDS,
-    FILTER_OPTIONS.BODY_AREA.LEGS_FEET,
-  ]
+  const bodyAreaOptions = FILTER_DEFINITIONS[FILTER_KEYS.BODY_AREA].options
 
   // Handle body area selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (bodyArea) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.BODY_AREA,
-      value: bodyArea === selected ? null : bodyArea
+      value: index === selected ? null : index
     })
   }
 
@@ -47,14 +42,14 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
         <div className="body-area-filter-background" />
         {/* Body area radio option buttons */}
         <div className="radio-filter body-area-filter-options">
-          {bodyAreas.map((bodyArea) => (
+          {bodyAreaOptions.map((option, index) => (
             <RadioOption
-              key={bodyArea}
-              value={bodyArea}
-              label={bodyArea}
-              isSelected={selected === bodyArea}
-              isDisabled={!isAvailable(bodyArea)}
-              onClick={() => handleSelect(bodyArea)}
+              key={index}
+              value={option.display}
+              label={option.display}
+              isSelected={selected === index}
+              isDisabled={!isAvailable(index)}
+              onClick={() => handleSelect(index)}
             />
           ))}
         </div>

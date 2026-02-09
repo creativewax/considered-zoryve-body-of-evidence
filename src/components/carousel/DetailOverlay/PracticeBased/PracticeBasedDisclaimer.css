@@ -1,0 +1,21 @@
+/**
+ * PracticeBasedDisclaimer.css
+ * Styles for Practice-Based disclaimer text
+ */
+
+.practice-based-disclaimer {
+  max-width: 400px;
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  line-height: 1.4;
+}
+
+.practice-based-disclaimer p {
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.practice-based-disclaimer p:last-child {
+  margin-bottom: 0;
+}

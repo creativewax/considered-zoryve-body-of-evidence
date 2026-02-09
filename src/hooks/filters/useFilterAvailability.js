@@ -16,18 +16,10 @@ import eventSystem, { EventSystem } from '../../utils/EventSystem'
  * Hook to track which filter options are currently available
  *
  * @param {string} filterType - Filter type to track (e.g., 'indication', 'age')
- * @returns {{availability: Set<string>, isAvailable: function(string): boolean}}
+ * @returns {{availability: Set<number>, isAvailable: function(number): boolean}}
  */
 export function useFilterAvailability(filterType) {
-  // ---------------------------------------------------------------------------
-  // STATE
-  // ---------------------------------------------------------------------------
-
   const [availability, setAvailability] = useState(new Set())
-
-  // ---------------------------------------------------------------------------
-  // EFFECTS
-  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const handleAvailabilityChange = availabilityMap => {
@@ -41,14 +33,10 @@ export function useFilterAvailability(filterType) {
     }
   }, [filterType])
 
-  // ---------------------------------------------------------------------------
-  // HELPERS
-  // ---------------------------------------------------------------------------
-
-  const isAvailable = value => {
+  const isAvailable = index => {
     // Empty Set = initial state, all available
     if (availability.size === 0) return true
-    return availability.has(value)
+    return availability.has(index)
   }
 
   return { availability, isAvailable }

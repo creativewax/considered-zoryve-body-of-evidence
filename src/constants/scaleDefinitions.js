@@ -4,36 +4,27 @@
  * Defines the scoring scales and their definitions for display in scale legends.
  */
 
+// Standard 0-4 severity scale definitions (used by IGA, S-IGA, B-IGA)
+export const STANDARD_SCALE_DEFINITIONS = [
+  { label: 'Clear', value: 0 },
+  { label: 'Almost Clear', value: 1 },
+  { label: 'Mild', value: 2 },
+  { label: 'Moderate', value: 3 },
+  { label: 'Severe', value: 4 }
+]
+
 export const SCALE_DEFINITIONS = {
   'IGA': {
     name: 'IGA Scale',
-    definitions: [
-      { label: 'Clear', value: 0 },
-      { label: 'Almost Clear', value: 1 },
-      { label: 'Mild', value: 2 },
-      { label: 'Moderate', value: 3 },
-      { label: 'Severe', value: 4 }
-    ]
+    definitions: STANDARD_SCALE_DEFINITIONS
   },
   'S-IGA': {
     name: 'S-IGA Scale',
-    definitions: [
-      { label: 'Clear', value: 0 },
-      { label: 'Almost Clear', value: 1 },
-      { label: 'Mild', value: 2 },
-      { label: 'Moderate', value: 3 },
-      { label: 'Severe', value: 4 }
-    ]
+    definitions: STANDARD_SCALE_DEFINITIONS
   },
   'B-IGA': {
     name: 'B-IGA Scale',
-    definitions: [
-      { label: 'Clear', value: 0 },
-      { label: 'Almost Clear', value: 1 },
-      { label: 'Mild', value: 2 },
-      { label: 'Moderate', value: 3 },
-      { label: 'Severe', value: 4 }
-    ]
+    definitions: STANDARD_SCALE_DEFINITIONS
   },
   'WI-NRS': {
     name: 'WI-NRS',

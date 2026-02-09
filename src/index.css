@@ -9,8 +9,10 @@
   --colour-zoryve-midnight-blue: #14365B;
   --colour-zoryve-black: #1F2B2B;
   --colour-zoryve-yellow: #FDE939;
+  --colour-last-timepoint-highlight: #FFEEC2;
   --colour-white: #FFFFFF;
   --colour-black: #000000;
+  --colour-grey: #D8E8EF;
   
   /* Opacity Colours */
   --colour-zoryve-primary-75: rgba(20, 54, 91, 0.75);
@@ -44,6 +46,7 @@
   --shadow-filter: 0 0 15px rgba(0, 0, 0, 0.15);
   --shadow-detail: 0 0 20px rgba(0, 0, 0, 0.1);
   --shadow-button: 0 0 10px rgba(0, 0, 0, 0.35);
+  --shadow-image-card: 0 30px 30px rgba(0, 0, 0, 0.25), 0 5px 10px rgba(0, 0, 0, 0.25);
 
   /* Detail overlay gradient (90% opacity) */
   --colour-detail-gradient-left: rgba(34, 99, 145, 1.0);

@@ -1,0 +1,100 @@
+/**
+ * DetailOverlayPracticeBased.css
+ * Styles for Practice-Based patient detail overlay
+ */
+
+.detail-overlay-pb-content {
+  position: relative;
+  width: 90%;
+  max-width: 1400px;
+  max-height: 90vh;
+  background: var(--colour-zoryve-midnight-blue);
+  border: 3px solid var(--colour-primary-blue);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  box-shadow: var(--shadow-soft);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header - 40px height with rounded top corners */
+.detail-overlay-pb-header {
+  height: 40px;
+  background-color: var(--colour-primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.detail-overlay-pb-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--colour-white);
+  margin: 0;
+}
+
+/* Top section with patient data and treated by */
+.detail-overlay-pb-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+.detail-overlay-pb-patient-data {
+  flex: 0 0 auto;
+}
+
+.detail-overlay-pb-treated-by {
+  flex: 0 0 auto;
+}
+
+/* Timepoint cards section */
+.detail-overlay-pb-timepoints {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+/* Bottom section */
+.detail-overlay-pb-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.detail-overlay-pb-bottom-left {
+  flex-shrink: 0;
+}
+
+.detail-overlay-pb-quote {
+  flex: 1;
+  font-family: 'Garamond', 'Georgia', serif;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  text-align: right;
+  line-height: 1.4;
+  max-width: 600px;
+  padding: var(--spacing-lg);
+}
+
+/* Disclaimer wrapper - aligns with left edge of overlay */
+.detail-overlay-pb-disclaimer-wrapper {
+  width: 90%;
+  max-width: 1400px;
+  margin: var(--spacing-md) auto 0;
+  display: flex;
+  justify-content: flex-start;
+}

@@ -6,7 +6,7 @@
  * selected - Currently selected age range or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -20,19 +20,13 @@ import './AgeFilter.css'
 const AgeFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.AGE)
 
-  const ageRanges = [
-    FILTER_OPTIONS.AGE_RANGES.RANGE_2_5,
-    FILTER_OPTIONS.AGE_RANGES.RANGE_6_18,
-    FILTER_OPTIONS.AGE_RANGES.RANGE_19_30,
-    FILTER_OPTIONS.AGE_RANGES.RANGE_31_50,
-    FILTER_OPTIONS.AGE_RANGES.RANGE_50_PLUS,
-  ]
+  const ageOptions = FILTER_DEFINITIONS[FILTER_KEYS.AGE].options
 
   // Handle age range selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (age) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.AGE,
-      value: age === selected ? null : age
+      value: index === selected ? null : index
     })
   }
 
@@ -44,14 +38,14 @@ const AgeFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Age" currentSource={currentSource}>
       <div className="age-filter">
         {/* Render age range buttons */}
-        {ageRanges.map((age) => (
+        {ageOptions.map((option, index) => (
           <FilterButton
-            key={age}
-            value={age}
-            label={age}
-            isSelected={selected === age}
-            isDisabled={!isAvailable(age)}
-            onClick={() => handleSelect(age)}
+            key={index}
+            value={option.display}
+            label={option.display}
+            isSelected={selected === index}
+            isDisabled={!isAvailable(index)}
+            onClick={() => handleSelect(index)}
           />
         ))}
       </div>

@@ -6,7 +6,7 @@
  * selected - Currently selected formulation or null if none selected
  */
 
-import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -20,18 +20,13 @@ import '../shared/RadioFilter.css'
 const FormulationFilter = ({ currentSource, selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.FORMULATION)
 
-  const formulations = [
-    FILTER_OPTIONS.FORMULATION.CREAM_005,
-    FILTER_OPTIONS.FORMULATION.CREAM_015,
-    FILTER_OPTIONS.FORMULATION.CREAM_03,
-    FILTER_OPTIONS.FORMULATION.FOAM_03,
-  ]
+  const formulationOptions = FILTER_DEFINITIONS[FILTER_KEYS.FORMULATION].options
 
   // Handle formulation selection; emits FILTER_SELECTED for FilterManager
-  const handleSelect = (formulation) => {
+  const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.FORMULATION,
-      value: formulation === selected ? null : formulation
+      value: index === selected ? null : index
     })
   }
 
@@ -43,14 +38,14 @@ const FormulationFilter = ({ currentSource, selected }) => {
     <FilterComponent title="Formulation" currentSource={currentSource}>
       <div className="radio-filter">
         {/* Render formulation radio option buttons */}
-        {formulations.map((formulation) => (
+        {formulationOptions.map((option, index) => (
           <RadioOption
-            key={formulation}
-            value={formulation}
-            label={formulation}
-            isSelected={selected === formulation}
-            isDisabled={!isAvailable(formulation)}
-            onClick={() => handleSelect(formulation)}
+            key={index}
+            value={option.display}
+            label={option.display}
+            isSelected={selected === index}
+            isDisabled={!isAvailable(index)}
+            onClick={() => handleSelect(index)}
           />
         ))}
       </div>

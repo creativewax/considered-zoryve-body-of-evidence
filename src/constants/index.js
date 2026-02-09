@@ -244,6 +244,116 @@ export const ASSETS = {
 }
 
 // ---------------------------------------------------------------------------
+// FILTER DEFINITIONS (Index-Based System)
+// ---------------------------------------------------------------------------
+
+/**
+ * Comprehensive filter definitions with index-based lookups
+ *
+ * This structure defines ALL filter metadata in one place:
+ * - Array index IS the filter ID (0, 1, 2...)
+ * - schemaField maps to patient data field name
+ * - matchFunction indicates special matching logic (age ranges, gender codes)
+ * - options array defines what's available for each filter
+ *
+ * Benefits of index-based approach:
+ * - No string parsing overhead (age ranges use pre-computed min/max)
+ * - No case-insensitive comparisons (direct value matching)
+ * - Type-safe with numeric indices
+ * - Faster Set operations (integer hashing vs string hashing)
+ */
+export const FILTER_DEFINITIONS = {
+  [FILTER_KEYS.INDICATION]: {
+    schemaField: PATIENT_SCHEMA.INDICATION,
+    options: [
+      { value: 'Plaque Psoriasis', display: 'Plaque Psoriasis' },
+      { value: 'Atopic Dermatitis', display: 'Atopic Dermatitis' },
+      { value: 'Seborrheic Dermatitis', display: 'Seborrheic Dermatitis' },
+    ]
+  },
+
+  [FILTER_KEYS.FORMULATION]: {
+    schemaField: PATIENT_SCHEMA.FORMULATION,
+    options: [
+      { value: '0.05% Cream', display: '0.05% Cream' },
+      { value: '0.15% Cream', display: '0.15% Cream' },
+      { value: '0.3% Cream', display: '0.3% Cream' },
+      { value: '0.3% Foam', display: '0.3% Foam' },
+    ]
+  },
+
+  [FILTER_KEYS.BODY_AREA]: {
+    schemaField: PATIENT_SCHEMA.BODY_AREA_SIMPLE,
+    options: [
+      { value: 'Head and neck', display: 'Head and neck' },
+      { value: 'Torso', display: 'Torso' },
+      { value: 'Arms and hands', display: 'Arms and hands' },
+      { value: 'Legs and feet', display: 'Legs and feet' },
+    ]
+  },
+
+  [FILTER_KEYS.BASELINE_SEVERITY]: {
+    schemaField: PATIENT_SCHEMA.BASELINE_SEVERITY,
+    options: [
+      { value: 'Mild', display: 'Mild' },
+      { value: 'Moderate', display: 'Moderate' },
+      { value: 'Severe', display: 'Severe' },
+    ]
+  },
+
+  [FILTER_KEYS.AGE]: {
+    schemaField: PATIENT_SCHEMA.AGE,
+    matchFunction: 'ageRange',
+    options: [
+      { min: 2, max: 5, display: '2-5' },
+      { min: 6, max: 18, display: '6-18' },
+      { min: 19, max: 30, display: '19-30' },
+      { min: 31, max: 50, display: '31-50' },
+      { min: 50, max: Infinity, display: '50+' },
+    ]
+  },
+
+  [FILTER_KEYS.GENDER]: {
+    schemaField: PATIENT_SCHEMA.GENDER,
+    matchFunction: 'gender',
+    options: [
+      { value: 'M', display: 'Male', icon: ASSETS.ICONS.MALE },
+      { value: 'F', display: 'Female', icon: ASSETS.ICONS.FEMALE },
+    ]
+  },
+}
+
+/**
+ * Get a filter option by index
+ * @param {string} filterKey - Filter type (e.g., FILTER_KEYS.INDICATION)
+ * @param {number} index - Option index (0, 1, 2...)
+ * @returns {Object|null} Filter option object or null if not found
+ */
+export const getFilterOption = (filterKey, index) =>
+  FILTER_DEFINITIONS[filterKey]?.options[index] || null
+
+/**
+ * Get display value for a filter option
+ * @param {string} filterKey - Filter type
+ * @param {number} index - Option index
+ * @returns {string} Display string (empty if not found)
+ */
+export const getFilterDisplay = (filterKey, index) =>
+  getFilterOption(filterKey, index)?.display || ''
+
+/**
+ * Get match value for a filter option (for data filtering)
+ * @param {string} filterKey - Filter type
+ * @param {number} index - Option index
+ * @returns {any} Value for matching against patient data
+ */
+export const getFilterValue = (filterKey, index) => {
+  const option = getFilterOption(filterKey, index)
+  // Return the value property if it exists, otherwise return the whole option
+  return option?.value ?? option
+}
+
+// ---------------------------------------------------------------------------
 // APP STATES
 // ---------------------------------------------------------------------------
 
