@@ -20,7 +20,7 @@ export const PATIENT_SCHEMA = {
   REFERENCE_ID: 'referenceId',
   PAGE_NUMBER: 'pageNumber',
   PATIENT_ID: 'patientId',
-  INDICATION: 'indication',
+  INDICATION: 'condition',
   FORMULATION: 'formulation',
   FITZPATRICK_SKIN_TYPE: 'fitzpatrickSkinType',
   GENDER: 'gender',
