@@ -8,6 +8,10 @@
 import { useState, useEffect } from 'react'
 import eventSystem, { EventSystem } from '../../utils/EventSystem'
 
+// ---------------------------------------------------------------------------
+// HOOK DEFINITION
+// ---------------------------------------------------------------------------
+
 /**
  * Hook to track which filter options are currently available
  *
@@ -15,7 +19,15 @@ import eventSystem, { EventSystem } from '../../utils/EventSystem'
  * @returns {{availability: Set<string>, isAvailable: function(string): boolean}}
  */
 export function useFilterAvailability(filterType) {
+  // ---------------------------------------------------------------------------
+  // STATE
+  // ---------------------------------------------------------------------------
+
   const [availability, setAvailability] = useState(new Set())
+
+  // ---------------------------------------------------------------------------
+  // EFFECTS
+  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const handleAvailabilityChange = availabilityMap => {
@@ -28,6 +40,10 @@ export function useFilterAvailability(filterType) {
       eventSystem.off(EventSystem.EVENTS.FILTER_AVAILABILITY_CHANGED, handleAvailabilityChange)
     }
   }, [filterType])
+
+  // ---------------------------------------------------------------------------
+  // HELPERS
+  // ---------------------------------------------------------------------------
 
   const isAvailable = value => {
     // Empty Set = initial state, all available

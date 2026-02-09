@@ -11,7 +11,9 @@ import eventSystem, { EventSystem } from '../utils/EventSystem.js'
 import dataManager from './DataManager.js'
 import appStateManager from './AppStateManager.js'
 
-// FILTER MANAGER CLASS
+// ---------------------------------------------------------------------------
+// CLASS DEFINITION
+// ---------------------------------------------------------------------------
 
 /**
  * FilterManager
@@ -29,6 +31,10 @@ import appStateManager from './AppStateManager.js'
  * @class
  */
 class FilterManager {
+  // ---------------------------------------------------------------------------
+  // INITIALISATION
+  // ---------------------------------------------------------------------------
+
   constructor() {
     // Initialise filter state - all filters start as null (unselected)
     this.filters = {
@@ -64,6 +70,10 @@ class FilterManager {
       this.handleSourceChanged.bind(this)
     )
   }
+
+  // ---------------------------------------------------------------------------
+  // EVENT HANDLERS
+  // ---------------------------------------------------------------------------
 
   /**
    * Handle data source change (Clinical Trial <-> Practice-Based)
@@ -139,6 +149,10 @@ class FilterManager {
     this.triggerUpdate()
   }
 
+  // ---------------------------------------------------------------------------
+  // UPDATE METHODS
+  // ---------------------------------------------------------------------------
+
   /**
    * Trigger carousel update with current filter state
    *
@@ -173,6 +187,9 @@ class FilterManager {
     eventSystem.emit(EventSystem.EVENTS.FILTER_AVAILABILITY_CHANGED, this.availability)
   }
 
+  // ---------------------------------------------------------------------------
+  // PUBLIC API
+  // ---------------------------------------------------------------------------
 
   /**
    * Get all current filter values (copy to prevent external mutation).
@@ -206,7 +223,9 @@ class FilterManager {
   }
 }
 
+// ---------------------------------------------------------------------------
 // SINGLETON EXPORT
+// ---------------------------------------------------------------------------
 
 // Create singleton instance
 const filterManager = new FilterManager()
