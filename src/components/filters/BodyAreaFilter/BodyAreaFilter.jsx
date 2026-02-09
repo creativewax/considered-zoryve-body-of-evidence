@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import RadioOption from '../shared/RadioOption.jsx'
 import '../shared/RadioFilter.css'
@@ -18,6 +19,8 @@ import './BodyAreaFilter.css'
 // ---------------------------------------------------------------------------
 
 const BodyAreaFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.BODY_AREA)
+
   const bodyAreas = [
     FILTER_OPTIONS.BODY_AREA.HEAD_NECK,
     FILTER_OPTIONS.BODY_AREA.TORSO,
@@ -50,6 +53,7 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
               value={bodyArea}
               label={bodyArea}
               isSelected={selected === bodyArea}
+              isDisabled={!isAvailable(bodyArea)}
               onClick={() => handleSelect(bodyArea)}
             />
           ))}

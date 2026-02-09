@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import RadioOption from '../shared/RadioOption.jsx'
 import '../shared/RadioFilter.css'
@@ -17,6 +18,8 @@ import '../shared/RadioFilter.css'
 // ---------------------------------------------------------------------------
 
 const BaselineSeverityFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.BASELINE_SEVERITY)
+
   const severities = [
     FILTER_OPTIONS.BASELINE_SEVERITY.MILD,
     FILTER_OPTIONS.BASELINE_SEVERITY.MODERATE,
@@ -45,6 +48,7 @@ const BaselineSeverityFilter = ({ currentSource, selected }) => {
             value={severity}
             label={severity}
             isSelected={selected === severity}
+            isDisabled={!isAvailable(severity)}
             onClick={() => handleSelect(severity)}
           />
         ))}

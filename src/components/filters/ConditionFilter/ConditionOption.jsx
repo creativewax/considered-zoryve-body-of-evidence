@@ -16,6 +16,7 @@ import './ConditionFilter.css'
  * value, label - Option value and display text
  * colourClass - CSS class for colour-coding (applied when selected)
  * isSelected - Whether the option is currently selected
+ * isDisabled - Whether the option is disabled (faded and not clickable)
  * onClick - Callback when option is clicked
  */
 const ConditionOption = ({
@@ -23,6 +24,7 @@ const ConditionOption = ({
   label,
   colourClass,
   isSelected,
+  isDisabled = false,
   onClick
 }) => {
   // ---------------------------------------------------------------------------
@@ -31,7 +33,8 @@ const ConditionOption = ({
 
   return (
     <motion.button
-      className={`condition-button ${isSelected ? `condition-button-selected ${colourClass}` : ''}`}
+      className={`condition-button ${isSelected ? `condition-button-selected ${colourClass}` : ''} ${isDisabled ? 'condition-button-disabled' : ''}`}
+      disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >

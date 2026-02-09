@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import FilterButton from '../shared/FilterButton.jsx'
 import './AgeFilter.css'
@@ -17,6 +18,8 @@ import './AgeFilter.css'
 // ---------------------------------------------------------------------------
 
 const AgeFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.AGE)
+
   const ageRanges = [
     FILTER_OPTIONS.AGE_RANGES.RANGE_2_5,
     FILTER_OPTIONS.AGE_RANGES.RANGE_6_18,
@@ -47,6 +50,7 @@ const AgeFilter = ({ currentSource, selected }) => {
             value={age}
             label={age}
             isSelected={selected === age}
+            isDisabled={!isAvailable(age)}
             onClick={() => handleSelect(age)}
           />
         ))}

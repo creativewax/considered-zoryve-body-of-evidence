@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import ConditionOption from './ConditionOption.jsx'
 import './ConditionFilter.css'
@@ -17,6 +18,8 @@ import './ConditionFilter.css'
 // ---------------------------------------------------------------------------
 
 const ConditionFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.CONDITION)
+
   const conditions = [
     { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colourClass: 'condition-button-plaque-psoriasis' },
     { value: FILTER_OPTIONS.CONDITION.ATOPIC_DERMATITIS, colourClass: 'condition-button-atopic-dermatitis' },
@@ -46,6 +49,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
             label={condition.value}
             colourClass={condition.colourClass}
             isSelected={selected === condition.value}
+            isDisabled={!isAvailable(condition.value)}
             onClick={() => handleSelect(condition.value)}
           />
         ))}

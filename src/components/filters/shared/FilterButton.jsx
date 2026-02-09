@@ -15,6 +15,7 @@ import '../AgeFilter/AgeFilter.css'
  *
  * value, label - Button value and display text
  * isSelected - Whether the button is currently selected
+ * isDisabled - Whether the button is disabled (faded and not clickable)
  * onClick - Callback when button is clicked
  * className - Optional additional CSS classes
  */
@@ -22,6 +23,7 @@ const FilterButton = ({
   value,
   label,
   isSelected,
+  isDisabled = false,
   onClick,
   className = ''
 }) => {
@@ -31,7 +33,8 @@ const FilterButton = ({
 
   return (
     <motion.button
-      className={`age-button ${isSelected ? 'age-button-selected' : ''} ${className}`}
+      className={`age-button ${isSelected ? 'age-button-selected' : ''} ${isDisabled ? 'age-button-disabled' : ''} ${className}`}
+      disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >

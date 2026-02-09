@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import RadioOption from '../shared/RadioOption.jsx'
 import '../shared/RadioFilter.css'
@@ -17,6 +18,8 @@ import '../shared/RadioFilter.css'
 // ---------------------------------------------------------------------------
 
 const FormulationFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.FORMULATION)
+
   const formulations = [
     FILTER_OPTIONS.FORMULATION.CREAM_005,
     FILTER_OPTIONS.FORMULATION.CREAM_015,
@@ -46,6 +49,7 @@ const FormulationFilter = ({ currentSource, selected }) => {
             value={formulation}
             label={formulation}
             isSelected={selected === formulation}
+            isDisabled={!isAvailable(formulation)}
             onClick={() => handleSelect(formulation)}
           />
         ))}

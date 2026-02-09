@@ -17,12 +17,14 @@ import './RadioFilter.css'
  * value - Option value/identifier
  * label - Display text for the option
  * isSelected - Whether the option is currently selected
+ * isDisabled - Whether the option is disabled (faded and not clickable)
  * onClick - Callback when option is clicked
  */
 const RadioOption = ({
   value,
   label,
   isSelected,
+  isDisabled = false,
   onClick
 }) => {
   // ---------------------------------------------------------------------------
@@ -31,7 +33,8 @@ const RadioOption = ({
 
   return (
     <motion.button
-      className="radio-option"
+      className={`radio-option ${isDisabled ? 'radio-option-disabled' : ''}`}
+      disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >

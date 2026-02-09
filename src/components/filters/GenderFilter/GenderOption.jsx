@@ -16,6 +16,7 @@ import './GenderFilter.css'
  * value, label - Option value and display text
  * icon - Image URL for the gender icon
  * isSelected - Whether the option is currently selected
+ * isDisabled - Whether the option is disabled (faded and not clickable)
  * onClick - Callback when option is clicked
  */
 const GenderOption = ({
@@ -23,6 +24,7 @@ const GenderOption = ({
   label,
   icon,
   isSelected,
+  isDisabled = false,
   onClick
 }) => {
   // ---------------------------------------------------------------------------
@@ -31,7 +33,8 @@ const GenderOption = ({
 
   return (
     <motion.button
-      className={`gender-button ${isSelected ? 'gender-button-selected' : ''}`}
+      className={`gender-button ${isSelected ? 'gender-button-selected' : ''} ${isDisabled ? 'gender-button-disabled' : ''}`}
+      disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
     >

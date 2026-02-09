@@ -8,6 +8,7 @@
 
 import { FILTER_OPTIONS, FILTER_KEYS, ASSETS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
+import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
 import GenderOption from './GenderOption.jsx'
 import './GenderFilter.css'
@@ -17,6 +18,8 @@ import './GenderFilter.css'
 // ---------------------------------------------------------------------------
 
 const GenderFilter = ({ currentSource, selected }) => {
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.GENDER)
+
   const genders = [
     { value: FILTER_OPTIONS.GENDER.MALE, icon: ASSETS.ICONS.MALE },
     { value: FILTER_OPTIONS.GENDER.FEMALE, icon: ASSETS.ICONS.FEMALE },
@@ -45,6 +48,7 @@ const GenderFilter = ({ currentSource, selected }) => {
             label={gender.value}
             icon={gender.icon}
             isSelected={selected === gender.value}
+            isDisabled={!isAvailable(gender.value)}
             onClick={() => handleSelect(gender.value)}
           />
         ))}
