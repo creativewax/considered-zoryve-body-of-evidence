@@ -58,10 +58,3 @@
 .condition-button-seborrheic-dermatitis {
   background-color: var(--colour-seborrheic-dermatitis);
 }
-
-.condition-button-disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-  transition: opacity 0.2s ease-in;
-}

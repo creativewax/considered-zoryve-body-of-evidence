@@ -33,7 +33,7 @@ const FilterButton = ({
 
   return (
     <motion.button
-      className={`age-button ${isSelected ? 'age-button-selected' : ''} ${isDisabled ? 'age-button-disabled' : ''} ${className}`}
+      className={`age-button ${isSelected ? 'age-button-selected' : ''} ${isDisabled ? 'button-disabled' : ''} ${className}`}
       disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}

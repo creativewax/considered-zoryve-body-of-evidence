@@ -33,7 +33,7 @@ const ConditionOption = ({
 
   return (
     <motion.button
-      className={`condition-button ${isSelected ? `condition-button-selected ${colourClass}` : ''} ${isDisabled ? 'condition-button-disabled' : ''}`}
+      className={`condition-button ${isSelected ? `condition-button-selected ${colourClass}` : ''} ${isDisabled ? 'button-disabled' : ''}`}
       disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}

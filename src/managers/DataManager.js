@@ -6,6 +6,7 @@ import {
   DATA_SOURCE_KEYS,
   IMAGE_FIELDS,
   FILTER_KEYS,
+  FILTER_OPTIONS,
   GENDER_MAP,
   ASSETS
 } from '../constants/index.js'
@@ -47,6 +48,18 @@ class DataManager {
 
       this.patientData = await dataResponse.json()
       this.schema = await schemaResponse.json()
+
+      // Normalise age field to ensure it's always a number
+      for (const key of Object.keys(this.patientData)) {
+        if (!Array.isArray(this.patientData[key])) continue
+        this.patientData[key].forEach(patient => {
+          if (patient[PATIENT_SCHEMA.AGE] !== undefined && patient[PATIENT_SCHEMA.AGE] !== null) {
+            patient[PATIENT_SCHEMA.AGE] = typeof patient[PATIENT_SCHEMA.AGE] === 'number'
+              ? patient[PATIENT_SCHEMA.AGE]
+              : parseInt(patient[PATIENT_SCHEMA.AGE], 10)
+          }
+        })
+      }
 
       // For testing: duplicate patient data if factor > 1
       if (DATA_DUPLICATION_FACTOR > 1) {
@@ -170,20 +183,17 @@ class DataManager {
       })
     }
 
-    // Filter by age range (supports formats: "2-5" or "19+")
+    // Filter by age range (age is normalised to number on load)
     if (filters[FILTER_KEYS.AGE]) {
       patients = patients.filter(p => {
-        const age = typeof p[PATIENT_SCHEMA.AGE] === 'number'
-          ? p[PATIENT_SCHEMA.AGE]
-          : parseInt(p[PATIENT_SCHEMA.AGE])
-
-        if (isNaN(age)) return false
+        const age = p[PATIENT_SCHEMA.AGE]
+        if (typeof age !== 'number' || isNaN(age)) return false
 
         if (filters[FILTER_KEYS.AGE].includes('+')) {
-          const min = parseInt(filters[FILTER_KEYS.AGE].replace('+', ''))
+          const min = parseInt(filters[FILTER_KEYS.AGE].replace('+', ''), 10)
           return age >= min
         } else {
-          const [min, max] = filters[FILTER_KEYS.AGE].split('-').map(n => parseInt(n))
+          const [min, max] = filters[FILTER_KEYS.AGE].split('-').map(n => parseInt(n, 10))
           return age >= min && age <= max
         }
       })
@@ -295,19 +305,16 @@ class DataManager {
           fieldValue = patient[PATIENT_SCHEMA.BASELINE_SEVERITY]
           break
         case FILTER_KEYS.AGE:
-          // Special handling for age ranges
-          const ageValue = patient[PATIENT_SCHEMA.AGE]
-          const age = typeof ageValue === 'number' ? ageValue : typeof ageValue === 'string' ? parseInt(ageValue) : NaN
-
-          if (!isNaN(age)) {
-            // Determine which age range(s) this patient fits into
-            if (age >= 2 && age <= 5) values.add('2-5')
-            if (age >= 6 && age <= 18) values.add('6-18')
-            if (age >= 19 && age <= 30) values.add('19-30')
-            if (age >= 31 && age <= 50) values.add('31-50')
-            if (age >= 50) values.add('50+')
+          // Age ranges - age is normalised to number on load
+          const age = patient[PATIENT_SCHEMA.AGE]
+          if (typeof age === 'number' && !isNaN(age)) {
+            if (age >= 2 && age <= 5) values.add(FILTER_OPTIONS.AGE_RANGES.RANGE_2_5)
+            if (age >= 6 && age <= 18) values.add(FILTER_OPTIONS.AGE_RANGES.RANGE_6_18)
+            if (age >= 19 && age <= 30) values.add(FILTER_OPTIONS.AGE_RANGES.RANGE_19_30)
+            if (age >= 31 && age <= 50) values.add(FILTER_OPTIONS.AGE_RANGES.RANGE_31_50)
+            if (age >= 50) values.add(FILTER_OPTIONS.AGE_RANGES.RANGE_50_PLUS)
           }
-          return // Skip the normal field value handling
+          return
         case FILTER_KEYS.GENDER:
           // Map gender codes back to display names
           const genderCode = patient[PATIENT_SCHEMA.GENDER]

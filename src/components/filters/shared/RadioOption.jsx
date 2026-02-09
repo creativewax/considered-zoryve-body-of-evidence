@@ -33,7 +33,7 @@ const RadioOption = ({
 
   return (
     <motion.button
-      className={`radio-option ${isDisabled ? 'radio-option-disabled' : ''}`}
+      className={`radio-option ${isDisabled ? 'button-disabled' : ''}`}
       disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}

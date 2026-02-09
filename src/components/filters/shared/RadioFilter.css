@@ -42,10 +42,3 @@
   font-weight: var(--font-weight-bold);
   color: var(--colour-white);
 }
-
-.radio-option-disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-  transition: opacity 0.2s ease-in;
-}

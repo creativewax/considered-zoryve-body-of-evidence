@@ -33,7 +33,7 @@ const GenderOption = ({
 
   return (
     <motion.button
-      className={`gender-button ${isSelected ? 'gender-button-selected' : ''} ${isDisabled ? 'gender-button-disabled' : ''}`}
+      className={`gender-button ${isSelected ? 'gender-button-selected' : ''} ${isDisabled ? 'button-disabled' : ''}`}
       disabled={isDisabled}
       onClick={onClick}
       {...ANIMATION_PROPS.INTERACTIVE}
