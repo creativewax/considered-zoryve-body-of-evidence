@@ -57,6 +57,7 @@ class EventSystem {
     // Manager state change events (notifications from managers)
     CATEGORY_CHANGED: 'categoryChanged',      // Data source tab changed (Clinical Trial / Practice-Based)
     FILTER_CHANGED: 'filterChanged',          // Individual filter value changed
+    FILTER_AVAILABILITY_CHANGED: 'filterAvailabilityChanged', // Available filter options changed
     FILTERS_RESET: 'filtersReset',            // All filters reset to defaults
     IMAGE_CLICKED: 'imageClicked',            // Selected image changed
     IMAGES_UPDATED: 'imagesUpdated',          // Filtered images list changed

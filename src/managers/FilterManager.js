@@ -7,7 +7,9 @@
  */
 
 import { FILTER_KEYS } from '../constants/index.js'
-import eventSystem from '../utils/EventSystem.js'
+import eventSystem, { EventSystem } from '../utils/EventSystem.js'
+import dataManager from './DataManager.js'
+import appStateManager from './AppStateManager.js'
 
 // FILTER MANAGER CLASS
 
@@ -38,15 +40,37 @@ class FilterManager {
       [FILTER_KEYS.GENDER]: null,
     }
 
+    // Initialise availability with empty sets
+    this.availability = {
+      [FILTER_KEYS.CONDITION]: new Set(),
+      [FILTER_KEYS.FORMULATION]: new Set(),
+      [FILTER_KEYS.BODY_AREA]: new Set(),
+      [FILTER_KEYS.BASELINE_SEVERITY]: new Set(),
+      [FILTER_KEYS.AGE]: new Set(),
+      [FILTER_KEYS.GENDER]: new Set(),
+    }
+
     // Listen to UI interaction events
     eventSystem.on(
-      eventSystem.constructor.EVENTS.FILTER_SELECTED,
+      EventSystem.EVENTS.FILTER_SELECTED,
       this.handleFilterSelected.bind(this)
     )
     eventSystem.on(
-      eventSystem.constructor.EVENTS.FILTERS_RESET_REQUESTED,
+      EventSystem.EVENTS.FILTERS_RESET_REQUESTED,
       this.handleResetRequested.bind(this)
     )
+    eventSystem.on(
+      EventSystem.EVENTS.SOURCE_CHANGED,
+      this.handleSourceChanged.bind(this)
+    )
+  }
+
+  /**
+   * Handle data source change (Clinical Trial <-> Practice-Based)
+   * Recalculates filter availability for new dataset
+   */
+  handleSourceChanged() {
+    this.updateAvailability()
   }
 
 
@@ -66,13 +90,14 @@ class FilterManager {
       this.filters[filterType] = value
 
       // Emit filter changed event for UI updates
-      eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_CHANGED, {
+      eventSystem.emit(EventSystem.EVENTS.FILTER_CHANGED, {
         filterType,
         value,
         filters: { ...this.filters }
       })
 
-      // Trigger carousel refresh with new filter state
+      // Update filter availability and trigger carousel refresh
+      this.updateAvailability()
       this.triggerUpdate()
     }
   }
@@ -105,11 +130,12 @@ class FilterManager {
     }
 
     // Emit reset event for UI updates
-    eventSystem.emit(eventSystem.constructor.EVENTS.FILTERS_RESET, {
+    eventSystem.emit(EventSystem.EVENTS.FILTERS_RESET, {
       ...this.filters
     })
 
-    // Trigger carousel refresh with cleared filters
+    // Update filter availability and trigger carousel refresh
+    this.updateAvailability()
     this.triggerUpdate()
   }
 
@@ -120,9 +146,31 @@ class FilterManager {
    * This event is consumed by useCarouselManager hook.
    */
   triggerUpdate() {
-    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGES_UPDATED, {
+    eventSystem.emit(EventSystem.EVENTS.IMAGES_UPDATED, {
       ...this.filters
     })
+  }
+
+  /**
+   * Update filter availability based on current filter state
+   * Calculates which filter options would yield results and emits availability map
+   */
+  updateAvailability() {
+    const source = appStateManager.getSource()
+    const filtersWithSource = { ...this.filters, source }
+
+    // Calculate available options for each filter type
+    this.availability = {
+      [FILTER_KEYS.CONDITION]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.CONDITION),
+      [FILTER_KEYS.FORMULATION]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.FORMULATION),
+      [FILTER_KEYS.BODY_AREA]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.BODY_AREA),
+      [FILTER_KEYS.BASELINE_SEVERITY]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.BASELINE_SEVERITY),
+      [FILTER_KEYS.AGE]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.AGE),
+      [FILTER_KEYS.GENDER]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.GENDER),
+    }
+
+    // Emit to components
+    eventSystem.emit(EventSystem.EVENTS.FILTER_AVAILABILITY_CHANGED, this.availability)
   }
 
 

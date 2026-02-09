@@ -251,6 +251,79 @@ class DataManager {
 
     return null
   }
+
+  // ---------------------------------------------------------------------------
+  // FILTER AVAILABILITY
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Get available filter options for a specific filter type
+   * Returns Set of values that would yield results if selected
+   *
+   * @param {Object} filters - Current filter state
+   * @param {string} filterType - Which filter to get options for
+   * @returns {Set<string>} Set of available option values
+   */
+  getAvailableFilterOptions(filters, filterType) {
+    if (!this.isLoaded || !this.patientData) return new Set()
+
+    // Create temporary filter state excluding the target filter
+    const tempFilters = { ...filters }
+    delete tempFilters[filterType]
+
+    // Get patients matching all OTHER filters
+    const patients = this.filterPatients(tempFilters)
+
+    // Extract unique values for the target filter from matching patients
+    const values = new Set()
+
+    patients.forEach(patient => {
+      let fieldValue
+
+      // Map filter type to patient schema field
+      switch (filterType) {
+        case FILTER_KEYS.INDICATION:
+          fieldValue = patient[PATIENT_SCHEMA.INDICATION]
+          break
+        case FILTER_KEYS.FORMULATION:
+          fieldValue = patient[PATIENT_SCHEMA.FORMULATION]
+          break
+        case FILTER_KEYS.BODY_AREA:
+          fieldValue = patient[PATIENT_SCHEMA.BODY_AREA_SIMPLE]
+          break
+        case FILTER_KEYS.BASELINE_SEVERITY:
+          fieldValue = patient[PATIENT_SCHEMA.BASELINE_SEVERITY]
+          break
+        case FILTER_KEYS.AGE:
+          // Special handling for age ranges
+          const ageValue = patient[PATIENT_SCHEMA.AGE]
+          const age = typeof ageValue === 'number' ? ageValue : typeof ageValue === 'string' ? parseInt(ageValue) : NaN
+
+          if (!isNaN(age)) {
+            // Determine which age range(s) this patient fits into
+            if (age >= 2 && age <= 5) values.add('2-5')
+            if (age >= 6 && age <= 18) values.add('6-18')
+            if (age >= 19 && age <= 30) values.add('19-30')
+            if (age >= 31 && age <= 50) values.add('31-50')
+            if (age >= 50) values.add('50+')
+          }
+          return // Skip the normal field value handling
+        case FILTER_KEYS.GENDER:
+          // Map gender codes back to display names
+          const genderCode = patient[PATIENT_SCHEMA.GENDER]
+          if (genderCode === 'M') values.add('Male')
+          else if (genderCode === 'F') values.add('Female')
+          return // Skip the normal field value handling
+      }
+
+      // Add non-null, non-empty string values
+      if (typeof fieldValue === 'string' && fieldValue.trim() !== '') {
+        values.add(fieldValue.trim())
+      }
+    })
+
+    return values
+  }
 }
 
 // ---------------------------------------------------------------------------
