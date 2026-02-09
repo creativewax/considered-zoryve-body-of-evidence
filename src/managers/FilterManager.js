@@ -32,7 +32,7 @@ class FilterManager {
   constructor() {
     // Initialise filter state - all filters start as null (unselected)
     this.filters = {
-      [FILTER_KEYS.CONDITION]: null,
+      [FILTER_KEYS.INDICATION]: null,
       [FILTER_KEYS.FORMULATION]: null,
       [FILTER_KEYS.BODY_AREA]: null,
       [FILTER_KEYS.BASELINE_SEVERITY]: null,
@@ -42,7 +42,7 @@ class FilterManager {
 
     // Initialise availability with empty sets
     this.availability = {
-      [FILTER_KEYS.CONDITION]: new Set(),
+      [FILTER_KEYS.INDICATION]: new Set(),
       [FILTER_KEYS.FORMULATION]: new Set(),
       [FILTER_KEYS.BODY_AREA]: new Set(),
       [FILTER_KEYS.BASELINE_SEVERITY]: new Set(),
@@ -121,7 +121,7 @@ class FilterManager {
 
     // Reset all filters to null
     this.filters = {
-      [FILTER_KEYS.CONDITION]: null,
+      [FILTER_KEYS.INDICATION]: null,
       [FILTER_KEYS.FORMULATION]: null,
       [FILTER_KEYS.BODY_AREA]: null,
       [FILTER_KEYS.BASELINE_SEVERITY]: null,
@@ -161,7 +161,7 @@ class FilterManager {
 
     // Calculate available options for each filter type
     this.availability = {
-      [FILTER_KEYS.CONDITION]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.CONDITION),
+      [FILTER_KEYS.INDICATION]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.INDICATION),
       [FILTER_KEYS.FORMULATION]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.FORMULATION),
       [FILTER_KEYS.BODY_AREA]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.BODY_AREA),
       [FILTER_KEYS.BASELINE_SEVERITY]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.BASELINE_SEVERITY),

@@ -131,7 +131,7 @@ export const FILTER_OPTIONS = {
  * Use these instead of hardcoded strings when emitting FILTER_SELECTED or reading filters
  */
 export const FILTER_KEYS = {
-  CONDITION: 'condition',
+  INDICATION: 'indication',
   FORMULATION: 'formulation',
   BODY_AREA: 'bodyArea',
   BASELINE_SEVERITY: 'baselineSeverity',

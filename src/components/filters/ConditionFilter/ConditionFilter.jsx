@@ -18,7 +18,7 @@ import './ConditionFilter.css'
 // ---------------------------------------------------------------------------
 
 const ConditionFilter = ({ currentSource, selected }) => {
-  const { isAvailable } = useFilterAvailability(FILTER_KEYS.CONDITION)
+  const { isAvailable } = useFilterAvailability(FILTER_KEYS.INDICATION)
 
   const conditions = [
     { value: FILTER_OPTIONS.CONDITION.PLAQUE_PSORIASIS, colourClass: 'condition-button-plaque-psoriasis' },
@@ -29,7 +29,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
   // Handle condition selection; emits FILTER_SELECTED for FilterManager
   const handleSelect = (condition) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
-      filterType: FILTER_KEYS.CONDITION,
+      filterType: FILTER_KEYS.INDICATION,
       value: condition === selected ? null : condition
     })
   }
@@ -39,7 +39,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Condition" currentSource={currentSource} condensed>
+    <FilterComponent title="Indication" currentSource={currentSource} condensed>
       <div className="condition-filter">
         {/* Render colour-coded condition option buttons */}
         {conditions.map((condition) => (

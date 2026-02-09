@@ -137,11 +137,11 @@ class DataManager {
     let patients = this.getPatientsBySource(source)
 
     // Filter by condition (exact match, case-insensitive)
-    if (filters[FILTER_KEYS.CONDITION]) {
+    if (filters[FILTER_KEYS.INDICATION]) {
       patients = patients.filter(p => {
         const indication = p[PATIENT_SCHEMA.INDICATION]
         if (!indication) return false
-        return indication.trim().toLowerCase() === filters[FILTER_KEYS.CONDITION].toLowerCase().trim()
+        return indication.trim().toLowerCase() === filters[FILTER_KEYS.INDICATION].toLowerCase().trim()
       })
     }
 

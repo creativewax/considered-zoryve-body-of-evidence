@@ -39,7 +39,7 @@ const FilterBody = ({ currentSource, filters }) => {
         {/* Medical condition filter - allows selection of specific conditions */}
         <ConditionFilter
           currentSource={currentSource}
-          selected={filters[FILTER_KEYS.CONDITION]}
+          selected={filters[FILTER_KEYS.INDICATION]}
         />
 
         {/* Formulation type filter - filters by treatment formulation */}
