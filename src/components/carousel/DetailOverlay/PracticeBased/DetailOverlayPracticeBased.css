@@ -54,13 +54,19 @@
   flex: 0 0 auto;
 }
 
-/* Timepoint cards section */
+/* Timepoint cards section — flexbox like Clinical Trial so cards shrink proportionally */
 .detail-overlay-pb-timepoints {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
   gap: var(--spacing-lg);
   padding: 0 var(--spacing-lg) var(--spacing-lg);
   flex-shrink: 0;
+}
+
+.detail-overlay-pb-timepoint-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Bottom section */
@@ -97,4 +103,20 @@
   margin: var(--spacing-md) auto 0;
   display: flex;
   justify-content: flex-start;
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 600px) {
+  .detail-overlay-pb-timepoints {
+    flex-direction: column;
+  }
+
+  .detail-overlay-pb-top {
+    flex-direction: column;
+  }
+
+  .detail-overlay-pb-bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

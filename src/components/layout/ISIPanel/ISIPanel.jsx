@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
-import { ASSETS } from '../../../constants/index.js'
+import { PlusIcon } from '../../common/Svg/index.js'
 import { gsap } from 'gsap'
 import ISIContent from './ISIContent.jsx'
 import './ISIPanel.css'
@@ -164,8 +164,14 @@ const ISIPanel = () => {
           className="isi-panel-toggle"
           onClick={togglePanel}
           style={{ transform: 'rotate(0deg)' }}
+          aria-label={isOpen ? 'Close' : 'Open'}
         >
-          <img src={ASSETS.ICONS.PLUS_BUTTON} alt={isOpen ? 'Close' : 'Open'} />
+          <PlusIcon
+            width={30}
+            height={30}
+            bgClassName="isi-panel-plus-bg"
+            fgClassName="isi-panel-plus-fg"
+          />
         </button>
         {/* Panel content area */}
         <div className="isi-panel-content">

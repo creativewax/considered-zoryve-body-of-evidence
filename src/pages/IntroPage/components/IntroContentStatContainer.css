@@ -1,0 +1,18 @@
+/**
+ * IntroContentStatContainer.css
+ * 2-column grid for stat cards
+ */
+
+.intro-content-stat-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  justify-items: center;
+}
+
+/* Responsive - single column at smaller sizes */
+@media (max-width: 900px) {
+  .intro-content-stat-container {
+    grid-template-columns: 1fr;
+  }
+}

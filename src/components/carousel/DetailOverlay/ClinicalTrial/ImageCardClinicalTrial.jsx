@@ -5,7 +5,7 @@
  * Features: 2px white border, rounded corners, shadow, top-left label, bottom-right plus button.
  */
 
-import { ASSETS } from '../../../../constants/index.js'
+import { PlusIcon } from '../../../common/Svg/index.js'
 import './ImageCardClinicalTrial.css'
 
 // ---------------------------------------------------------------------------
@@ -44,12 +44,17 @@ const ImageCardClinicalTrial = ({ image, thumb, label, title, onExpand, isLastTi
         <button
           className="image-card-expand-button"
           onClick={(e) => {
-            e.stopPropagation() // Prevent double trigger from wrapper click
+            e.stopPropagation()
             onExpand()
           }}
           aria-label={`Expand ${label}`}
         >
-          <img src={ASSETS.ICONS.PLUS_BUTTON_BLUE} alt="Expand" />
+          <PlusIcon
+            width={24}
+            height={24}
+            bgClassName="image-card-plus-bg"
+            fgClassName="image-card-plus-fg"
+          />
         </button>
       </div>
     </div>

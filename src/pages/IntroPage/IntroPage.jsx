@@ -1,14 +1,19 @@
 /**
  * IntroPage.jsx
  *
- * Animated landing page with fade-in and slide-up, and "Get Started" button.
+ * Animated landing page with clinical trial data and "Get Started" button.
  */
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
+import dataManager from '../../managers/DataManager.js'
 import Button from '../../components/common/Button/Button.jsx'
+import IntroHeader from './components/IntroHeader.jsx'
+import IntroContentContainer from './components/IntroContentContainer.jsx'
+import IntroContent from './components/IntroContent.jsx'
 import './IntroPage.css'
 
 // ---------------------------------------------------------------------------
@@ -17,9 +22,21 @@ import './IntroPage.css'
 
 const IntroPage = () => {
   const navigate = useNavigate()
+  const [introData, setIntroData] = useState(null)
+
+  useEffect(() => {
+    // Load intro data from DataManager
+    const data = dataManager.getIntroData()
+    setIntroData(data)
+  }, [])
 
   const handleGetStarted = () => {
     navigate(ROUTES.MAIN)
+  }
+
+  // Show loading or fallback if data not ready
+  if (!introData) {
+    return <div className="intro-page">Loading...</div>
   }
 
   // ---------------------------------------------------------------------------
@@ -35,18 +52,34 @@ const IntroPage = () => {
       transition={TRANSITIONS.SLOW}
     >
       <motion.div
-        className="intro-page-content"
+        className="intro-page-container"
         initial={ANIMATIONS.SLIDE_UP.initial}
         animate={ANIMATIONS.SLIDE_UP.animate}
         transition={TRANSITIONS.DELAYED()}
       >
-        <div className="intro-page-content-text">
-          <h1>Clinical Trial Designs and Results</h1>
-          <p>To go here...</p>
+        {/* Header with title and logo */}
+        <IntroHeader title={introData.title} />
+
+        {/* Scrollable content container */}
+        <IntroContentContainer references={introData.references}>
+          {introData.content.map((item, index) => (
+            <IntroContent
+              key={index}
+              icon={item.icon}
+              title={item.title}
+              headerColor={item['header-colour']}
+              body={item.body}
+              stats={item.stats}
+            />
+          ))}
+        </IntroContentContainer>
+
+        {/* Get Started button */}
+        <div className="intro-page-button">
+          <Button onClick={handleGetStarted}>
+            GET STARTED
+          </Button>
         </div>
-        <Button onClick={handleGetStarted}>
-          GET STARTED
-        </Button>
       </motion.div>
     </motion.div>
   )

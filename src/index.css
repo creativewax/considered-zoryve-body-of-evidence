@@ -8,7 +8,10 @@
   --colour-zoryve-blue: #408BAB;
   --colour-zoryve-midnight-blue: #14365B;
   --colour-zoryve-black: #1F2B2B;
-  --colour-zoryve-yellow: #FDE939;
+  --colour-zoryve-yellow: #ffb81c;
+  --colour-zoryve-grey: #A8AAAD;
+  --colour-close-icon-bg: #fff;
+  --colour-close-icon-fg: #ffb81c;
   --colour-last-timepoint-highlight: #FFEEC2;
   --colour-white: #FFFFFF;
   --colour-black: #000000;
@@ -71,6 +74,7 @@
   --font-size-lg: 16px;
   --font-size-xl: 18px;
   --font-size-xxl: 22px;
+  --font-size-xxxl: 36px;
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-regular: 500;
@@ -141,6 +145,22 @@ body {
 .svg-scale {
   transform: scale(0.5);
   transform-origin: center center;
+}
+
+/* Inline close icon – colours via CSS custom properties */
+.close-icon .close-icon-bg {
+  fill: var(--close-icon-bg, var(--colour-close-icon-bg));
+}
+.close-icon .close-icon-fg {
+  fill: var(--close-icon-fg, var(--colour-close-icon-fg));
+}
+
+/* Inline plus icon – colours via CSS custom properties when not set by props */
+.plus-icon .plus-icon-bg {
+  fill: var(--plus-icon-bg, var(--colour-zoryve-yellow));
+}
+.plus-icon .plus-icon-fg {
+  fill: var(--plus-icon-fg, var(--colour-white));
 }
 
 /* Standard text styles H1, H2, H3, H4, H5, H6, P */

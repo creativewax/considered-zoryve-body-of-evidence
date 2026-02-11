@@ -1,0 +1,130 @@
+{
+  "title": "Clinical Trial Designs and Results",
+  "content": [
+    {
+      "header-colour": "--colour-plaque-psoriasis",
+      "icon": "icon-foam-03.svg",
+      "title": "Plaque psoriasis - 0.3% Foam<sup>1-3</sup>",
+      "body": "Two multicenter, randomized, parallel, double-blind, vehicle-controlled studies (ARRECTOR and Trial 204) evaluated 736 participants with plaque psoriasis treated with ZORYVE foam 0.3% or vehicle once daily for 8 weeks. ARRECTOR: ZORYVE foam=281, vehicle=151. Trial 204: ZORYVE foam=200, vehicle=104. Primary endpoints were S-IGA Success at Week 8 in both studies, and B-IGA Success at Week 8 in ARRECTOR. Key secondary endpoints were B-IGA Success at Week 8 in Trial 204, SI-NRS Success at Week 8 in ARRECTOR: ZORYVE foam=203, vehicle=123, and WI-NRS Success at Week 8 in ARRECTOR: ZORYVE foam=203, vehicle=110.",
+      "stats": [
+        {
+          "title": "S-IGA Success at Week 8",
+          "zoryve-percent": "63",
+          "vehicle-percent": "21",
+          "zoryve-count": "481",
+          "vehicle-count": "255"
+        },
+        {
+          "title": "B-IGA Success at Week 8",
+          "zoryve-percent": "42",
+          "vehicle-percent": "15",
+          "zoryve-count": "481",
+          "vehicle-count": "255"
+        },
+        {
+          "title": "SI-NRS Success at Week 8",
+          "zoryve-percent": "65",
+          "vehicle-percent": "30",
+          "zoryve-count": "203",
+          "vehicle-count": "128"
+        },
+        {
+          "title": "WI-NRS Success at Week 8",
+          "zoryve-percent": "63",
+          "vehicle-percent": "30",
+          "zoryve-count": "203",
+          "vehicle-count": "110"
+        }
+      ]
+    },
+    {
+      "header-colour": "--colour-plaque-psoriasis",
+      "icon": "icon-cream-03.svg",
+      "title": "Plaque psoriasis - 0.3% Cream<sup>4,5</sup>",
+      "body": "Two Phase 3, multicenter, randomized, parallel, double-blind, vehicle-controlled, studies (DERMIS-1 and DERMIS-2) evaluated 881 participants with plaque psoriasis treated with ZORYVE cream 0.3% or vehicle once daily for 8 weeks. ZORYVE cream=576, vehicle=305. Primary endpoint was IGA Success at Week 8. WI-NRS Success at Week 8 was a key secondary endpoint; ZORYVE cream=447, vehicle=231.",
+      "stats": [
+        {
+          "title": "IGA Success at Week 8",
+          "zoryve-percent": "40",
+          "vehicle-percent": "7",
+          "zoryve-count": "576",
+          "vehicle-count": "305"
+        },
+        {
+          "title": "WI-NRS Success at Week 8",
+          "zoryve-percent": "69",
+          "vehicle-percent": "31",
+          "zoryve-count": "447",
+          "vehicle-count": "231"
+        }
+      ]
+    },
+    {
+      "header-colour": "--colour-atopic-dermatitis",
+      "icon": "icon-cream-015.svg",
+      "title": "Atopic Dermatitis - 0.15% Cream<sup>4,6,7</sup>",
+      "body": "Two Phase 3, multicenter, randomized, double-blind, vehicle-controlled studies (INTEGUMENT-1 and INTEGUMENT-2) evaluated 1337 participants with mild to moderate atopic dermatitis ages 6 years and older. Participants applied ZORYVE cream 0.15% or vehicle once daily for 4 weeks. ZORYVE cream=884, vehicle=453. Primary endpoint was vIGA-AD Success at Week 4. WI-NRS Success at Week 4 was a key secondary endpoint; ZORYVE cream=542, vehicle=271.",
+      "stats": [
+        {
+          "title": "vIGA-AD Success at Week 4",
+          "zoryve-percent": "31",
+          "vehicle-percent": "14",
+          "zoryve-count": "884",
+          "vehicle-count": "453"
+        },
+        {
+          "title": "WI-NRS Success at Week 4",
+          "zoryve-percent": "32",
+          "vehicle-percent": "17",
+          "zoryve-count": "542",
+          "vehicle-count": "271"
+        }
+      ]
+    },
+    {
+      "header-colour": "--colour-atopic-dermatitis",
+      "icon": "icon-cream-005.svg",
+      "title": "Atopic Dermatitis - 0.05% Cream<sup>4,8</sup>",
+      "body": "A Phase 3, multicenter, randomized, double-blind, vehicle-controlled study (INTEGUMENT-PED) evaluated 652 participants with mild to moderate atopic dermatitis ages 2-5. Caregivers applied  ZORYVE cream 0.05% or vehicle to patients once daily for 4 weeks. ZORYVE cream=436, vehicle=215.  Primary endpoint was vIGA-AD Success at Week 4.  WI-NRS Success at Week 4 was an exploratory endpoint (ZORYVE cream=347, vehicle=160),  assessed by caregivers using a WI-NRS validated in patients age 12+.",
+      "stats": [
+        {
+          "title": "vIGA-AD Success at Week 4",
+          "zoryve-percent": "25",
+          "vehicle-percent": "11",
+          "zoryve-count": "436",
+          "vehicle-count": "215"
+        },
+        {
+          "title": "WI-NRS Success at Week 4",
+          "zoryve-percent": "35",
+          "vehicle-percent": "18",
+          "zoryve-count": "347",
+          "vehicle-count": "160"
+        }
+      ]
+    },
+    {
+      "header-colour": "--colour-seborrheic-dermatitis",
+      "icon": "icon-foam-03.svg",
+      "title": "Seborrheic Dermatitis - 0.3% Foam<sup>1,9</sup>",
+      "body": "Two multicenter, randomized, double-blind, vehicle-controlled studies (STRATUM and Trial 203) evaluated 683 participants with moderate to severe seborrheic dermatitis treated with ZORYVE foam 0.3% or vehicle once daily for 8 weeks. STRATUM: ZORYVE foam=304, vehicle=153. Trial 203: ZORYVE foam=154, vehicle=72.  Primary endpoint was IGA Success at Week 8. WI-NRS Success at Week 8 was a key secondary endpoint in STRATUM; ZORYVE foam=206, vehicle=98.",
+      "stats": [
+        {
+          "title": "IGA Success at Week 8",
+          "zoryve-percent": "77",
+          "vehicle-percent": "53",
+          "zoryve-count": "458",
+          "vehicle-count": "228"
+        },
+        {
+          "title": "WI-NRS Success at Week 8",
+          "zoryve-percent": "63",
+          "vehicle-percent": "41",
+          "zoryve-count": "206",
+          "vehicle-count": "98"
+        }
+      ]
+    }
+  ],
+  "references": "<strong>References:</strong> <strong>1.</strong> ZORYVE® foam. Prescribing information. Arcutis Biotherapeutics, Inc; 2025. <strong>2.</strong> Kircik L, Alonso-Llamazares J, Bhatia N, et al. Once-daily roflumilast foam 0.3% for scalp and body psoriasis: a randomized, double-blind, vehicle-controlled phase IIb study. Br J Dermatol. 2023;189:392–399. <strong>3.</strong> Gooderham MJ, Alonso-Llamazares J, Bagel J, et al. Roflumilast foam, 0.3%, for psoriasis of the scalp and body: the ARRECTOR phase 3 randomized clinical trial. JAMA Dermatol. 2025;161(7):698-706. doi:10.1001/jamadermatol.2025.1136 <strong>4.</strong> ZORYVE® cream. Prescribing information. Arcutis Biotherapeutics, Inc; 2025. <strong>5.</strong> Lebwohl MG, Kircik LH, Moore AY, et al. Effect of roflumilast cream vs vehicle cream on chronic plaque psoriasis: The DERMIS-1 and DERMIS-2 randomized clinical trials. JAMA. 2022;328(11):1073-1084. <strong>6.</strong> Simpson EL, Eichenfield LF, Alonso-Llamazares J, et al. Roflumilast cream, 0.15%, for atopic dermatitis in adults and children: INTEGUMENT-1 and INTEGUMENT-2 randomized clinical trials. JAMA Dermatol. 2024;160(11):1161-1170. doi:10.1001/jamadermatol.2024.3121 <strong>7.</strong> Simpson E, Boguniewicz M, Eichenfield L, et al. Pooled efficacy, patient-reported outcomes, and safety of roflumilast cream 0.15% from the INTEGUMENT-1 and INTEGUMENT-2 phase 3 clinical trials of adults and children with atopic dermatitis. Poster presented at: American Academy of Dermatology Annual Meeting; March 8-12, 2024; San Diego, CA. <strong>8.</strong> Eichenfield LF, Serrao R, Prajapati VH, et al. Efficacy and safety of once-daily roflumilast cream 0.05% in pediatric patients aged 2-5 years with mild-to-moderate atopic dermatitis (INTEGUMENT-PED): a phase 3 randomized controlled trial. Pediatr Dermatol. 2025;42(2):296-304. <strong>9.</strong> Blauvelt A, Draelos ZD, Stein Gold L, et al. Roflumilast foam 0.3% for adolescent and adult patients with seborrheic dermatitis: A randomized, double-blinded, vehicle-controlled, phase 3 trial. J Am Acad Dermatol. 2024;90(5):986-993.<br /><br />B-IGA/IGA/S-IGA/vIGA-AD Success=Achievement of Clear (0) or Almost Clear (1) and a ≥2-grade improvement from baseline. SI-NRS/WI-NRS Success=Achievement of ≥4-point improvement from baseline in patients with a baseline score ≥4. SI-NRS/WI-NRS: 0 (no itch) to 10 (worst imaginable itch).<br /><br />B-IGA=Body Investigator Global Assessment, IGA=Investigator Global Assessment, S-IGA=Scalp Investigator Global Assessment, SI-NRS=Scalp Itch Numeric Rating Scale, WI-NRS=Worst Itch Numeric Rating Scale, vIGA-AD=validated Investigator Global Assessment-Atopic Dermatitis."
+}

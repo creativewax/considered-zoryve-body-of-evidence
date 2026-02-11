@@ -40,12 +40,6 @@
   align-items: flex-start;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-md);
-  width: 100%;
-  max-width: 960px;
-}
-
-/* Practice-Based bottom section - wider overlay */
-.detail-overlay-bottom-section-pb {
   width: 90%;
   max-width: 1400px;
 }
@@ -87,8 +81,20 @@
 .detail-overlay-close {
   width: 40px;
   height: 40px;
+  padding: 0;
+  border: none;
   border-radius: 50%;
   box-shadow: var(--shadow-button);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-overlay-close .close-icon {
+  width: 100%;
+  height: 100%;
 }
 
 /* Responsive layout */

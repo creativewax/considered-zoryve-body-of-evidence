@@ -69,9 +69,17 @@
   transform: scale(1.1);
 }
 
-.image-card-expand-button img {
-  width: 30px;
-  height: 30px;
+.image-card-expand-button .plus-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* Plus icon colours – Zoryve midnight blue bg, white icon (specificity overrides index.css defaults) */
+.image-card-expand-button .plus-icon .image-card-plus-bg {
+  fill: var(--colour-zoryve-midnight-blue);
+}
+.image-card-expand-button .plus-icon .image-card-plus-fg {
+  fill: var(--colour-white);
 }
 
 /* Title below image */
@@ -91,4 +99,19 @@
 
 .image-card-label-last-timepoint {
   background-color: var(--colour-last-timepoint-highlight) !important;
+}
+
+.image-card-expand-button .plus-icon .image-card-plus-bg {
+  fill: var(--colour-grey) !important;
+}
+.image-card-expand-button .plus-icon .image-card-plus-fg {
+  fill: var(--colour-zoryve-midnight-blue) !important;
+}
+
+.image-card-last-timepoint .image-card-expand-button .plus-icon .image-card-plus-bg {
+  fill: var(--colour-last-timepoint-highlight) !important;
+}
+
+.image-card-last-timepoint .image-card-expand-button .plus-icon .image-card-plus-fg {
+  fill: var(--colour-zoryve-midnight-blue) !important;
 }

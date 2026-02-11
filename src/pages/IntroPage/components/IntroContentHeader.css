@@ -1,0 +1,49 @@
+/**
+ * IntroContentHeader.css
+ * Header with icon and title
+ */
+
+.intro-content-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 40px;
+  padding: 0 var(--spacing-md);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.intro-content-header-icon {
+  height: 32px;
+  width: auto;
+}
+
+.intro-content-header-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.intro-content-header-title sup {
+  font-size: 70%;
+  margin-left: 2px;
+  text-transform: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .intro-content-header {
+    height: 40px;
+  }
+
+  .intro-content-header-icon {
+    height: 24px;
+  }
+
+  .intro-content-header-title {
+    font-size: var(--font-size-sm);
+  }
+}

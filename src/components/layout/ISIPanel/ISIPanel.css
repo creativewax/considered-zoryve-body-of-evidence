@@ -36,9 +36,17 @@
   transform: scale(1.1);
 }
 
-.isi-panel-toggle img {
-  width: 30px;
-  height: 30px;
+.isi-panel-toggle .plus-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* Plus icon colours – Zoryve yellow bg, white icon (specificity overrides index.css defaults) */
+.isi-panel-toggle .plus-icon .isi-panel-plus-bg {
+  fill: var(--colour-zoryve-yellow);
+}
+.isi-panel-toggle .plus-icon .isi-panel-plus-fg {
+  fill: var(--colour-white);
 }
 
 .isi-panel-content {

@@ -206,6 +206,16 @@ export const GENDER_CODE = {
 }
 
 // ---------------------------------------------------------------------------
+// COLOURS (for icon components and components that pass colour props)
+// ---------------------------------------------------------------------------
+
+export const COLOURS = {
+  WHITE: '#FFFFFF',
+  ZORYVE_YELLOW: '#FDE939',
+  ZORYVE_MIDNIGHT_BLUE: '#14365B',
+}
+
+// ---------------------------------------------------------------------------
 // ASSET PATHS
 // ---------------------------------------------------------------------------
 
@@ -226,7 +236,7 @@ export const ASSETS = {
     MALE: '/UI/icon-male.svg',
     FEMALE: '/UI/icon-female.svg',
     BODY_AREA_PERSON: '/UI/body-area-person.svg',
-    CLOSE_BUTTON: '/UI/close_button.svg',
+    CLOSE_BUTTON: '/UI/close-button.svg',
     PLUS_BUTTON: '/UI/plus-button.svg',
     PLUS_BUTTON_BLUE: '/UI/plus-button-blue.svg',
     FOOTER_INFO: '/UI/footer-info.svg',
@@ -239,6 +249,7 @@ export const ASSETS = {
   DATA: {
     PATIENT_DATA: '/data/patient_data.json',
     PATIENT_SCHEMA: '/data/patient_schema.json',
+    INTRO_DATA: '/data/intro_data.json',
   },
   PATIENTS_PATH: '/patients/',
 }

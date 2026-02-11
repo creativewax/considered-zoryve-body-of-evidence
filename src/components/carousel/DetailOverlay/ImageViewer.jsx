@@ -8,9 +8,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
-import { ASSETS } from '../../../constants/index.js'
-import { ChevronLeft, ChevronRight } from '../../common/Svg/index.js'
+import { ChevronLeft, ChevronRight, CloseIcon } from '../../common/Svg/index.js'
 import eventSystem from '../../../utils/EventSystem'
+import ImageContainer from './Common/ImageContainer.jsx'
 import './ImageViewer.css'
 
 // ---------------------------------------------------------------------------
@@ -180,17 +180,17 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
             style={{ cursor: 'pointer' }}
           >
             <div className="image-viewer-image-container">
-              <img
+              <ImageContainer
                 src={imagePath}
                 alt={`${currentTimepoint.label} - ${currentTimepoint.scale.name}`}
                 className="image-viewer-image"
                 draggable={false}
-              />
-
-              {/* Label in top-right corner - same as ImageCard */}
-              <div className="image-viewer-label">
-                <span className="image-viewer-label-text">{currentTimepoint.label}</span>
-              </div>
+              >
+                {/* Label in top-right corner - same as ImageCard */}
+                <div className="image-viewer-label">
+                  <span className="image-viewer-label-text">{currentTimepoint.label}</span>
+                </div>
+              </ImageContainer>
             </div>
 
             {/* Close Button */}
@@ -205,7 +205,7 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
               whileTap={{ scale: 0.95 }}
               aria-label="Close viewer"
             >
-              <img src={ASSETS.ICONS.CLOSE_BUTTON} alt="Close" />
+              <CloseIcon width={40} height={40} />
             </motion.button>
           </motion.div>
         </AnimatePresence>

@@ -1,0 +1,42 @@
+/**
+ * IntroHeader.css
+ * Header with title and logo
+ */
+
+.intro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xl);
+  flex-shrink: 0;
+}
+
+.intro-header-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-light);
+  color: var(--colour-white);
+  margin: var(--spacing-xl);
+  flex: 1;
+}
+
+.intro-header-logo {
+  height: 60px;
+  width: auto;
+  margin: var(--spacing-xl);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .intro-header {
+    gap: var(--spacing-lg);
+  }
+
+  .intro-header-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .intro-header-logo {
+    height: 40px;
+  }
+}

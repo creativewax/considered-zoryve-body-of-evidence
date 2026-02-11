@@ -1,0 +1,94 @@
+/**
+ * IntroContentStat.css
+ * Stat card with ZORYVE vs Vehicle comparison
+ */
+
+.intro-content-stat {
+  background: rgba(20, 54, 91, 0.7);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  max-width: 290px;
+  width: 100%;
+}
+
+.intro-content-stat-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: var(--spacing-sm);
+}
+
+.intro-content-stat-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--colour-white);
+  margin-bottom: var(--spacing-md);
+}
+
+.intro-content-stat-values {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+}
+
+.intro-content-stat-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.intro-content-stat-label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--colour-white);
+  letter-spacing: 0.5px;
+}
+
+.intro-content-stat-percent {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xxxl);
+  font-weight: var(--font-weight-bold);
+  color: var(--colour-white);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.intro-content-stat-count {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .intro-content-stat {
+    max-width: 100%;
+  }
+
+  .intro-content-stat-percent {
+    font-size: var(--font-size-xl);
+  }
+}
+
+.zoryve-label {
+  text-transform: uppercase;
+}
+
+.vehicle-label {
+  text-transform: none;
+}
+
+.zoryve-percent {
+  color: var(--colour-zoryve-yellow);
+}
+
+.vehicle-percent {
+  color: var(--colour-zoryve-grey);
+}

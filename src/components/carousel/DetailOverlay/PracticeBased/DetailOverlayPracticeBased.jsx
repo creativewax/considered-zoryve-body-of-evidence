@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { TRANSITIONS } from '../../../../constants/animations'
 import { splitPatientData } from '../../../../utils/patientDataSplitter.js'
 import appStateManager from '../../../../managers/AppStateManager.js'
+import eventSystem from '../../../../utils/EventSystem'
 import PatientDetailDataPracticeBased from './PatientDetailDataPracticeBased.jsx'
 import TreatedBy from './TreatedBy.jsx'
 import ImageCardPracticeBased from './ImageCardPracticeBased.jsx'
@@ -23,6 +24,15 @@ import './DetailOverlayPracticeBased.css'
 
 const DetailOverlayPracticeBased = ({ patient, onClose }) => {
   const { timepoints } = splitPatientData(patient, appStateManager.getSource())
+
+  const onExpandImage = (timepoints, index) => {
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_VIEWER_OPENED, { timepoints, index })
+  }
+
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <>
@@ -63,30 +73,37 @@ const DetailOverlayPracticeBased = ({ patient, onClose }) => {
             }
           }}
         >
-          {timepoints.map((timepointData, index) => (
-            <motion.div
-              key={timepointData.timepoint}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.3,
-                    delay: (index + 1) * 0.2,
-                    ease: 'easeOut'
+          {timepoints.map((timepointData, index) => {
+            const isLastTimepoint = index === timepoints.length - 1
+
+            return (
+              <motion.div
+                key={timepointData.timepoint}
+                className="detail-overlay-pb-timepoint-card"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: 0.3,
+                      delay: (index + 1) * 0.2,
+                      ease: 'easeOut'
+                    }
                   }
-                }
-              }}
-            >
-              <ImageCardPracticeBased
-                thumb={timepointData.thumb}
-                label={timepointData.label}
-                severity={timepointData.scale.score}
-                itchScore={timepointData.wiNrs}
-              />
-            </motion.div>
-          ))}
+                }}
+              >
+                <ImageCardPracticeBased
+                  thumb={timepointData.thumb}
+                  label={timepointData.label}
+                  severity={timepointData.scale.score}
+                  itchScore={timepointData.wiNrs}
+                  onExpand={() => onExpandImage(timepoints, index)}
+                  isLastTimepoint={isLastTimepoint}
+                />
+              </motion.div>
+            )
+          })}
         </motion.div>
 
         {/* Bottom section */}
@@ -101,7 +118,7 @@ const DetailOverlayPracticeBased = ({ patient, onClose }) => {
       </motion.div>
 
       {/* Bottom section: Disclaimer (left) | Close Button (center) | Legends (right) */}
-      <div className="detail-overlay-bottom-section detail-overlay-bottom-section-pb">
+      <div className="detail-overlay-bottom-section">
         <div className="detail-overlay-bottom-left">
           <PracticeBasedDisclaimer />
         </div>

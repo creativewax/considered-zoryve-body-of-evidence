@@ -21,6 +21,7 @@ class DataManager {
   // ---------------------------------------------------------------------------
 
   constructor() {
+    this.introData = null
     this.patientData = null
     this.schema = null
     this.isLoaded = false
@@ -33,11 +34,13 @@ class DataManager {
   // Load patient data and schema from JSON files
   async loadData() {
     try {
-      const [dataResponse, schemaResponse] = await Promise.all([
+      const [introResponse, dataResponse, schemaResponse] = await Promise.all([
+        fetch(ASSETS.DATA.INTRO_DATA),
         fetch(ASSETS.DATA.PATIENT_DATA),
         fetch(ASSETS.DATA.PATIENT_SCHEMA)
       ])
 
+      this.introData = await introResponse.json()
       this.patientData = await dataResponse.json()
       this.schema = await schemaResponse.json()
 
@@ -56,11 +59,12 @@ class DataManager {
       this.isLoaded = true
 
       eventSystem.emit(eventSystem.constructor.EVENTS.DATA_LOADED, {
+        introData: this.introData,
         data: this.patientData,
         schema: this.schema
       })
 
-      return { data: this.patientData, schema: this.schema }
+      return { introData: this.introData, data: this.patientData, schema: this.schema }
     } catch (error) {
       console.error('Error loading data:', error)
       throw error
@@ -306,6 +310,15 @@ class DataManager {
     })
 
     return indices
+  }
+
+  // ---------------------------------------------------------------------------
+  // INTRO DATA ACCESS
+  // ---------------------------------------------------------------------------
+
+  // Get intro data for landing page
+  getIntroData() {
+    return this.introData
   }
 }
 

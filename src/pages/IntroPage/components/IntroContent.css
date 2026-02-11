@@ -1,0 +1,49 @@
+/**
+ * IntroContent.css
+ * Content section with header, body text, and stats
+ */
+
+.intro-content {
+  margin-bottom: var(--spacing-md);
+  background: var(--colour-zoryve-midnight-blue-75);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.intro-content-body-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg);
+}
+
+.intro-content-body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-white);
+  line-height: 1.6;
+}
+
+.intro-content-body sup {
+  font-size: 0.7em;
+  vertical-align: super;
+}
+
+/* Responsive - stack body and stats at smaller sizes */
+@media (max-width: 900px) {
+  .intro-content-body-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .intro-content-body-wrapper {
+    padding: var(--spacing-md);
+  }
+
+  .intro-content-body {
+    font-size: var(--font-size-sm);
+  }
+}

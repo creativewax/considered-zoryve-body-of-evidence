@@ -1,0 +1,60 @@
+/**
+ * IntroContentContainer.css
+ * Scrollable container with masked corners
+ */
+
+.intro-content-container {
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--spacing-xl);
+}
+
+.intro-content-scrollable {
+  height: 100%;
+  overflow-y: auto;
+  background: rgba(20, 54, 91, 0.3);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.intro-content-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.intro-content-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.intro-content-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.intro-content-scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.intro-content-references {
+  max-width: 700px;
+  padding: var(--spacing-xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--colour-white);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .intro-content-container {
+    padding: 0 var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .intro-content-scrollable {
+    padding: var(--spacing-lg);
+  }
+}

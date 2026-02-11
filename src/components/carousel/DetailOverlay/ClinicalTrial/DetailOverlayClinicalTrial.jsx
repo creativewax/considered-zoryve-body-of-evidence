@@ -7,7 +7,6 @@
 
 import { motion } from 'framer-motion'
 import { TRANSITIONS } from '../../../../constants/animations.js'
-import { DATA_SOURCE } from '../../../../constants/index.js'
 import { splitPatientData } from '../../../../utils/patientDataSplitter.js'
 import { getScaleDefinition } from '../../../../constants/scaleDefinitions.js'
 import appStateManager from '../../../../managers/AppStateManager.js'
@@ -25,14 +24,16 @@ import './DetailOverlayClinicalTrial.css'
 
 const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
   const { timepoints, showWiNrs, showSiNrs } = splitPatientData(patient, appStateManager.getSource())
-  const source = appStateManager.getSource()
-  const isClinicalTrial = source === DATA_SOURCE.CLINICAL_TRIAL
   const scaleName = patient.scale
   const nrsDef = getScaleDefinition('WI-NRS')
 
   const onExpandImage = (timepoints, index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_VIEWER_OPENED, { timepoints, index })
   }
+
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
 
   return (
     <>
@@ -61,7 +62,7 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
           }}
         >
           {timepoints.map((timepointData, index) => {
-            const isLastTimepoint = isClinicalTrial && index === timepoints.length - 1
+            const isLastTimepoint = index === timepoints.length - 1
 
             return (
               <motion.div
