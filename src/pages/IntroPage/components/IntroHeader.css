@@ -34,9 +34,11 @@
 
   .intro-header-title {
     font-size: var(--font-size-lg);
+    margin: 0;
   }
 
   .intro-header-logo {
     height: 40px;
+    margin: 0;
   }
 }

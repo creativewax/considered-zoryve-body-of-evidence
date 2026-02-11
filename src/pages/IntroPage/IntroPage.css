@@ -1,12 +1,13 @@
 .intro-page {
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
+  max-width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .intro-page-container {
@@ -27,6 +28,10 @@
 
 /* Responsive */
 @media (max-width: 600px) {
+  .intro-page {
+    max-width: 100%;
+  }
+
   .intro-page-button {
     padding: var(--spacing-xl);
   }
