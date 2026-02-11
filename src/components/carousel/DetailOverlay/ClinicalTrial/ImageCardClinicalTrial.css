@@ -9,6 +9,7 @@
   gap: var(--spacing-sm);
   flex: 1;
   min-width: 0; /* Allow flex shrink */
+  max-width: 580px;
 }
 
 .image-card-image-wrapper {

@@ -47,8 +47,8 @@ const PatientDetailDataPracticeBased = ({ patient }) => {
 
   const column2 = [
     { label: 'Age', value: displayValue(patient.age) },
-    { label: 'Treatments Tried and Failed', value: displayValue(patient.treatmentsTriedAndFailed) },
     { label: 'Body Area', value: displayValue(patient.bodyArea) },
+    { label: 'Treatments Tried and Failed', value: displayValue(patient.treatmentsTriedAndFailed) },
   ]
 
   return (

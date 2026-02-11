@@ -40,7 +40,13 @@
 /* When the card is narrow, shrink header so text fits */
 @container image-card-pb (max-width: 300px) {
   .image-card-pb-header {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-lg);
+  }
+}
+
+@container image-card-pb (max-width: 265px) {
+  .image-card-pb-header {
+    font-size: var(--font-size-md);
   }
 }
 
@@ -147,11 +153,6 @@
 
 /* Responsive layout for mobile */
 @media (max-width: 600px) {
-  .image-card-pb-header {
-    height: 36px;
-    font-size: var(--font-size-md);
-  }
-
   .image-card-pb-footer {
     height: 60px;
   }
