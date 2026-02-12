@@ -4,12 +4,12 @@
  * Animated landing page with clinical trial data and "Get Started" button.
  */
 
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
 import dataManager from '../../managers/DataManager.js'
+import useManagerSubscription from '../../hooks/common/useManagerSubscription.js'
 import Button from '../../components/common/Button/Button.jsx'
 import IntroHeader from './components/IntroHeader.jsx'
 import IntroContentContainer from './components/IntroContentContainer.jsx'
@@ -22,13 +22,7 @@ import './IntroPage.css'
 
 const IntroPage = () => {
   const navigate = useNavigate()
-  const [introData, setIntroData] = useState(null)
-
-  useEffect(() => {
-    // Load intro data from DataManager
-    const data = dataManager.getIntroData()
-    setIntroData(data)
-  }, [])
+  const introData = useManagerSubscription(dataManager, mgr => mgr.getIntroData())
 
   const handleGetStarted = () => {
     navigate(ROUTES.MAIN)

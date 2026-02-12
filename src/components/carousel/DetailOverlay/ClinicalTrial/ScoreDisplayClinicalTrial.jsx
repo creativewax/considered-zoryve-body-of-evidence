@@ -22,9 +22,22 @@ import appStateManager from '../../../../managers/AppStateManager.js'
 const ScoreItem = ({ label, value }) => (
   <div className="score-item">
     <span className="score-item-label">{label}</span>
-    <div className="score-item-value">{value ?? '-'}</div>
+    <span className="score-item-value">{value ?? '-'}</span>
   </div>
 )
+
+/**
+ * ScoreItemArray - Displays an array of score items
+ *
+ * @param {Array} scale - Array of scale objects with name and score
+ */
+const ScoreItemArray = ({ scale }) => {
+  return scale.map((scale, index) => {
+    // if name is valid, display the score item
+    if (scale.name) return <ScoreItem key={index} label={scale.name} value={scale.score} />
+    return null
+  })
+}
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
@@ -41,16 +54,14 @@ const ScoreItem = ({ label, value }) => (
  * @param {boolean} isLastTimepoint - Whether this is the last timepoint (for special styling)
  */
 const ScoreDisplayClinicalTrial = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs, isLastTimepoint = false }) => {
-  const source = appStateManager.getSource()
-
   // Show secondary scores section if either WI-NRS or SI-NRS should be displayed
   const hasSecondaryScores = showWiNrs || showSiNrs
 
   return (
     <div className={`score-display ${isLastTimepoint ? 'score-display-last-timepoint' : ''}`}>
-      {/* Main scale score - 50% midnight blue background */}
       <div className="score-display-main">
-        <ScoreItem label={scale.name} value={scale.score} />
+        {/* Main scale score - 50% midnight blue background */}
+        <ScoreItemArray scale={scale} />
       </div>
 
       {/* Secondary scores (WI-NRS and SI-NRS) - 25% midnight blue background */}

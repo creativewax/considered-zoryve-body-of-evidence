@@ -81,62 +81,21 @@
         "nullable": true
       },
       {
+        "name": "Body Area Simple",
+        "camelCase": "bodyAreaSimple",
+        "type": "string",
+        "nullable": true,
+        "description": "Simplified body area category",
+        "options": [
+          "Head and neck",
+          "Torso",
+          "Arms and hands",
+          "Legs and feet"
+        ]
+      },
+      {
         "name": "Treatments Tried and Failed",
         "camelCase": "treatmentsTriedAndFailed",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Scale",
-        "camelCase": "scale",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Baseline",
-        "camelCase": "baseline",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Week 1 ",
-        "camelCase": "week1",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Week 2 ",
-        "camelCase": "week2",
-        "type": "integer",
-        "nullable": true
-      },
-      {
-        "name": "Week 4 ",
-        "camelCase": "week4",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Week 6",
-        "camelCase": "week6",
-        "type": "integer",
-        "nullable": true
-      },
-      {
-        "name": "Week 8 ",
-        "camelCase": "week8",
-        "type": "integer",
-        "nullable": true
-      },
-      {
-        "name": "Week 52",
-        "camelCase": "week52",
-        "type": "string",
-        "nullable": true
-      },
-      {
-        "name": "Week 56",
-        "camelCase": "week56",
         "type": "string",
         "nullable": true
       },
@@ -313,6 +272,72 @@
         "camelCase": "week52ImagePreview",
         "type": "string",
         "nullable": true
+      },
+      {
+        "name": "[scale*]",
+        "camelCase": "scaleData",
+        "type": "array",
+        "nullable": true,
+        "description": "Array of scale data objects",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "Scale",
+              "camelCase": "scale",
+              "type": "string",
+              "nullable": true
+            },
+            {
+              "name": "Baseline",
+              "camelCase": "baseline",
+              "type": "string",
+              "nullable": true
+            },
+            {
+              "name": "Week 1",
+              "camelCase": "week1",
+              "type": "string",
+              "nullable": true
+            },
+            {
+              "name": "Week 2",
+              "camelCase": "week2",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "Week 4",
+              "camelCase": "week4",
+              "type": "string",
+              "nullable": true
+            },
+            {
+              "name": "Week 6",
+              "camelCase": "week6",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "Week 8",
+              "camelCase": "week8",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "Week 52",
+              "camelCase": "week52",
+              "type": "string",
+              "nullable": true
+            },
+            {
+              "name": "Week 56",
+              "camelCase": "week56",
+              "type": "string",
+              "nullable": true
+            }
+          ]
+        }
       }
     ]
   },
@@ -390,6 +415,19 @@
         "camelCase": "bodyArea",
         "type": "string",
         "nullable": true
+      },
+      {
+        "name": "Body Area Simple",
+        "camelCase": "bodyAreaSimple",
+        "type": "string",
+        "nullable": true,
+        "description": "Simplified body area category",
+        "options": [
+          "Head and neck",
+          "Torso",
+          "Arms and hands",
+          "Legs and feet"
+        ]
       },
       {
         "name": "Treatments Tried and Failed",

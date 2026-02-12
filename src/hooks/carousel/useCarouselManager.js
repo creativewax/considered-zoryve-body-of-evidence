@@ -1,9 +1,71 @@
 /**
  * useCarouselManager.js
  *
- * Comprehensive carousel management hook extracted from MainView.jsx
- * Handles image fetching, layout calculation, manager initialisation, and fade transitions
- * Encapsulates the complex 73-line useEffect into a focused, reusable hook
+ * Manages the carousel lifecycle: fetching filtered images, calculating layout,
+ * initialising carousel managers, and animating transitions between states.
+ *
+ * Thumbnails are preloaded by ImageManager during app init — this hook only
+ * coordinates data and layout, it doesn't handle image loading.
+ *
+ * ---------------------------------------------------------------------------
+ * DATA FLOW
+ * ---------------------------------------------------------------------------
+ *
+ *   FilterManager.getFilters()   ──┐
+ *   AppStateManager.getSource()  ──┼──► DataManager.getFilteredImages(filters)
+ *                                  │
+ *                                  ▼
+ *                          filteredImages[]
+ *                                  │
+ *                                  ▼
+ *                      getLayoutConfig(imageCount)
+ *                                  │
+ *                                  ▼
+ *                             layoutConfig
+ *                                  │
+ *                     ┌────────────┼────────────┐
+ *                     ▼            ▼            ▼
+ *              PoolManager   RotationState   React state
+ *             .initialise    .setColumnAngle  { layoutConfig,
+ *                            .setRotation       imageCount }
+ *
+ * ---------------------------------------------------------------------------
+ * DATA STRUCTURES
+ * ---------------------------------------------------------------------------
+ *
+ * filteredImages[] — from DataManager.getFilteredImages(), one entry per patient:
+ *   [{
+ *     imagePath:  string   — full path to first valid image (e.g. '/patients/110-005_baseline.jpg')
+ *     field:      string   — which image field matched (e.g. 'baselineImage', 'week2Image')
+ *     patient:    object   — the full patient record with all PATIENT_SCHEMA fields:
+ *       {
+ *         referenceId, pageNumber, patientId,
+ *         condition, formulation, fitzpatrickSkinType,
+ *         gender, age, race, ethnicity,
+ *         bodyArea, bodyAreaSimple,
+ *         treatmentsTriedAndFailed, baselineSeverity, baselineBsa, durationOfDisease,
+ *         scale (or scale--don'tDisplay for practice-based),
+ *         baselineImage, week1Image, week2Image, ... week52Image,
+ *         baseline, week1, week2, ... week52 (score values),
+ *         itchScoreBaseline, itchScoreWeek1, itchScoreWeek4, itchScoreWeek8,
+ *         quote (practice-based only)
+ *       }
+ *   }]
+ *
+ * layoutConfig — calculated from image count via getLayoutConfig():
+ *   {
+ *     rows:            number   — row count (1, 3, or 5)
+ *     visibleColumns:  number   — how many columns the user sees at once
+ *     totalColumns:    number   — total columns to hold all images
+ *     imageSize:       number   — size of each image in 3D units
+ *     cylinderRadius:  number   — radius of the 3D cylinder
+ *     rowSpacing:      number   — vertical gap between rows
+ *     columnAngle:     number   — radians between adjacent columns
+ *     poolSize:        number   — number of active 3D frames (visible + buffer)
+ *     cameraZ:         number   — camera distance from cylinder
+ *   }
+ *
+ * ---------------------------------------------------------------------------
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react'
@@ -18,13 +80,29 @@ import { CAROUSEL_SETTINGS } from '../../constants/carousel.js'
 import useMultipleEventSubscriptions from '../common/useMultipleEventSubscriptions.js'
 import eventSystem from '../../utils/EventSystem.js'
 
+
+// ---------------------------------------------------------------------------
+// PURE HELPERS (no side-effects, easy to reason about)
+// ---------------------------------------------------------------------------
+
 /**
- * useCarouselManager - Carousel data, layout, fade transitions.
- * containerRef - Ref for fade animations.
- * Returns { layoutConfig, imageCount }.
- *
- * Note: Thumbnails are preloaded by ImageManager during app init
+ * Gather current filters + source from managers and fetch matching images.
+ * Returns { images, count }.
  */
+function fetchFilteredImages() {
+  const filters = {
+    ...filterManager.getFilters(),
+    source: appStateManager.getSource()
+  }
+  const images = dataManager.getFilteredImages(filters)
+  return { images, count: images.length }
+}
+
+
+// ---------------------------------------------------------------------------
+// HOOK
+// ---------------------------------------------------------------------------
+
 export const useCarouselManager = (containerRef) => {
   // ---------------------------------------------------------------------------
   // STATE
@@ -32,88 +110,118 @@ export const useCarouselManager = (containerRef) => {
 
   const [layoutConfig, setLayoutConfig] = useState(null)
   const [imageCount, setImageCount] = useState(0)
-  const pendingRef = useRef(null)
-  const currentRowsRef = useRef(null)
-  const isInitialisedRef = useRef(false)
+
+  // Refs for managing transition state between renders
+  const pendingRef = useRef(null)        // holds queued update during fade-out
+  const currentRowsRef = useRef(null)    // tracks current row count (null = first load)
+  const isInitialisedRef = useRef(false) // prevents double-init in StrictMode
 
   // ---------------------------------------------------------------------------
-  // CAROUSEL INIT
+  // APPLY — push a new config into all managers and React state
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Write the new carousel state everywhere it needs to go:
+   *  - React state (triggers re-render of Carousel3DScene)
+   *  - RotationStateManager (resets rotation to 0 with new column angle)
+   *  - PoolManager (builds the visible frame pool from images + config)
+   */
+  const applyCarouselState = useCallback((config, images, count) => {
+    setLayoutConfig(config)
+    setImageCount(count)
+    currentRowsRef.current = config.rows
+
+    rotationStateManager.setColumnAngle(config.columnAngle)
+    rotationStateManager.setRotation(0)
+    poolManager.initialisePool(config, images, 0)
+  }, [])
+
+  // ---------------------------------------------------------------------------
+  // RESET — clear everything when there are no images
+  // ---------------------------------------------------------------------------
+
+  const resetCarousel = useCallback(() => {
+    setLayoutConfig(null)
+    setImageCount(0)
+    currentRowsRef.current = null
+
+    rotationStateManager.reset()
+    poolManager.reset()
+  }, [])
+
+  // ---------------------------------------------------------------------------
+  // TRANSITION — fade out old carousel, apply new state, fade back in
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Crossfade to a new carousel state using GSAP.
+   * Stores the pending update in a ref so only the latest one is applied
+   * (if multiple filter changes fire in quick succession, earlier ones are dropped).
+   */
+  const transitionToNewState = useCallback((config, images, count) => {
+    pendingRef.current = { config, images, count }
+
+    gsap.to(containerRef.current, {
+      opacity: 0,
+      duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        // Grab the latest pending update (may differ from what started the fade)
+        const pending = pendingRef.current
+        if (!pending) return
+        pendingRef.current = null
+
+        // Apply new state while carousel is invisible
+        applyCarouselState(pending.config, pending.images, pending.count)
+
+        // Fade back in
+        gsap.to(containerRef.current, {
+          opacity: 1,
+          duration: CAROUSEL_SETTINGS.transitionFadeDuration,
+          ease: 'power2.inOut'
+        })
+      }
+    })
+  }, [containerRef, applyCarouselState])
+
+  // ---------------------------------------------------------------------------
+  // INIT — main entry point, called on mount and when filters/source change
   // ---------------------------------------------------------------------------
 
   const initCarousel = useCallback(() => {
-    // Fetch filtered images
-    // Combine filters from FilterManager with source from AppStateManager
-    // Note: Thumbnails already preloaded by ImageManager, no need to add paths
-    const filters = {
-      ...filterManager.getFilters(),
-      source: appStateManager.getSource()
-    }
-    const images = dataManager.getFilteredImages(filters)
-    const count = images.length
+    // 1. Get the current filtered images from managers
+    const { images, count } = fetchFilteredImages()
 
-    // Handle empty state - reset all carousel state
+    // 2. No results — clear the carousel
     if (count === 0) {
-      setLayoutConfig(null)
-      setImageCount(0)
-      rotationStateManager.reset()
-      poolManager.reset()
-      currentRowsRef.current = null
+      resetCarousel()
       return
     }
 
+    // 3. Calculate layout from image count (rows, columns, cylinder size, etc.)
     const config = getLayoutConfig(count)
-    const isInitialLoad = currentRowsRef.current === null
 
-    // Apply fade transition for filter changes (skip on initial load)
-    if (!isInitialLoad && containerRef.current) {
-      // Store pending update and fade out current carousel
-      pendingRef.current = { config, images, count }
-
-      gsap.to(containerRef.current, {
-        opacity: 0,
-        duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          const pending = pendingRef.current
-          if (!pending) return
-          pendingRef.current = null
-
-          // Update state with new carousel configuration
-          setLayoutConfig(pending.config)
-          setImageCount(pending.count)
-          currentRowsRef.current = pending.config.rows
-          rotationStateManager.setColumnAngle(pending.config.columnAngle)
-          rotationStateManager.setRotation(0)
-          poolManager.initialisePool(pending.config, pending.images, 0)
-
-          // Fade back in with new content
-          gsap.to(containerRef.current, {
-            opacity: 1,
-            duration: CAROUSEL_SETTINGS.transitionFadeDuration,
-            ease: 'power2.inOut'
-          })
-        }
-      })
-    } else {
-      // Initial load - apply state without animation
-      setLayoutConfig(config)
-      setImageCount(count)
-      currentRowsRef.current = config.rows
-      rotationStateManager.setColumnAngle(config.columnAngle)
-      rotationStateManager.setRotation(0)
-      poolManager.initialisePool(config, images, 0)
+    // 4. First load — apply immediately without animation
+    const isFirstLoad = currentRowsRef.current === null
+    if (isFirstLoad || !containerRef.current) {
+      applyCarouselState(config, images, count)
+      return
     }
-  }, [containerRef])
+
+    // 5. Subsequent updates — crossfade to new state
+    transitionToNewState(config, images, count)
+  }, [containerRef, resetCarousel, applyCarouselState, transitionToNewState])
 
   // ---------------------------------------------------------------------------
-  // SUBSCRIPTIONS & MOUNT
+  // SUBSCRIPTIONS — re-init when filters change or source switches
   // ---------------------------------------------------------------------------
 
   useMultipleEventSubscriptions([
     [eventSystem.constructor.EVENTS.IMAGES_UPDATED, initCarousel],
-    [eventSystem.constructor.EVENTS.CATEGORY_CHANGED, initCarousel],
+    [eventSystem.constructor.EVENTS.SOURCE_CHANGED, initCarousel],
   ], [initCarousel])
 
+  // Run once on mount (guarded against StrictMode double-fire)
   useEffect(() => {
     if (!isInitialisedRef.current) {
       isInitialisedRef.current = true
@@ -121,6 +229,10 @@ export const useCarouselManager = (containerRef) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ---------------------------------------------------------------------------
+  // PUBLIC API
+  // ---------------------------------------------------------------------------
 
   return { layoutConfig, imageCount }
 }

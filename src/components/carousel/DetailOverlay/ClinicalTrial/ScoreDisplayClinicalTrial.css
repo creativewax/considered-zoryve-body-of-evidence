@@ -17,6 +17,8 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;
 }

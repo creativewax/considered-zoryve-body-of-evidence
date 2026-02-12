@@ -4,11 +4,10 @@
  * Reset filters button. Enabled only when filters are active; subscribes to filter events.
  */
 
-import { useState, useEffect } from 'react'
 import FadeIn from '../../animations/FadeIn.jsx'
 import eventSystem from '../../../utils/EventSystem.js'
 import Button from '../../common/Button/Button.jsx'
-import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
+import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import filterManager from '../../../managers/FilterManager.js'
 import './FilterBottom.css'
 
@@ -18,27 +17,10 @@ import './FilterBottom.css'
 
 const FilterBottom = () => {
   // ---------------------------------------------------------------------------
-  // STATE
+  // STATE — single source of truth from FilterManager
   // ---------------------------------------------------------------------------
 
-  const [hasActiveFilters, setHasActiveFilters] = useState(false)
-
-  const checkFilters = () => {
-    setHasActiveFilters(filterManager.hasActiveFilters())
-  }
-
-  // ---------------------------------------------------------------------------
-  // EFFECTS
-  // ---------------------------------------------------------------------------
-
-  useEffect(() => {
-    checkFilters()
-  }, [])
-
-  useMultipleEventSubscriptions([
-    [eventSystem.constructor.EVENTS.FILTER_CHANGED, checkFilters],
-    [eventSystem.constructor.EVENTS.FILTERS_RESET, checkFilters],
-  ], [])
+  const hasActiveFilters = useManagerSubscription(filterManager, mgr => mgr.hasActiveFilters())
 
   // ---------------------------------------------------------------------------
   // HANDLERS

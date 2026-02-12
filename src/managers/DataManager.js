@@ -25,6 +25,7 @@ class DataManager {
     this.patientData = null
     this.schema = null
     this.isLoaded = false
+    this.listeners = new Set()
   }
 
   // ---------------------------------------------------------------------------
@@ -63,6 +64,8 @@ class DataManager {
         data: this.patientData,
         schema: this.schema
       })
+
+      this.notifyListeners()
 
       return { introData: this.introData, data: this.patientData, schema: this.schema }
     } catch (error) {
@@ -215,9 +218,7 @@ class DataManager {
     // Extract first valid image from each patient
     filteredPatients.forEach(patient => {
       const imageData = this.getFirstValidImage(patient, filters.source || DATA_SOURCE.CLINICAL_TRIAL)
-      if (imageData) {
-        images.push(imageData)
-      }
+      if (imageData) images.push(imageData)
     })
 
     return images
@@ -319,6 +320,21 @@ class DataManager {
   // Get intro data for landing page
   getIntroData() {
     return this.introData
+  }
+
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTION (same pattern as PoolManager / RotationStateManager)
+  // ---------------------------------------------------------------------------
+
+  subscribe(callback) {
+    this.listeners.add(callback)
+    return () => this.listeners.delete(callback)
+  }
+
+  notifyListeners() {
+    this.listeners.forEach(cb => {
+      try { cb() } catch (e) { console.error('DataManager:', e) }
+    })
   }
 }
 

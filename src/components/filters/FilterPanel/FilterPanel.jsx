@@ -5,7 +5,7 @@
  * background transitions on source change, and event subscriptions.
  */
 
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { DATA_SOURCE, ASSETS } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
@@ -16,7 +16,7 @@ import FilterTabs from './FilterTabs.jsx'
 import FilterBody from './FilterBody.jsx'
 import FilterBottom from './FilterBottom.jsx'
 import useBackgroundTransition from '../../../hooks/filters/useBackgroundTransition.js'
-import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
+import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import './FilterPanel.css'
 
 // ---------------------------------------------------------------------------
@@ -25,11 +25,11 @@ import './FilterPanel.css'
 
 const FilterPanel = () => {
   // ---------------------------------------------------------------------------
-  // STATE
+  // STATE — single source of truth from managers
   // ---------------------------------------------------------------------------
 
-  const [currentSource, setCurrentSource] = useState(appStateManager.getSource())
-  const [filters, setFilters] = useState(filterManager.getFilters())
+  const currentSource = useManagerSubscription(appStateManager, mgr => mgr.getSource())
+  const filters = useManagerSubscription(filterManager, mgr => mgr.getFilters())
   const backgroundRef = useRef(null)
 
   // ---------------------------------------------------------------------------
@@ -43,20 +43,10 @@ const FilterPanel = () => {
   }
 
   // ---------------------------------------------------------------------------
-  // EFFECTS - BACKGROUND AND EVENTS
+  // EFFECTS - BACKGROUND
   // ---------------------------------------------------------------------------
 
   useBackgroundTransition(backgroundRef, getFilterBackground, currentSource)
-
-  const handleCategoryChanged = (source) => {
-    setCurrentSource(source)
-  }
-
-  useMultipleEventSubscriptions([
-    [eventSystem.constructor.EVENTS.CATEGORY_CHANGED, handleCategoryChanged],
-    [eventSystem.constructor.EVENTS.FILTER_CHANGED, ({ filters: newFilters }) => setFilters(newFilters)],
-    [eventSystem.constructor.EVENTS.FILTERS_RESET, (newFilters) => setFilters(newFilters)],
-  ], [])
 
   // ---------------------------------------------------------------------------
   // HANDLERS

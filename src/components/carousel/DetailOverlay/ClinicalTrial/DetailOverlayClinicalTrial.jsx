@@ -24,7 +24,6 @@ import './DetailOverlayClinicalTrial.css'
 
 const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
   const { timepoints, showWiNrs, showSiNrs } = splitPatientData(patient, appStateManager.getSource())
-  const scaleName = patient.scale
   const nrsDef = getScaleDefinition('WI-NRS')
 
   const onExpandImage = (timepoints, index) => {
@@ -113,7 +112,7 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
         </div>
         <div className="detail-overlay-bottom-right">
           <ScaleLegendsClinicalTrial
-            scaleName={scaleName}
+            patient={patient}
             nrsDef={nrsDef}
             showWiNrs={showWiNrs}
             showSiNrs={showSiNrs}

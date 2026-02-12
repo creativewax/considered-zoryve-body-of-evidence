@@ -56,6 +56,8 @@ class FilterManager {
       [FILTER_KEYS.GENDER]: new Set(),
     }
 
+    this.listeners = new Set()
+
     // Listen to UI interaction events
     eventSystem.on(
       EventSystem.EVENTS.FILTER_SELECTED,
@@ -127,6 +129,7 @@ class FilterManager {
       // Update filter availability and trigger carousel refresh
       this.updateAvailability()
       this.triggerUpdate()
+      this.notifyListeners()
     }
   }
 
@@ -165,6 +168,7 @@ class FilterManager {
     // Update filter availability and trigger carousel refresh
     this.updateAvailability()
     this.triggerUpdate()
+    this.notifyListeners()
   }
 
   // ---------------------------------------------------------------------------
@@ -202,8 +206,9 @@ class FilterManager {
       [FILTER_KEYS.GENDER]: dataManager.getAvailableFilterOptions(filtersWithSource, FILTER_KEYS.GENDER),
     }
 
-    // Emit to components
+    // Emit to components and notify subscribers
     eventSystem.emit(EventSystem.EVENTS.FILTER_AVAILABILITY_CHANGED, this.availability)
+    this.notifyListeners()
   }
 
   // ---------------------------------------------------------------------------
@@ -239,6 +244,21 @@ class FilterManager {
    */
   reset() {
     this.handleResetRequested()
+  }
+
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTION (same pattern as PoolManager / RotationStateManager)
+  // ---------------------------------------------------------------------------
+
+  subscribe(callback) {
+    this.listeners.add(callback)
+    return () => this.listeners.delete(callback)
+  }
+
+  notifyListeners() {
+    this.listeners.forEach(cb => {
+      try { cb() } catch (e) { console.error('FilterManager:', e) }
+    })
   }
 }
 

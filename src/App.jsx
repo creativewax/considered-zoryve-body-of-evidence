@@ -14,7 +14,8 @@ import dataManager from './managers/DataManager.js'
 import imageManager from './managers/ImageManager.js'
 import appStateManager from './managers/AppStateManager.js'
 import eventSystem from './utils/EventSystem.js'
-import useMultipleEventSubscriptions from './hooks/common/useMultipleEventSubscriptions.js'
+import useManagerSubscription from './hooks/common/useManagerSubscription.js'
+import useEventSubscription from './hooks/common/useEventSubscription.js'
 import Background from './components/common/Background/Background.jsx'
 import DraftWatermark from './components/common/DraftWatermark/DraftWatermark.jsx'
 import IntroPage from './pages/IntroPage/IntroPage.jsx'
@@ -28,10 +29,10 @@ import './App.css'
 
 function App() {
   // ---------------------------------------------------------------------------
-  // STATE
+  // STATE — appState from manager (single source of truth)
   // ---------------------------------------------------------------------------
 
-  const [appState, setAppState] = useState(APP_STATE.LOADING)
+  const appState = useManagerSubscription(appStateManager, mgr => mgr.getState())
   const [loadingStage, setLoadingStage] = useState('Loading patient data...')
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [imageViewerState, setImageViewerState] = useState(null) // { timepoints, index }
@@ -74,7 +75,6 @@ function App() {
         setLoadingProgress(100)
 
         // Transition to intro page once everything is loaded
-        setAppState(APP_STATE.INTRO)
         appStateManager.setState(APP_STATE.INTRO)
       } catch (error) {
         console.error('Failed to initialise app:', error)
@@ -85,11 +85,17 @@ function App() {
     initialiseApp()
   }, [])
 
-  useMultipleEventSubscriptions([
-    [eventSystem.constructor.EVENTS.APP_STATE_CHANGED, (newState) => setAppState(newState)],
-    [eventSystem.constructor.EVENTS.IMAGE_VIEWER_OPENED, ({ timepoints, index }) => setImageViewerState({ timepoints, index })],
-    [eventSystem.constructor.EVENTS.IMAGE_VIEWER_CLOSED, () => setImageViewerState(null)],
-  ], [])
+  // Image viewer events (these are UI-only events, not manager state)
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.IMAGE_VIEWER_OPENED,
+    ({ timepoints, index }) => setImageViewerState({ timepoints, index }),
+    []
+  )
+  useEventSubscription(
+    eventSystem.constructor.EVENTS.IMAGE_VIEWER_CLOSED,
+    () => setImageViewerState(null),
+    []
+  )
 
   // ---------------------------------------------------------------------------
   // RENDER - LOADING STATE

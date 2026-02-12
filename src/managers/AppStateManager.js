@@ -16,6 +16,7 @@ class AppStateManager {
     this.currentState = APP_STATE.LOADING
     this.currentSource = DATA_SOURCE.CLINICAL_TRIAL
     this.selectedImage = null
+    this.listeners = new Set()
 
     // Listen to UI interaction events (event-driven architecture)
     eventSystem.on(
@@ -30,6 +31,14 @@ class AppStateManager {
       eventSystem.constructor.EVENTS.IMAGE_DESELECTED,
       this.handleImageDeselected.bind(this)
     )
+    eventSystem.on(
+      eventSystem.constructor.EVENTS.FILTER_CHANGED,
+      this.handleFilterChanged.bind(this)
+    )
+    eventSystem.on(
+      eventSystem.constructor.EVENTS.IMAGES_UPDATED,
+      this.handleImagesUpdated.bind(this)
+    )
   }
 
   // ---------------------------------------------------------------------------
@@ -41,6 +50,7 @@ class AppStateManager {
     if (this.currentState !== newState) {
       this.currentState = newState
       eventSystem.emit(eventSystem.constructor.EVENTS.APP_STATE_CHANGED, newState)
+      this.notifyListeners()
     }
   }
 
@@ -53,11 +63,11 @@ class AppStateManager {
   // DATA SOURCE MANAGEMENT
   // ---------------------------------------------------------------------------
 
-  // Set data source (Clinical Trial or Practice-Based)
+  // Store data source and notify subscribers
   setSource(source) {
     if (this.currentSource !== source) {
       this.currentSource = source
-      eventSystem.emit(eventSystem.constructor.EVENTS.CATEGORY_CHANGED, source)
+      this.notifyListeners()
     }
   }
 
@@ -70,10 +80,10 @@ class AppStateManager {
   // IMAGE SELECTION
   // ---------------------------------------------------------------------------
 
-  // Set selected image and emit event
+  // Store selected image and notify subscribers
   setSelectedImage(imageData) {
     this.selectedImage = imageData
-    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_CLICKED, imageData)
+    this.notifyListeners()
   }
 
   // Get currently selected image
@@ -108,8 +118,36 @@ class AppStateManager {
    * Responds to IMAGE_DESELECTED event emitted by DetailOverlay component
    */
   handleImageDeselected() {
-    // Clear selected image
     this.setSelectedImage(null)
+  }
+
+  /**
+   * Handle filter changed — clear selected image (overlay closes on filter change)
+   */
+  handleFilterChanged() {
+    this.setSelectedImage(null)
+  }
+
+  /**
+   * Handle images updated — clear selected image (overlay closes when image pool changes)
+   */
+  handleImagesUpdated() {
+    this.setSelectedImage(null)
+  }
+
+  // ---------------------------------------------------------------------------
+  // SUBSCRIPTION (same pattern as PoolManager / RotationStateManager)
+  // ---------------------------------------------------------------------------
+
+  subscribe(callback) {
+    this.listeners.add(callback)
+    return () => this.listeners.delete(callback)
+  }
+
+  notifyListeners() {
+    this.listeners.forEach(cb => {
+      try { cb() } catch (e) { console.error('AppStateManager:', e) }
+    })
   }
 }
 

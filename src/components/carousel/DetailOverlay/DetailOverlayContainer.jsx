@@ -3,28 +3,33 @@
  *
  * Minimal container component that handles overlay rendering logic.
  * Determines which overlay type to show (Clinical Trial vs Practice-Based) based on data source.
+ * Uses useManagerSubscription to read selected image from AppStateManager (single source of truth).
  */
 
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import eventSystem from '../../../utils/EventSystem'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
 import { DATA_SOURCE } from '../../../constants/index.js'
 import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
+import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import appStateManager from '../../../managers/AppStateManager.js'
 import DetailOverlayClinicalTrial from './ClinicalTrial/DetailOverlayClinicalTrial.jsx'
 import DetailOverlayPracticeBased from './PracticeBased/DetailOverlayPracticeBased.jsx'
 import './DetailOverlayContainer.css'
 
 const DetailOverlayContainer = () => {
-  const [selected, setSelected] = useState(null)
   const isClosingRef = useRef(false)
+
+  // Read selected image from AppStateManager via subscription (single source of truth)
+  const selected = useManagerSubscription(appStateManager, (mgr) => mgr.getSelectedImage())
 
   // ---------------------------------------------------------------------------
   // HANDLERS
   // ---------------------------------------------------------------------------
 
   const close = () => {
+    isClosingRef.current = true
     eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
   }
 
@@ -34,19 +39,16 @@ const DetailOverlayContainer = () => {
     }
   }
 
-  const handleImageClicked = (data) => {
+  const handleOpen = () => {
     isClosingRef.current = false
-    setSelected(data)
   }
 
   const handleClose = () => {
     isClosingRef.current = true
-    setSelected(null)
   }
 
   useMultipleEventSubscriptions([
-    [eventSystem.constructor.EVENTS.IMAGE_CLICKED, handleImageClicked],
-    [eventSystem.constructor.EVENTS.IMAGE_DESELECTED, handleClose],
+    [eventSystem.constructor.EVENTS.IMAGE_SELECTED, handleOpen],
     [eventSystem.constructor.EVENTS.FILTER_CHANGED, handleClose],
     [eventSystem.constructor.EVENTS.IMAGES_UPDATED, handleClose],
   ], [])

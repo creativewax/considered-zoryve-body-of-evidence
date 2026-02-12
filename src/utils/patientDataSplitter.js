@@ -39,12 +39,13 @@ function isValidValue(value) {
  * Clinical Trial: numeric scores in 'baseline', 'week2', etc.
  * Practice-Based: text scores in 'baselineSeverity', 'week2Severity', etc.
  */
-function getScoreForTimepoint(patient, timepoint, source) {
+function getScoreForTimepoint(patient, timepoint, source, hasScaleData = false, index = 0) {
   const isClinicalTrial = source === DATA_SOURCE.CLINICAL_TRIAL
 
   if (isClinicalTrial) {
     // Clinical Trial: direct numeric scores
-    return patient[timepoint]
+    if (hasScaleData) return patient.scaleData[index][timepoint]
+    else return patient[timepoint]
   } else {
     // Practice-Based: severity text values
     const severityKey = timepoint === 'baseline' ? 'baselineSeverity' : `${timepoint}Severity`
@@ -128,12 +129,12 @@ function sortTimepointsChronologically(timepoints) {
 /**
  * Finds available timepoints that have both an image and a score
  */
-function getAvailableTimepoints(patient, source) {
+function getAvailableTimepoints(patient, source, hasScaleData = false) {
   const available = []
 
   for (const timepoint of ALL_WEEKS) {
     const image = getImageForTimepoint(patient, timepoint)
-    const score = getScoreForTimepoint(patient, timepoint, source)
+    const score = getScoreForTimepoint(patient, timepoint, source, hasScaleData)
 
     // Only include if both image and score exist and are valid
     if (isValidValue(image) && isValidValue(score)) {
@@ -200,14 +201,15 @@ function selectTimepoints(availableTimepoints) {
 export function splitPatientData(patient, source) {
   if (!patient) return { timepoints: [], showWiNrs: false, showSiNrs: false }
 
+  // Lets check if we have scaleData vs flat key/value pairs
+  const hasScaleData = patient.scaleData !== undefined
+
   // Get all available timepoints with images and scores
-  const available = getAvailableTimepoints(patient, source)
+  // this does not need to know about the scale data type
+  const available = getAvailableTimepoints(patient, source, hasScaleData)
 
   // Select which 3 timepoints to show
   const selectedTimepoints = selectTimepoints(available)
-
-  // Get scale name from patient data
-  const scaleName = patient.scale
 
   // Build the result array
   const result = selectedTimepoints.map(timepoint => {
@@ -220,15 +222,29 @@ export function splitPatientData(patient, source) {
     const validWiNrs = isValidValue(wiNrs) ? wiNrs : null
     const validSiNrs = isValidValue(siNrs) ? siNrs : null
 
+    // We will setup scale as either an object or an array based on the data type
+    let scale = null
+    if (hasScaleData) {
+      scale = []
+      for (let i = 0; i < patient.scaleData.length; i++) {
+        scale.push({
+          name: patient.scaleData[i].scale,
+          score: getScoreForTimepoint(patient, timepoint, source, true, i)
+        })
+      }
+    } else {
+      scale = {
+        name: patient.scale,
+        score: getScoreForTimepoint(patient, timepoint, source)
+      }
+    }
+
     return {
       timepoint,
       label: formatTimepointLabel(timepoint),
       image: imagePath,
       thumb: thumbPath,
-      scale: {
-        name: scaleName,
-        score: getScoreForTimepoint(patient, timepoint, source)
-      },
+      scale: scale,
       // Keep raw values (null if not valid) - display component will show "-" for null
       wiNrs: validWiNrs,
       siNrs: validSiNrs
@@ -244,4 +260,7 @@ export function splitPatientData(patient, source) {
     showWiNrs,
     showSiNrs
   }
+}
+
+function setupScale(patient, timepoint, source, hasScaleData) {
 }

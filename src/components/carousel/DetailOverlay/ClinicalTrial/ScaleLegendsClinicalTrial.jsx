@@ -10,11 +10,29 @@ import { TRANSITIONS } from '../../../../constants/animations.js'
 import { STANDARD_SCALE_DEFINITIONS } from '../../../../constants/scaleDefinitions.js'
 import ScaleLegend from '../Common/ScaleLegend.jsx'
 
-const ScaleLegendsClinicalTrial = ({ scaleName, nrsDef, showWiNrs, showSiNrs }) => {
+const ScaleLegendsClinicalTrial = ({ patient, nrsDef, showWiNrs, showSiNrs }) => {
   // Combine WI-NRS and SI-NRS into single legend if both are shown
   const showCombinedNrs = showWiNrs && showSiNrs
   const showWiNrsOnly = showWiNrs && !showSiNrs
   const showSiNrsOnly = showSiNrs && !showWiNrs
+
+  // lets check if we have scaleData vs flat key/value pairs
+  const hasScaleData = patient.scaleData !== undefined
+  let scaleName = ""
+  if (hasScaleData) {
+    let scaleCount = 0
+    // lets append each scale name to one string with / between them if there is more than one valid scale
+    patient.scaleData.forEach(scale => {
+      if (scale.scale !== null && scale.scale !== undefined) {
+        if (scaleCount >= 1) scaleName += '/'
+        scaleName += scale.scale
+        scaleCount++
+      }
+    })
+  } else {
+    scaleName = patient.scale
+    console.log(scaleName)
+  }
 
   return (
     <motion.div

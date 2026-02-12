@@ -66,10 +66,10 @@ export const useBackgroundTransition = (backgroundRef, getBackgroundUrl, initial
     img.src = imageUrl
   }
 
-  // Subscribe to category change events
+  // Subscribe to source change events
   useEventSubscription(
-    eventSystem.constructor.EVENTS.CATEGORY_CHANGED,
-    handleCategoryChange,
+    eventSystem.constructor.EVENTS.SOURCE_CHANGED,
+    ({ source }) => handleCategoryChange(source),
     [backgroundRef, getBackgroundUrl, className]
   )
 }

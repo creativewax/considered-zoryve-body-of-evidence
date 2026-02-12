@@ -12,8 +12,8 @@ import useBackgroundTransition from '../../../hooks/filters/useBackgroundTransit
 import './Background.css'
 
 /**
- * Background - Full-screen background that crossfades when data source (category) changes.
- * Listens to CATEGORY_CHANGED events.
+ * Background - Full-screen background that crossfades when data source changes.
+ * Listens to SOURCE_CHANGED events.
  */
 const Background = () => {
   const backgroundRef = useRef(null)
