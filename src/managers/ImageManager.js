@@ -9,7 +9,7 @@
 import * as THREE from 'three'
 import eventSystem from '../utils/EventSystem.js'
 import dataManager from './DataManager.js'
-import { DATA_SOURCE, ASSETS } from '../constants/index.js'
+import { IMAGE_FIELDS, ASSETS } from '../constants/index.js'
 
 // ---------------------------------------------------------------------------
 // IMAGE MANAGER CLASS
@@ -55,7 +55,7 @@ class ImageManager {
   // ---------------------------------------------------------------------------
 
   /**
-   * Preload all thumbnail images for all patients across both data sources.
+   * Preload all thumbnail images for all patients.
    * Runs during the app loading screen. Loads thumbnails in parallel.
    */
   async preloadThumbnails() {
@@ -94,26 +94,17 @@ class ImageManager {
     eventSystem.emit(eventSystem.constructor.EVENTS.IMAGES_READY)
   }
 
-  /** Get all image paths from all patients in both data sources. */
+  /** Get all image paths from all patients. */
   getAllImagePaths() {
     const imagePaths = new Set()
+    const patients = dataManager.getPatients()
 
-    const sources = [
-      { source: DATA_SOURCE.CLINICAL_TRIAL },
-      { source: DATA_SOURCE.PRACTICE_BASED }
-    ]
-
-    sources.forEach(({ source }) => {
-      const patients = dataManager.getPatientsBySource(source)
-      const imageFields = dataManager.getImageFields(source)
-
-      patients.forEach(patient => {
-        imageFields.forEach(field => {
-          if (patient[field] && patient[field].trim() !== '') {
-            const imagePath = `${ASSETS.PATIENTS_PATH}${patient[field]}`
-            imagePaths.add(imagePath)
-          }
-        })
+    patients.forEach(patient => {
+      IMAGE_FIELDS.forEach(field => {
+        if (patient[field] && patient[field].trim() !== '') {
+          const imagePath = `${ASSETS.PATIENTS_PATH}${patient[field]}`
+          imagePaths.add(imagePath)
+        }
       })
     })
 

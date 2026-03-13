@@ -11,8 +11,7 @@
  * DATA FLOW
  * ---------------------------------------------------------------------------
  *
- *   FilterManager.getFilters()   ──┐
- *   AppStateManager.getSource()  ──┼──► DataManager.getFilteredImages(filters)
+ *   FilterManager.getFilters()   ────► DataManager.getFilteredImages(filters)
  *                                  │
  *                                  ▼
  *                          filteredImages[]
@@ -44,11 +43,9 @@
  *         gender, age, race, ethnicity,
  *         bodyArea, bodyAreaSimple,
  *         treatmentsTriedAndFailed, baselineSeverity, baselineBsa, durationOfDisease,
- *         scale (or scale--don'tDisplay for practice-based),
+ *         scale,
  *         baselineImage, week1Image, week2Image, ... week52Image,
- *         baseline, week1, week2, ... week52 (score values),
- *         itchScoreBaseline, itchScoreWeek1, itchScoreWeek4, itchScoreWeek8,
- *         quote (practice-based only)
+ *         baseline, week1, week2, ... week52 (score values)
  *       }
  *   }]
  *
@@ -71,7 +68,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { gsap } from 'gsap'
 import dataManager from '../../managers/DataManager.js'
-import appStateManager from '../../managers/AppStateManager.js'
 import filterManager from '../../managers/FilterManager.js'
 import poolManager from '../../managers/PoolManager.js'
 import rotationStateManager from '../../managers/RotationStateManager.js'
@@ -86,14 +82,11 @@ import eventSystem from '../../utils/EventSystem.js'
 // ---------------------------------------------------------------------------
 
 /**
- * Gather current filters + source from managers and fetch matching images.
+ * Gather current filters from manager and fetch matching images.
  * Returns { images, count }.
  */
 function fetchFilteredImages() {
-  const filters = {
-    ...filterManager.getFilters(),
-    source: appStateManager.getSource()
-  }
+  const filters = filterManager.getFilters()
   const images = dataManager.getFilteredImages(filters)
   return { images, count: images.length }
 }
@@ -213,12 +206,11 @@ export const useCarouselManager = (containerRef) => {
   }, [containerRef, resetCarousel, applyCarouselState, transitionToNewState])
 
   // ---------------------------------------------------------------------------
-  // SUBSCRIPTIONS — re-init when filters change or source switches
+  // SUBSCRIPTIONS — re-init when filters change
   // ---------------------------------------------------------------------------
 
   useMultipleEventSubscriptions([
     [eventSystem.constructor.EVENTS.IMAGES_UPDATED, initCarousel],
-    [eventSystem.constructor.EVENTS.SOURCE_CHANGED, initCarousel],
   ], [initCarousel])
 
   // Run once on mount (guarded against StrictMode double-fire)

@@ -13,10 +13,8 @@
 /**
  * Patient data field names used in JSON data
  * Maps logical field names to the actual keys in patient data objects
- * Supports both Clinical Trial and Practice-Based data sources
  */
 export const PATIENT_SCHEMA = {
-  // Common fields
   REFERENCE_ID: 'referenceId',
   PAGE_NUMBER: 'pageNumber',
   PATIENT_ID: 'patientId',
@@ -35,26 +33,6 @@ export const PATIENT_SCHEMA = {
   BASELINE_SEVERITY: 'baselineSeverity',
   BASELINE_BSA: 'baselineBsa',
   DURATION_OF_DISEASE: 'durationOfDisease',
-  
-  // Practice-Based specific
-  PRACTICE_BASED_OR_CLINICAL_TRIAL: 'practice-basedOrClinicalTrial',
-  SCALE_DONT_DISPLAY: 'scale--don\'tDisplay',
-  WEEK1_SEVERITY: 'week1Severity',
-  WEEK2_SEVERITY: 'week2Severity',
-  WEEK4_SEVERITY: 'week4Severity',
-  WEEK8_SEVERITY: 'week8Severity',
-  ITCH_SCORE_BASELINE: 'itchScoreBaseline',
-  ITCH_SCORE_WEEK1: 'itchScoreWeek1',
-  ITCH_SCORE_WEEK4: 'itchScoreWeek4',
-  ITCH_SCORE_WEEK8: 'itchScoreWeek8',
-  BASELINE_IMAGE: 'baselineImage',
-  WEEK1_IMAGE: 'week1Image',
-  WEEK4_IMAGE: 'week4Image',
-  WEEK8_IMAGE: 'week8Image',
-  QUOTE: 'quote',
-  
-  // Clinical Trial (iCVA 2.1) specific
-  REAL_WORLD_OR_CLINICAL_TRIAL: 'realWorldOrClinicalTrial',
   SCALE: 'scale',
   BASELINE: 'baseline',
   WEEK1: 'week1',
@@ -65,9 +43,13 @@ export const PATIENT_SCHEMA = {
   WEEK8: 'week8',
   WEEK52: 'week52',
   WEEK56: 'week56',
+  BASELINE_IMAGE: 'baselineImage',
+  WEEK1_IMAGE: 'week1Image',
   WEEK2_IMAGE: 'week2Image',
   WEEK3_IMAGE: 'week3Image',
+  WEEK4_IMAGE: 'week4Image',
   WEEK6_IMAGE: 'week6Image',
+  WEEK8_IMAGE: 'week8Image',
   WEEK52_IMAGE: 'week52Image',
 }
 
@@ -145,44 +127,23 @@ export const FILTER_KEYS = {
 // ---------------------------------------------------------------------------
 
 /**
- * Data source display names (shown in UI tabs)
+ * Data source key as it appears in patient_data.json
  */
-export const DATA_SOURCE = {
-  CLINICAL_TRIAL: 'Clinical Trial',
-  PRACTICE_BASED: 'Practice-Based',
-}
+export const DATA_SOURCE_KEY = 'iCVA 2.1'
 
 /**
- * Data source keys as they appear in the patient data JSON
- * Maps to the top-level keys in patient_data.json
+ * Image field names (in chronological order)
  */
-export const DATA_SOURCE_KEYS = {
-  CLINICAL_TRIAL: 'iCVA 2.1',
-  PRACTICE_BASED: 'Practice-Based Patients',
-}
-
-/**
- * Image field names for each data source
- * Clinical Trial data has more time points (up to week 52) than Practice-Based data
- */
-export const IMAGE_FIELDS = {
-  CLINICAL_TRIAL: [
-    'baselineImage',
-    'week1Image',
-    'week2Image',
-    'week3Image',
-    'week4Image',
-    'week6Image',
-    'week8Image',
-    'week52Image',
-  ],
-  PRACTICE_BASED: [
-    'baselineImage',
-    'week1Image',
-    'week4Image',
-    'week8Image',
-  ],
-}
+export const IMAGE_FIELDS = [
+  'baselineImage',
+  'week1Image',
+  'week2Image',
+  'week3Image',
+  'week4Image',
+  'week6Image',
+  'week8Image',
+  'week52Image',
+]
 
 // ---------------------------------------------------------------------------
 // DATA MAPPING
@@ -225,14 +186,8 @@ export const COLOURS = {
  * All paths are relative to the public directory
  */
 export const ASSETS = {
-  BACKGROUNDS: {
-    CLINICAL_TRIAL: '/UI/bkgd-ct.jpg',
-    PRACTICE_BASED: '/UI/bkgd-pb.jpg',
-  },
-  FILTER_BACKGROUNDS: {
-    CLINICAL_TRIAL: '/UI/filter-bkgd-ct.jpg',
-    PRACTICE_BASED: '/UI/filter-bkgd-pb.jpg',
-  },
+  BACKGROUND: '/UI/bkgd-ct.jpg',
+  FILTER_BACKGROUND: '/UI/filter-bkgd-ct.jpg',
   ICONS: {
     MALE: '/UI/icon-male.svg',
     FEMALE: '/UI/icon-female.svg',
@@ -437,9 +392,7 @@ export const NAVIGATION_DIRECTION = {
  * @property {string} thumb - Thumbnail image filename (e.g., 'dc_ear_baseline_thumb.jpg')
  * @property {Object} scale - Main severity scale score
  * @property {string} scale.name - Scale name (e.g., 'IGA', 'v-IGA-AD', 'S-IGA')
- * @property {string|number|null} scale.score - Score value (null shown as "-" in UI)
- *   - Clinical Trial: numeric (e.g., 0, 1, 2, 3)
- *   - Practice-Based: text severity (e.g., 'Clear', 'Mild', 'Moderate', 'Severe')
+ * @property {string|number|null} scale.score - Score value (null shown as "-" in UI, numeric e.g., 0, 1, 2, 3)
  * @property {string|number|null} wiNrs - WI-NRS (Worst Itch Numerical Rating Scale) score
  *   - null if not available or "Not Reported" (shown as "-" in UI when section is displayed)
  *   - numeric value 0-10 if available
@@ -481,41 +434,5 @@ export const NAVIGATION_DIRECTION = {
  *   ],
  *   showWiNrs: true,   // At least one timepoint has WI-NRS data
  *   showSiNrs: false   // No timepoints have SI-NRS data
- * }
- *
- * @example
- * // splitPatientData() return structure for Practice-Based patient
- * {
- *   timepoints: [
- *     {
- *       timepoint: 'baseline',
- *       label: 'Baseline',
- *       image: 'dc_ear_baseline.jpg',
- *       thumb: 'dc_ear_baseline_thumb.jpg',
- *       scale: { name: 'IGA', score: 'Moderate' },
- *       wiNrs: null,
- *       siNrs: null
- *     },
- *     {
- *       timepoint: 'week2',
- *       label: 'Week 2',
- *       image: 'dc_ear_week2.jpg',
- *       thumb: 'dc_ear_week2_thumb.jpg',
- *       scale: { name: 'IGA', score: 'Mild' },
- *       wiNrs: null,
- *       siNrs: null
- *     },
- *     {
- *       timepoint: 'week8',
- *       label: 'Week 8',
- *       image: 'dc_ear_week8.jpg',
- *       thumb: 'dc_ear_week8_thumb.jpg',
- *       scale: { name: 'IGA', score: 'Clear' },
- *       wiNrs: null,
- *       siNrs: null
- *     }
- *   ],
- *   showWiNrs: false,  // No WI-NRS data for practice-based patients
- *   showSiNrs: false   // No SI-NRS data for practice-based patients
  * }
  */

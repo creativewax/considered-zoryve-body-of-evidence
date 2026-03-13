@@ -2,10 +2,8 @@
  * patientDataSplitter.js
  *
  * Utility functions for processing patient data and determining which timepoints to display.
- * Handles both Clinical Trial and Practice-Based patient data formats.
  */
 
-import { DATA_SOURCE } from '../constants/index.js'
 import imageManager from '../managers/ImageManager.js'
 
 // ---------------------------------------------------------------------------
@@ -35,69 +33,37 @@ function isValidValue(value) {
 }
 
 /**
- * Gets score for a specific timepoint
- * Clinical Trial: numeric scores in 'baseline', 'week2', etc.
- * Practice-Based: text scores in 'baselineSeverity', 'week2Severity', etc.
+ * Gets score for a specific timepoint (numeric scores in 'baseline', 'week2', etc.)
  */
-function getScoreForTimepoint(patient, timepoint, source, hasScaleData = false, index = 0) {
-  const isClinicalTrial = source === DATA_SOURCE.CLINICAL_TRIAL
-
-  if (isClinicalTrial) {
-    // Clinical Trial: direct numeric scores
-    if (hasScaleData) return patient.scaleData[index][timepoint]
-    else return patient[timepoint]
-  } else {
-    // Practice-Based: severity text values
-    const severityKey = timepoint === 'baseline' ? 'baselineSeverity' : `${timepoint}Severity`
-    return patient[severityKey]
-  }
+function getScoreForTimepoint(patient, timepoint, hasScaleData = false, index = 0) {
+  if (hasScaleData) return patient.scaleData[index][timepoint]
+  return patient[timepoint]
 }
 
 /**
- * Gets WI-NRS/Itch score for a specific timepoint
- * Clinical Trial: uses 'wi-nrsBaseline', 'wi-nrsWeek1', etc.
- * Practice-Based: uses 'itchScoreBaseline', 'itchScoreWeek1', etc.
+ * Gets WI-NRS score for a specific timepoint
+ * Uses 'wi-nrsBaseline', 'wi-nrsWeek1', etc.
  */
-function getWiNrsForTimepoint(patient, timepoint, source) {
-  const isPracticeBased = source === DATA_SOURCE.PRACTICE_BASED
-
-  if (timepoint === 'baseline') {
-    return isPracticeBased ? patient['itchScoreBaseline'] : patient['wi-nrsBaseline']
-  }
-
-  // Extract week number (e.g., 'week2' -> '2')
+function getWiNrsForTimepoint(patient, timepoint) {
+  if (timepoint === 'baseline') return patient['wi-nrsBaseline']
   const weekNum = timepoint.replace('week', '')
-
-  if (isPracticeBased) {
-    // Practice-Based uses camelCase: itchScoreWeek1, itchScoreWeek4, etc.
-    const key = `itchScoreWeek${weekNum}`
-    return patient[key]
-  } else {
-    // Clinical Trial uses hyphenated: wi-nrsWeek1, wi-nrsWeek2, etc.
-    const key = `wi-nrsWeek${weekNum}`
-    return patient[key]
-  }
+  return patient[`wi-nrsWeek${weekNum}`]
 }
 
 /**
  * Gets SI-NRS score for a specific timepoint
  */
 function getSiNrsForTimepoint(patient, timepoint) {
-  if (timepoint === 'baseline') {
-    return patient['si-nrsBaseline']
-  }
-  // Extract week number (e.g., 'week2' -> '2')
+  if (timepoint === 'baseline') return patient['si-nrsBaseline']
   const weekNum = timepoint.replace('week', '')
-  const key = `si-nrsWeek${weekNum}`
-  return patient[key]
+  return patient[`si-nrsWeek${weekNum}`]
 }
 
 /**
  * Gets image path for a specific timepoint
  */
 function getImageForTimepoint(patient, timepoint) {
-  const imageKey = `${timepoint}Image`
-  return patient[imageKey]
+  return patient[`${timepoint}Image`]
 }
 
 /**
@@ -105,7 +71,6 @@ function getImageForTimepoint(patient, timepoint) {
  */
 function formatTimepointLabel(timepoint) {
   if (timepoint === 'baseline') return 'Baseline'
-  // Convert 'week2' to 'Week 2', 'week52' to 'Week 52', etc.
   const weekNum = timepoint.replace('week', '')
   return `Week ${weekNum}`
 }
@@ -115,11 +80,8 @@ function formatTimepointLabel(timepoint) {
  */
 function sortTimepointsChronologically(timepoints) {
   return [...timepoints].sort((a, b) => {
-    // Baseline always comes first
     if (a === 'baseline') return -1
     if (b === 'baseline') return 1
-
-    // Extract week numbers and compare
     const weekA = parseInt(a.replace('week', ''))
     const weekB = parseInt(b.replace('week', ''))
     return weekA - weekB
@@ -129,14 +91,13 @@ function sortTimepointsChronologically(timepoints) {
 /**
  * Finds available timepoints that have both an image and a score
  */
-function getAvailableTimepoints(patient, source, hasScaleData = false) {
+function getAvailableTimepoints(patient, hasScaleData = false) {
   const available = []
 
   for (const timepoint of ALL_WEEKS) {
     const image = getImageForTimepoint(patient, timepoint)
-    const score = getScoreForTimepoint(patient, timepoint, source, hasScaleData)
+    const score = getScoreForTimepoint(patient, timepoint, hasScaleData)
 
-    // Only include if both image and score exist and are valid
     if (isValidValue(image) && isValidValue(score)) {
       available.push(timepoint)
     }
@@ -151,23 +112,20 @@ function getAvailableTimepoints(patient, source, hasScaleData = false) {
  * Returns timepoints sorted chronologically
  */
 function selectTimepoints(availableTimepoints) {
-  // Always try to include baseline first
   const selected = []
 
   if (availableTimepoints.includes('baseline')) {
     selected.push('baseline')
   }
 
-  // Try to add preferred timepoints
   for (const preferred of PREFERRED_TIMEPOINTS) {
-    if (preferred === 'baseline') continue // Already added
+    if (preferred === 'baseline') continue
     if (availableTimepoints.includes(preferred) && !selected.includes(preferred)) {
       selected.push(preferred)
     }
     if (selected.length >= 3) break
   }
 
-  // If we don't have 3 yet, add any remaining available timepoints
   if (selected.length < 3) {
     for (const timepoint of availableTimepoints) {
       if (!selected.includes(timepoint)) {
@@ -177,7 +135,6 @@ function selectTimepoints(availableTimepoints) {
     }
   }
 
-  // Sort chronologically before returning
   return sortTimepointsChronologically(selected)
 }
 
@@ -190,52 +147,37 @@ function selectTimepoints(availableTimepoints) {
  * Returns object with timepoint array and flags for showing WI-NRS/SI-NRS sections
  *
  * @param {Object} patient - Patient data object
- * @param {string} source - Data source (DATA_SOURCE.CLINICAL_TRIAL or DATA_SOURCE.PRACTICE_BASED)
- * @returns {Object} Object with structure:
- *   {
- *     timepoints: Array of timepoint objects,
- *     showWiNrs: boolean,  // true if any timepoint has WI-NRS data
- *     showSiNrs: boolean   // true if any timepoint has SI-NRS data
- *   }
+ * @returns {Object} { timepoints, showWiNrs, showSiNrs }
  */
-export function splitPatientData(patient, source) {
+export function splitPatientData(patient) {
   if (!patient) return { timepoints: [], showWiNrs: false, showSiNrs: false }
 
-  // Lets check if we have scaleData vs flat key/value pairs
   const hasScaleData = patient.scaleData !== undefined
-
-  // Get all available timepoints with images and scores
-  // this does not need to know about the scale data type
-  const available = getAvailableTimepoints(patient, source, hasScaleData)
-
-  // Select which 3 timepoints to show
+  const available = getAvailableTimepoints(patient, hasScaleData)
   const selectedTimepoints = selectTimepoints(available)
 
-  // Build the result array
   const result = selectedTimepoints.map(timepoint => {
-    const wiNrs = getWiNrsForTimepoint(patient, timepoint, source)
+    const wiNrs = getWiNrsForTimepoint(patient, timepoint)
     const siNrs = getSiNrsForTimepoint(patient, timepoint)
     const imagePath = getImageForTimepoint(patient, timepoint)
     const thumbPath = imageManager.getThumbnailPath(imagePath)
 
-    // For NRS scores, 0 is a valid score (no itch); only null/undefined/"Not Reported" are treated as missing
     const validWiNrs = isValidValue(wiNrs) ? wiNrs : null
     const validSiNrs = isValidValue(siNrs) ? siNrs : null
 
-    // We will setup scale as either an object or an array based on the data type
     let scale = null
     if (hasScaleData) {
       scale = []
       for (let i = 0; i < patient.scaleData.length; i++) {
         scale.push({
           name: patient.scaleData[i].scale,
-          score: getScoreForTimepoint(patient, timepoint, source, true, i)
+          score: getScoreForTimepoint(patient, timepoint, true, i)
         })
       }
     } else {
       scale = {
         name: patient.scale,
-        score: getScoreForTimepoint(patient, timepoint, source)
+        score: getScoreForTimepoint(patient, timepoint)
       }
     }
 
@@ -245,22 +187,13 @@ export function splitPatientData(patient, source) {
       image: imagePath,
       thumb: thumbPath,
       scale: scale,
-      // Keep raw values (null if not valid) - display component will show "-" for null
       wiNrs: validWiNrs,
       siNrs: validSiNrs
     }
   })
 
-  // Check if ANY timepoint has WI-NRS or SI-NRS data
   const showWiNrs = result.some(tp => tp.wiNrs !== null)
   const showSiNrs = result.some(tp => tp.siNrs !== null)
 
-  return {
-    timepoints: result,
-    showWiNrs,
-    showSiNrs
-  }
-}
-
-function setupScale(patient, timepoint, source, hasScaleData) {
+  return { timepoints: result, showWiNrs, showSiNrs }
 }

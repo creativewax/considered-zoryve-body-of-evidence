@@ -6,8 +6,6 @@
  */
 
 import './ScoreDisplayClinicalTrial.css'
-import { DATA_SOURCE } from '../../../../constants/index.js'
-import appStateManager from '../../../../managers/AppStateManager.js'
 
 // ---------------------------------------------------------------------------
 // SCORE ITEM COMPONENT

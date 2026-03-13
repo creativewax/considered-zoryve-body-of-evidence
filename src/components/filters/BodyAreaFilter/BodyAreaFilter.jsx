@@ -2,8 +2,7 @@
  * BodyAreaFilter.jsx
  *
  * Filter component for selecting body area locations. Radio-style selection, single select with toggle.
- * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * selected - Currently selected body area or null if none selected
+ * selected - Currently selected body area indices
  */
 
 import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
@@ -18,7 +17,7 @@ import './BodyAreaFilter.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const BodyAreaFilter = ({ currentSource, selected }) => {
+const BodyAreaFilter = ({ selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.BODY_AREA)
 
   const bodyAreaOptions = FILTER_DEFINITIONS[FILTER_KEYS.BODY_AREA].options
@@ -36,7 +35,7 @@ const BodyAreaFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Body Area" currentSource={currentSource}>
+    <FilterComponent title="Body Area">
       <div className="body-area-filter">
         {/* Decorative background element */}
         <div className="body-area-filter-background" />

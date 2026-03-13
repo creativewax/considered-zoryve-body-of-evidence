@@ -2,8 +2,7 @@
  * GenderFilter.jsx
  *
  * Filter component for gender with icons. Single select with toggle.
- * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * selected - Currently selected gender or null if none selected
+ * selected - Currently selected gender indices
  */
 
 import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
@@ -17,7 +16,7 @@ import './GenderFilter.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const GenderFilter = ({ currentSource, selected }) => {
+const GenderFilter = ({ selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.GENDER)
 
   const genderOptions = FILTER_DEFINITIONS[FILTER_KEYS.GENDER].options
@@ -35,7 +34,7 @@ const GenderFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Gender" currentSource={currentSource}>
+    <FilterComponent title="Gender">
       <div className="gender-filter">
         {/* Render gender option buttons with icons */}
         {genderOptions.map((option, index) => (

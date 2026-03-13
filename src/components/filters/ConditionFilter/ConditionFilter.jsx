@@ -2,8 +2,7 @@
  * ConditionFilter.jsx
  *
  * Filter component for dermatological conditions with colour-coded styling. Single select with toggle.
- * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * selected - Currently selected condition or null if none selected
+ * selected - Currently selected condition indices
  */
 
 import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
@@ -17,7 +16,7 @@ import './ConditionFilter.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const ConditionFilter = ({ currentSource, selected }) => {
+const ConditionFilter = ({ selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.INDICATION)
 
   const conditions = [
@@ -39,7 +38,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Indication" currentSource={currentSource} condensed>
+    <FilterComponent title="Indication" condensed>
       <div className="condition-filter">
         {/* Render colour-coded condition option buttons */}
         {conditions.map((condition, index) => {

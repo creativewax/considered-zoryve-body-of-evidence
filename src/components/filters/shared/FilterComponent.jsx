@@ -1,12 +1,11 @@
 /**
  * FilterComponent.jsx
  *
- * Container for filter sections with data source-based header styling.
- * title - Section title; children - Filter options; currentSource - Data source; condensed - Optional.
+ * Container for filter sections with header styling.
+ * title - Section title; children - Filter options; condensed - Optional.
  */
 
 import { motion } from 'framer-motion'
-import { DATA_SOURCE } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
 import './FilterComponent.css'
 
@@ -17,13 +16,8 @@ import './FilterComponent.css'
 const FilterComponent = ({
   title,
   children,
-  currentSource,
   condensed = false
 }) => {
-  const headerClass = currentSource === DATA_SOURCE.CLINICAL_TRIAL
-    ? 'filter-component-header-clinical-trial'
-    : 'filter-component-header-practice-based'
-
   // ---------------------------------------------------------------------------
   // RENDER
   // ---------------------------------------------------------------------------
@@ -35,12 +29,10 @@ const FilterComponent = ({
       animate={ANIMATIONS.FADE_SLIDE_UP.animate}
       transition={TRANSITIONS.NORMAL}
     >
-      {/* Filter section header with data source-specific styling */}
-      <div className={`filter-component-header ${headerClass}`}>
+      <div className="filter-component-header">
         <h3 className="filter-component-title">{title}</h3>
       </div>
 
-      {/* Filter options body with optional condensed layout */}
       <div
         className={`filter-component-body ${condensed ? 'filter-component-body-condensed' : ''}`}
       >

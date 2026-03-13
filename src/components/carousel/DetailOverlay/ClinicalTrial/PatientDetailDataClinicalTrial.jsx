@@ -1,13 +1,12 @@
 /**
  * PatientDetailDataClinicalTrial.jsx
  *
- * Renders patient info in the detail overlay for Clinical Trial patients: 9 fields in 3 columns of 3.
+ * Renders patient info in the detail overlay: 9 fields in 3 columns of 3.
  * Type, Condition, Formulation | Gender, Age, Race | Body Area, Treatments, Ethnicity.
  * Uses N/A for missing or "Not Reported" values.
  */
 
-import { DATA_SOURCE, FILTER_OPTIONS, GENDER_CODE } from '../../../../constants/index.js'
-import appStateManager from '../../../../managers/AppStateManager.js'
+import { FILTER_OPTIONS, GENDER_CODE } from '../../../../constants/index.js'
 import './PatientDetailDataClinicalTrial.css'
 
 // ---------------------------------------------------------------------------
@@ -27,32 +26,22 @@ function displayValue(value) {
 // INFO ITEM
 // ---------------------------------------------------------------------------
 
-const InfoItem = ({ label, value }) => {
-  const source = appStateManager.getSource()
-  return source === DATA_SOURCE.CLINICAL_TRIAL ? (
-    <div className="detail-overlay-info-item">
-      <span className="detail-overlay-info-label">{label}:</span>
-      <span className="detail-overlay-info-value">{value}</span>
-    </div>
-  ) : (
-    <div className="detail-overlay-info-item detail-overlay-info-item-practice-based">
-      <div className="detail-overlay-info-label">{label}:</div>
-      <div className="detail-overlay-info-value">{value}</div>
-    </div>
-  )
-}
+const InfoItem = ({ label, value }) => (
+  <div className="detail-overlay-info-item">
+    <span className="detail-overlay-info-label">{label}:</span>
+    <span className="detail-overlay-info-value">{value}</span>
+  </div>
+)
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
 const PatientDetailDataClinicalTrial = ({ patient }) => {
-  const source = appStateManager.getSource()
-  const typeLabel = source === DATA_SOURCE.CLINICAL_TRIAL ? 'Clinical Trial Patient' : 'Practice-Based Patient'
   const genderDisplay = patient.gender === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE
 
   const column1 = [
-    { label: 'Type', value: typeLabel },
+    { label: 'Type', value: 'Clinical Trial Patient' },
     { label: 'Condition', value: displayValue(patient.indication) },
     { label: 'Formulation', value: displayValue(patient.formulation) },
   ]

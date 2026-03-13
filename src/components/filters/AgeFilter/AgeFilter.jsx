@@ -2,8 +2,7 @@
  * AgeFilter.jsx
  *
  * Filter component for age ranges. Single select with toggle.
- * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * selected - Currently selected age range or null if none selected
+ * selected - Currently selected age range indices
  */
 
 import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
@@ -17,7 +16,7 @@ import './AgeFilter.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const AgeFilter = ({ currentSource, selected }) => {
+const AgeFilter = ({ selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.AGE)
 
   const ageOptions = FILTER_DEFINITIONS[FILTER_KEYS.AGE].options
@@ -35,7 +34,7 @@ const AgeFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Age" currentSource={currentSource}>
+    <FilterComponent title="Age">
       <div className="age-filter">
         {/* Render age range buttons */}
         {ageOptions.map((option, index) => (

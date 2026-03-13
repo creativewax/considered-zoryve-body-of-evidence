@@ -2,7 +2,6 @@
  * DetailOverlayContainer.jsx
  *
  * Minimal container component that handles overlay rendering logic.
- * Determines which overlay type to show (Clinical Trial vs Practice-Based) based on data source.
  * Uses useManagerSubscription to read selected image from AppStateManager (single source of truth).
  */
 
@@ -10,12 +9,10 @@ import { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import eventSystem from '../../../utils/EventSystem'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
-import { DATA_SOURCE } from '../../../constants/index.js'
 import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
 import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import appStateManager from '../../../managers/AppStateManager.js'
 import DetailOverlayClinicalTrial from './ClinicalTrial/DetailOverlayClinicalTrial.jsx'
-import DetailOverlayPracticeBased from './PracticeBased/DetailOverlayPracticeBased.jsx'
 import './DetailOverlayContainer.css'
 
 const DetailOverlayContainer = () => {
@@ -57,9 +54,6 @@ const DetailOverlayContainer = () => {
   // RENDER
   // ---------------------------------------------------------------------------
 
-  const source = selected ? appStateManager.getSource() : null
-  const isPracticeBased = source === DATA_SOURCE.PRACTICE_BASED
-
   return (
     <AnimatePresence>
       {selected && (
@@ -71,12 +65,7 @@ const DetailOverlayContainer = () => {
           transition={TRANSITIONS.NORMAL}
           onClick={onBackdrop}
         >
-          {/* Render appropriate overlay based on source */}
-          {isPracticeBased ? (
-            <DetailOverlayPracticeBased patient={selected.patient} onClose={close} />
-          ) : (
-            <DetailOverlayClinicalTrial patient={selected.patient} onClose={close} />
-          )}
+          <DetailOverlayClinicalTrial patient={selected.patient} onClose={close} />
         </motion.div>
       )}
     </AnimatePresence>

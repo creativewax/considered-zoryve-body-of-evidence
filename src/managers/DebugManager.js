@@ -13,7 +13,7 @@
  * (FILTER_CHANGED, IMAGES_UPDATED) from clearing the selected image.
  */
 
-import { DATA_SOURCE, DATA_SOURCE_KEYS, ASSETS, FILTER_KEYS, FILTER_DEFINITIONS, PATIENT_SCHEMA } from '../constants/index.js'
+import { DATA_SOURCE_KEY, IMAGE_FIELDS, ASSETS, FILTER_KEYS, FILTER_DEFINITIONS, PATIENT_SCHEMA } from '../constants/index.js'
 import eventSystem, { EventSystem } from '../utils/EventSystem.js'
 import { splitPatientData } from '../utils/patientDataSplitter.js'
 import filterManager from './FilterManager.js'
@@ -83,7 +83,7 @@ class DebugManager {
    * @returns {Object|null} The matching patient record
    */
   findPatient(patientData) {
-    const patients = patientData[DATA_SOURCE_KEYS.CLINICAL_TRIAL] || []
+    const patients = patientData[DATA_SOURCE_KEY] || []
     const targetId = this.patientId.toLowerCase()
     const targetBody = this.bodyArea.toLowerCase()
 
@@ -114,7 +114,7 @@ class DebugManager {
     if (!patient) {
       console.error('[DebugManager] Patient not found:', this.patientId, this.bodyArea)
       console.log('[DebugManager] Available patients:')
-      const patients = patientData[DATA_SOURCE_KEYS.CLINICAL_TRIAL] || []
+      const patients = patientData[DATA_SOURCE_KEY] || []
       patients.forEach(p => console.log(`  ${p.patientId} / ${p.bodyArea}`))
       return
     }
@@ -123,9 +123,8 @@ class DebugManager {
 
     // Build the imageData object that IMAGE_SELECTED expects
     // (same shape as DataManager.getFirstValidImage)
-    const imageFields = ['baselineImage', 'week1Image', 'week2Image', 'week3Image', 'week4Image', 'week6Image', 'week8Image', 'week52Image']
     let firstImageField = null
-    for (const field of imageFields) {
+    for (const field of IMAGE_FIELDS) {
       if (patient[field] && patient[field].trim() !== '') {
         firstImageField = field
         break
@@ -143,10 +142,7 @@ class DebugManager {
       patient: patient
     }
 
-    // Ensure source is Clinical Trial
-    eventSystem.emit(EventSystem.EVENTS.SOURCE_CHANGED, { source: DATA_SOURCE.CLINICAL_TRIAL })
-
-    // Small delay to let source change propagate, then select the image
+    // Small delay to let app initialise, then select the image
     setTimeout(() => {
       // Highlight matching filters in the UI without triggering events
       this.setFiltersFromPatient(patient)
@@ -168,7 +164,7 @@ class DebugManager {
    * @param {number} index - Timepoint index to display
    */
   openImageViewer(patient, index) {
-    const { timepoints } = splitPatientData(patient, DATA_SOURCE.CLINICAL_TRIAL)
+    const { timepoints } = splitPatientData(patient)
 
     if (index >= timepoints.length) {
       console.warn(`[DebugManager] Image index ${index} out of range (max ${timepoints.length - 1})`)

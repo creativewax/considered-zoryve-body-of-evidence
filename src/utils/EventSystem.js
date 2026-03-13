@@ -47,7 +47,6 @@ class EventSystem {
     // User interaction events (requests from UI components)
     FILTER_SELECTED: 'filterSelected',               // User clicked filter button
     FILTERS_RESET_REQUESTED: 'filtersResetRequested', // User clicked reset button
-    SOURCE_CHANGED: 'sourceChanged',                 // User changed data source tab
     IMAGE_SELECTED: 'imageSelected',                 // User clicked carousel image
     IMAGE_DESELECTED: 'imageDeselected',             // User closed detail overlay
     IMAGE_VIEWER_OPENED: 'imageViewerOpened',        // User opened full-screen image viewer

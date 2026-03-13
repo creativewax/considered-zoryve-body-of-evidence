@@ -2,8 +2,7 @@
 
 import {
   PATIENT_SCHEMA,
-  DATA_SOURCE,
-  DATA_SOURCE_KEYS,
+  DATA_SOURCE_KEY,
   IMAGE_FIELDS,
   FILTER_KEYS,
   FILTER_DEFINITIONS,
@@ -46,16 +45,14 @@ class DataManager {
       this.schema = await schemaResponse.json()
 
       // Normalise age field to ensure it's always a number
-      for (const key of Object.keys(this.patientData)) {
-        if (!Array.isArray(this.patientData[key])) continue
-        this.patientData[key].forEach(patient => {
-          if (patient[PATIENT_SCHEMA.AGE] !== undefined && patient[PATIENT_SCHEMA.AGE] !== null) {
-            patient[PATIENT_SCHEMA.AGE] = typeof patient[PATIENT_SCHEMA.AGE] === 'number'
-              ? patient[PATIENT_SCHEMA.AGE]
-              : parseInt(patient[PATIENT_SCHEMA.AGE], 10)
-          }
-        })
-      }
+      const patients = this.getPatients()
+      patients.forEach(patient => {
+        if (patient[PATIENT_SCHEMA.AGE] !== undefined && patient[PATIENT_SCHEMA.AGE] !== null) {
+          patient[PATIENT_SCHEMA.AGE] = typeof patient[PATIENT_SCHEMA.AGE] === 'number'
+            ? patient[PATIENT_SCHEMA.AGE]
+            : parseInt(patient[PATIENT_SCHEMA.AGE], 10)
+        }
+      })
 
       this.isLoaded = true
 
@@ -75,28 +72,13 @@ class DataManager {
   }
 
   // ---------------------------------------------------------------------------
-  // SOURCE HELPERS
+  // DATA ACCESS
   // ---------------------------------------------------------------------------
 
-  // Get data source key for accessing patient data
-  getSourceKey(source) {
-    return source === DATA_SOURCE.CLINICAL_TRIAL
-      ? DATA_SOURCE_KEYS.CLINICAL_TRIAL
-      : DATA_SOURCE_KEYS.PRACTICE_BASED
-  }
-
-  // Get image field names for given data source
-  getImageFields(source) {
-    return source === DATA_SOURCE.CLINICAL_TRIAL
-      ? IMAGE_FIELDS.CLINICAL_TRIAL
-      : IMAGE_FIELDS.PRACTICE_BASED
-  }
-
-  // Get all patients for given source
-  getPatientsBySource(source) {
+  // Get all patients
+  getPatients() {
     if (!this.isLoaded || !this.patientData) return []
-    const sourceKey = this.getSourceKey(source)
-    return this.patientData[sourceKey] || []
+    return this.patientData[DATA_SOURCE_KEY] || []
   }
 
   // ---------------------------------------------------------------------------
@@ -104,11 +86,8 @@ class DataManager {
   // ---------------------------------------------------------------------------
 
   // Get first valid image from patient record
-  getFirstValidImage(patient, source) {
-    const imageFields = this.getImageFields(source)
-
-    // Check each image field in order until we find a valid one
-    for (const field of imageFields) {
+  getFirstValidImage(patient) {
+    for (const field of IMAGE_FIELDS) {
       if (patient[field] && patient[field].trim() !== '') {
         return {
           imagePath: `${ASSETS.PATIENTS_PATH}${patient[field]}`,
@@ -169,8 +148,7 @@ class DataManager {
   filterPatients(filters) {
     if (!this.isLoaded || !this.patientData) return []
 
-    const source = filters.source || DATA_SOURCE.CLINICAL_TRIAL
-    let patients = this.getPatientsBySource(source)
+    let patients = this.getPatients()
 
     // Apply each active filter (OR within category, AND across categories)
     for (const filterKey of Object.values(FILTER_KEYS)) {
@@ -188,9 +166,8 @@ class DataManager {
     const filteredPatients = this.filterPatients(filters)
     const images = []
 
-    // Extract first valid image from each patient
     filteredPatients.forEach(patient => {
-      const imageData = this.getFirstValidImage(patient, filters.source || DATA_SOURCE.CLINICAL_TRIAL)
+      const imageData = this.getFirstValidImage(patient)
       if (imageData) images.push(imageData)
     })
 
@@ -206,26 +183,12 @@ class DataManager {
     if (!this.isLoaded || !this.patientData) return null
 
     const imageName = imagePath.split('/').pop()
+    const patients = this.getPatients()
 
-    // Search in both data sources
-    const sources = [
-      { key: DATA_SOURCE_KEYS.CLINICAL_TRIAL, source: DATA_SOURCE.CLINICAL_TRIAL },
-      { key: DATA_SOURCE_KEYS.PRACTICE_BASED, source: DATA_SOURCE.PRACTICE_BASED }
-    ]
-
-    for (const { key, source } of sources) {
-      const patients = this.patientData[key] || []
-      const imageFields = this.getImageFields(source)
-
-      for (const patient of patients) {
-        for (const field of imageFields) {
-          if (patient[field] === imageName) {
-            return {
-              patient,
-              source: source,
-              imageField: field
-            }
-          }
+    for (const patient of patients) {
+      for (const field of IMAGE_FIELDS) {
+        if (patient[field] === imageName) {
+          return { patient, imageField: field }
         }
       }
     }
@@ -240,10 +203,6 @@ class DataManager {
   /**
    * Get available filter options for a specific filter type
    * Returns Set of indices that would yield results if selected
-   *
-   * @param {Object} filters - Current filter state
-   * @param {string} filterType - Which filter to get options for
-   * @returns {Set<number>} Set of available option indices
    */
   getAvailableFilterOptions(filters, filterType) {
     if (!this.isLoaded || !this.patientData) return new Set()
@@ -274,7 +233,6 @@ class DataManager {
   // INTRO DATA ACCESS
   // ---------------------------------------------------------------------------
 
-  // Get intro data for landing page
   getIntroData() {
     return this.introData
   }
@@ -299,7 +257,6 @@ class DataManager {
 // SINGLETON EXPORT
 // ---------------------------------------------------------------------------
 
-// Create singleton instance
 const dataManager = new DataManager()
 
 export default dataManager

@@ -1,6 +1,6 @@
-// AppStateManager - singleton for global application state and filter management
+// AppStateManager - singleton for global application state
 
-import { APP_STATE, DATA_SOURCE } from '../constants/index.js'
+import { APP_STATE } from '../constants/index.js'
 import eventSystem from '../utils/EventSystem.js'
 import debugManager from './DebugManager.js'
 
@@ -15,15 +15,10 @@ class AppStateManager {
 
   constructor() {
     this.currentState = APP_STATE.LOADING
-    this.currentSource = DATA_SOURCE.CLINICAL_TRIAL
     this.selectedImage = null
     this.listeners = new Set()
 
     // Listen to UI interaction events (event-driven architecture)
-    eventSystem.on(
-      eventSystem.constructor.EVENTS.SOURCE_CHANGED,
-      this.handleSourceChanged.bind(this)
-    )
     eventSystem.on(
       eventSystem.constructor.EVENTS.IMAGE_SELECTED,
       this.handleImageSelected.bind(this)
@@ -61,23 +56,6 @@ class AppStateManager {
   }
 
   // ---------------------------------------------------------------------------
-  // DATA SOURCE MANAGEMENT
-  // ---------------------------------------------------------------------------
-
-  // Store data source and notify subscribers
-  setSource(source) {
-    if (this.currentSource !== source) {
-      this.currentSource = source
-      this.notifyListeners()
-    }
-  }
-
-  // Get current data source
-  getSource() {
-    return this.currentSource
-  }
-
-  // ---------------------------------------------------------------------------
   // IMAGE SELECTION
   // ---------------------------------------------------------------------------
 
@@ -96,28 +74,10 @@ class AppStateManager {
   // EVENT HANDLERS (Event-Driven Architecture)
   // ---------------------------------------------------------------------------
 
-  /**
-   * Handle source change event from UI
-   * Responds to SOURCE_CHANGED event emitted by FilterPanel component
-   */
-  handleSourceChanged({ source }) {
-    // Delegate to existing setSource method
-    this.setSource(source)
-  }
-
-  /**
-   * Handle image selection event from UI
-   * Responds to IMAGE_SELECTED event emitted by ImageFrame component
-   */
   handleImageSelected(imageData) {
-    // Delegate to existing setSelectedImage method
     this.setSelectedImage(imageData)
   }
 
-  /**
-   * Handle image deselection event from UI
-   * Responds to IMAGE_DESELECTED event emitted by DetailOverlay component
-   */
   handleImageDeselected() {
     this.setSelectedImage(null)
   }
@@ -160,7 +120,6 @@ class AppStateManager {
 // SINGLETON EXPORT
 // ---------------------------------------------------------------------------
 
-// Create singleton instance
 const appStateManager = new AppStateManager()
 
 export default appStateManager

@@ -1,8 +1,7 @@
 /**
  * FilterBody.jsx
  *
- * Renders all filter sub-components in a grid. Re-animates when data source changes (key=currentSource).
- * currentSource - Active data source (CLINICAL_TRIAL or PRACTICE_BASED)
+ * Renders all filter sub-components in a grid.
  * filters - Current filter selections for all filter types
  */
 
@@ -21,7 +20,7 @@ import './FilterBody.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const FilterBody = ({ currentSource, filters }) => {
+const FilterBody = ({ filters }) => {
   // ---------------------------------------------------------------------------
   // RENDER
   // ---------------------------------------------------------------------------
@@ -29,48 +28,17 @@ const FilterBody = ({ currentSource, filters }) => {
   return (
     <motion.div
       className="filter-body"
-      key={currentSource}
       initial={ANIMATIONS.FADE_IN.initial}
       animate={ANIMATIONS.FADE_IN.animate}
       transition={TRANSITIONS.NORMAL}
     >
-      {/* Grid container for all filter components */}
       <div className="filter-body-content">
-        {/* Medical condition filter - allows selection of specific conditions */}
-        <ConditionFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.INDICATION]}
-        />
-
-        {/* Formulation type filter - filters by treatment formulation */}
-        <FormulationFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.FORMULATION]}
-        />
-
-        {/* Body area filter - filters by anatomical location */}
-        <BodyAreaFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.BODY_AREA]}
-        />
-
-        {/* Baseline severity filter - filters by initial symptom severity */}
-        <BaselineSeverityFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.BASELINE_SEVERITY]}
-        />
-
-        {/* Age filter - filters by patient age range */}
-        <AgeFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.AGE]}
-        />
-
-        {/* Gender filter - filters by patient gender */}
-        <GenderFilter
-          currentSource={currentSource}
-          selected={filters[FILTER_KEYS.GENDER]}
-        />
+        <ConditionFilter selected={filters[FILTER_KEYS.INDICATION]} />
+        <FormulationFilter selected={filters[FILTER_KEYS.FORMULATION]} />
+        <BodyAreaFilter selected={filters[FILTER_KEYS.BODY_AREA]} />
+        <BaselineSeverityFilter selected={filters[FILTER_KEYS.BASELINE_SEVERITY]} />
+        <AgeFilter selected={filters[FILTER_KEYS.AGE]} />
+        <GenderFilter selected={filters[FILTER_KEYS.GENDER]} />
       </div>
     </motion.div>
   )

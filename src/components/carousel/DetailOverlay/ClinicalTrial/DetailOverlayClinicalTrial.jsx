@@ -9,7 +9,6 @@ import { motion } from 'framer-motion'
 import { TRANSITIONS } from '../../../../constants/animations.js'
 import { splitPatientData } from '../../../../utils/patientDataSplitter.js'
 import { getScaleDefinition } from '../../../../constants/scaleDefinitions.js'
-import appStateManager from '../../../../managers/AppStateManager.js'
 import eventSystem from '../../../../utils/EventSystem'
 import PatientDetailDataClinicalTrial from './PatientDetailDataClinicalTrial.jsx'
 import ImageCardClinicalTrial from './ImageCardClinicalTrial.jsx'
@@ -23,7 +22,7 @@ import './DetailOverlayClinicalTrial.css'
 // ---------------------------------------------------------------------------
 
 const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
-  const { timepoints, showWiNrs, showSiNrs } = splitPatientData(patient, appStateManager.getSource())
+  const { timepoints, showWiNrs, showSiNrs } = splitPatientData(patient)
   const nrsDef = getScaleDefinition('WI-NRS')
 
   const onExpandImage = (timepoints, index) => {

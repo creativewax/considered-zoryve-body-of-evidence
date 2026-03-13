@@ -2,8 +2,7 @@
  * FormulationFilter.jsx
  *
  * Filter component for formulation types (cream/foam). Radio-style, single select with toggle.
- * currentSource - Current data source (CLINICAL_TRIAL or PRACTICE_BASED)
- * selected - Currently selected formulation or null if none selected
+ * selected - Currently selected formulation indices
  */
 
 import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
@@ -17,7 +16,7 @@ import '../shared/RadioFilter.css'
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const FormulationFilter = ({ currentSource, selected }) => {
+const FormulationFilter = ({ selected }) => {
   const { isAvailable } = useFilterAvailability(FILTER_KEYS.FORMULATION)
 
   const formulationOptions = FILTER_DEFINITIONS[FILTER_KEYS.FORMULATION].options
@@ -35,7 +34,7 @@ const FormulationFilter = ({ currentSource, selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Formulation" currentSource={currentSource}>
+    <FilterComponent title="Formulation">
       <div className="radio-filter">
         {/* Render formulation radio option buttons */}
         {formulationOptions.map((option, index) => (

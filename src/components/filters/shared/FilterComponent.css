@@ -14,16 +14,8 @@
 .filter-component-header {
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
-.filter-component-header-clinical-trial {
   background: var(--colour-zoryve-midnight-blue);
   color: var(--colour-white);
-}
-
-.filter-component-header-practice-based {
-  background: var(--colour-zoryve-blue);
-  color: var(--colour-zoryve-midnight-blue);
 }
 
 .filter-component-title {
