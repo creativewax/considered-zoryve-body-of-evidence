@@ -26,7 +26,7 @@ const GenderFilter = ({ currentSource, selected }) => {
   const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.GENDER,
-      value: index === selected ? null : index
+      value: index
     })
   }
 
@@ -44,7 +44,7 @@ const GenderFilter = ({ currentSource, selected }) => {
             value={option.display}
             label={option.display}
             icon={option.icon}
-            isSelected={selected === index}
+            isSelected={selected.includes(index)}
             isDisabled={!isAvailable(index)}
             onClick={() => handleSelect(index)}
           />

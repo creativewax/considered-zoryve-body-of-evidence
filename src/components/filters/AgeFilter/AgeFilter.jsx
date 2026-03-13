@@ -26,7 +26,7 @@ const AgeFilter = ({ currentSource, selected }) => {
   const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.AGE,
-      value: index === selected ? null : index
+      value: index
     })
   }
 
@@ -43,7 +43,7 @@ const AgeFilter = ({ currentSource, selected }) => {
             key={index}
             value={option.display}
             label={option.display}
-            isSelected={selected === index}
+            isSelected={selected.includes(index)}
             isDisabled={!isAvailable(index)}
             onClick={() => handleSelect(index)}
           />

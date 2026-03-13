@@ -30,6 +30,7 @@ export const PATIENT_SCHEMA = {
   BODY_AREA: 'bodyArea',
   /** One of four filter categories (Head and neck, Torso, Arms and hands, Legs and feet). Populate from bodyArea e.g. via AI so filtering works without guessing spellings. */
   BODY_AREA_SIMPLE: 'bodyAreaSimple',
+  MULTI_BODY_AREA: 'multiBodyArea',
   TREATMENTS_TRIED_AND_FAILED: 'treatmentsTriedAndFailed',
   BASELINE_SEVERITY: 'baselineSeverity',
   BASELINE_BSA: 'baselineBsa',
@@ -276,6 +277,7 @@ export const ASSETS = {
 export const FILTER_DEFINITIONS = {
   [FILTER_KEYS.INDICATION]: {
     schemaField: PATIENT_SCHEMA.INDICATION,
+    multiSelect: false,
     options: [
       { value: 'Plaque Psoriasis', display: 'Plaque Psoriasis' },
       { value: 'Atopic Dermatitis', display: 'Atopic Dermatitis' },
@@ -285,6 +287,7 @@ export const FILTER_DEFINITIONS = {
 
   [FILTER_KEYS.FORMULATION]: {
     schemaField: PATIENT_SCHEMA.FORMULATION,
+    multiSelect: true,
     options: [
       { value: '0.05% Cream', display: '0.05% Cream' },
       { value: '0.15% Cream', display: '0.15% Cream' },
@@ -295,16 +298,19 @@ export const FILTER_DEFINITIONS = {
 
   [FILTER_KEYS.BODY_AREA]: {
     schemaField: PATIENT_SCHEMA.BODY_AREA_SIMPLE,
+    multiSelect: true,
     options: [
       { value: 'Head and neck', display: 'Head and neck' },
       { value: 'Torso', display: 'Torso' },
       { value: 'Arms and hands', display: 'Arms and hands' },
       { value: 'Legs and feet', display: 'Legs and feet' },
+      { value: true, display: 'Multiple body parts', matchField: PATIENT_SCHEMA.MULTI_BODY_AREA },
     ]
   },
 
   [FILTER_KEYS.BASELINE_SEVERITY]: {
     schemaField: PATIENT_SCHEMA.BASELINE_SEVERITY,
+    multiSelect: true,
     options: [
       { value: 'Mild', display: 'Mild' },
       { value: 'Moderate', display: 'Moderate' },
@@ -315,6 +321,7 @@ export const FILTER_DEFINITIONS = {
   [FILTER_KEYS.AGE]: {
     schemaField: PATIENT_SCHEMA.AGE,
     matchFunction: 'ageRange',
+    multiSelect: true,
     options: [
       { min: 2, max: 5, display: '2-5' },
       { min: 6, max: 18, display: '6-18' },
@@ -327,6 +334,7 @@ export const FILTER_DEFINITIONS = {
   [FILTER_KEYS.GENDER]: {
     schemaField: PATIENT_SCHEMA.GENDER,
     matchFunction: 'gender',
+    multiSelect: true,
     options: [
       { value: 'M', display: 'Male', icon: ASSETS.ICONS.MALE },
       { value: 'F', display: 'Female', icon: ASSETS.ICONS.FEMALE },

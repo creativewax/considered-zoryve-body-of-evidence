@@ -6,7 +6,7 @@
  * Uses event-driven architecture for decoupled component communication
  */
 
-import { FILTER_KEYS } from '../constants/index.js'
+import { FILTER_KEYS, FILTER_DEFINITIONS } from '../constants/index.js'
 import eventSystem, { EventSystem } from '../utils/EventSystem.js'
 import dataManager from './DataManager.js'
 import appStateManager from './AppStateManager.js'
@@ -36,14 +36,14 @@ class FilterManager {
   // ---------------------------------------------------------------------------
 
   constructor() {
-    // Initialise filter state - all filters start as null (unselected)
+    // Initialise filter state - all filters start as empty arrays (unselected)
     this.filters = {
-      [FILTER_KEYS.INDICATION]: null,
-      [FILTER_KEYS.FORMULATION]: null,
-      [FILTER_KEYS.BODY_AREA]: null,
-      [FILTER_KEYS.BASELINE_SEVERITY]: null,
-      [FILTER_KEYS.AGE]: null,
-      [FILTER_KEYS.GENDER]: null,
+      [FILTER_KEYS.INDICATION]: [],
+      [FILTER_KEYS.FORMULATION]: [],
+      [FILTER_KEYS.BODY_AREA]: [],
+      [FILTER_KEYS.BASELINE_SEVERITY]: [],
+      [FILTER_KEYS.AGE]: [],
+      [FILTER_KEYS.GENDER]: [],
     }
 
     // Initialise availability with empty sets
@@ -106,31 +106,45 @@ class FilterManager {
 
   /**
    * Handle filter selection from UI. Responds to FILTER_SELECTED event.
-   * Updates internal state and emits FILTER_CHANGED if value changed.
+   * Toggles the clicked index in/out of the filter array.
+   * Single-select filters (indication) replace the value; multi-select filters toggle.
    * payload.filterType - Type of filter (condition, age, etc.)
-   * payload.value - New filter value (null to deselect)
+   * payload.value - Index of the clicked option
    */
   handleFilterSelected({ filterType, value }) {
-    // Only update if value actually changed
-    if (this.filters[filterType] !== value) {
-      // Close any visible detail overlay BEFORE updating filters
-      // This ensures the overlay closes with old data before carousel refreshes
-      eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
+    const definition = FILTER_DEFINITIONS[filterType]
+    const current = this.filters[filterType]
+    let next
 
-      this.filters[filterType] = value
-
-      // Emit filter changed event for UI updates
-      eventSystem.emit(EventSystem.EVENTS.FILTER_CHANGED, {
-        filterType,
-        value,
-        filters: { ...this.filters }
-      })
-
-      // Update filter availability and trigger carousel refresh
-      this.updateAvailability()
-      this.triggerUpdate()
-      this.notifyListeners()
+    if (definition.multiSelect) {
+      // Multi-select: toggle the index in the array
+      next = current.includes(value)
+        ? current.filter(i => i !== value)
+        : [...current, value]
+    } else {
+      // Single-select: toggle on/off (same click deselects)
+      next = current.includes(value) ? [] : [value]
     }
+
+    // Only update if selection actually changed
+    if (JSON.stringify(current) === JSON.stringify(next)) return
+
+    // Close any visible detail overlay BEFORE updating filters
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
+
+    this.filters[filterType] = next
+
+    // Emit filter changed event for UI updates
+    eventSystem.emit(EventSystem.EVENTS.FILTER_CHANGED, {
+      filterType,
+      value: next,
+      filters: { ...this.filters }
+    })
+
+    // Update filter availability and trigger carousel refresh
+    this.updateAvailability()
+    this.triggerUpdate()
+    this.notifyListeners()
   }
 
   /**
@@ -141,7 +155,7 @@ class FilterManager {
    */
   handleResetRequested() {
     // Check if there are any active filters before resetting
-    const hasActiveFilters = Object.values(this.filters).some(v => v !== null)
+    const hasActiveFilters = Object.values(this.filters).some(v => v.length > 0)
 
     // No filters active, nothing to reset
     if (!hasActiveFilters) return
@@ -150,14 +164,14 @@ class FilterManager {
     // This ensures the overlay closes with old data before carousel refreshes
     eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
 
-    // Reset all filters to null
+    // Reset all filters to empty arrays
     this.filters = {
-      [FILTER_KEYS.INDICATION]: null,
-      [FILTER_KEYS.FORMULATION]: null,
-      [FILTER_KEYS.BODY_AREA]: null,
-      [FILTER_KEYS.BASELINE_SEVERITY]: null,
-      [FILTER_KEYS.AGE]: null,
-      [FILTER_KEYS.GENDER]: null,
+      [FILTER_KEYS.INDICATION]: [],
+      [FILTER_KEYS.FORMULATION]: [],
+      [FILTER_KEYS.BODY_AREA]: [],
+      [FILTER_KEYS.BASELINE_SEVERITY]: [],
+      [FILTER_KEYS.AGE]: [],
+      [FILTER_KEYS.GENDER]: [],
     }
 
     // Emit reset event for UI updates
@@ -233,7 +247,7 @@ class FilterManager {
    * Check if any filters are currently active.
    */
   hasActiveFilters() {
-    return Object.values(this.filters).some(v => v !== null)
+    return Object.values(this.filters).some(v => v.length > 0)
   }
 
   /**
@@ -244,6 +258,21 @@ class FilterManager {
    */
   reset() {
     this.handleResetRequested()
+  }
+
+  /**
+   * Set filter values directly without emitting any events.
+   * Used by DebugManager to highlight the matching filters in the UI
+   * without triggering carousel updates or overlay closures.
+   *
+   * @param {Object} filterValues - Map of FILTER_KEYS to index values
+   */
+  setFiltersQuietly(filterValues) {
+    for (const [key, value] of Object.entries(filterValues)) {
+      this.filters[key] = value
+    }
+    // Only notify React subscribers (re-render filter UI) — no event emission
+    this.notifyListeners()
   }
 
   // ---------------------------------------------------------------------------

@@ -13,6 +13,7 @@ import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
 import imageManager from './managers/ImageManager.js'
 import appStateManager from './managers/AppStateManager.js'
+import debugManager from './managers/DebugManager.js'
 import eventSystem from './utils/EventSystem.js'
 import useManagerSubscription from './hooks/common/useManagerSubscription.js'
 import useEventSubscription from './hooks/common/useEventSubscription.js'
@@ -41,6 +42,9 @@ function App() {
   // EFFECTS - INITIALISATION
   // ---------------------------------------------------------------------------
 
+  // Check for debug mode before anything renders
+  const isDebug = debugManager.parseUrl()
+
   useEffect(() => {
     /**
      * Initialise application by loading patient data and preloading thumbnails
@@ -49,14 +53,14 @@ function App() {
      * Loading stages:
      * 1. Load patient data JSON
      * 2. Preload ALL thumbnail images
-     * 3. Transition to intro page
+     * 3. Transition to intro page (or main page in debug mode)
      */
     const initialiseApp = async () => {
       try {
         // Stage 1: Load patient data
         setLoadingStage('Loading patient data...')
         setLoadingProgress(0)
-        await dataManager.loadData()
+        const { data } = await dataManager.loadData()
 
         // Stage 2: Preload thumbnails with progress tracking
         setLoadingStage('Loading images...')
@@ -74,8 +78,15 @@ function App() {
         clearInterval(progressInterval)
         setLoadingProgress(100)
 
-        // Transition to intro page once everything is loaded
-        appStateManager.setState(APP_STATE.INTRO)
+        // Debug mode: skip intro, go straight to main, then activate debug overlay
+        if (isDebug) {
+          appStateManager.setState(APP_STATE.MAIN)
+          // Give the main page time to mount before activating debug
+          setTimeout(() => debugManager.activate(data), 500)
+        } else {
+          // Normal flow: transition to intro page
+          appStateManager.setState(APP_STATE.INTRO)
+        }
       } catch (error) {
         console.error('Failed to initialise app:', error)
       }
@@ -134,6 +145,7 @@ function App() {
         <Routes>
           <Route path={ROUTES.INTRO} element={<IntroPage />} />
           <Route path={ROUTES.MAIN} element={<MainPage />} />
+          <Route path="/debug/*" element={<MainPage />} />
         </Routes>
 
         <AnimatePresence>

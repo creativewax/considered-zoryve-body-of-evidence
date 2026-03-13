@@ -97,7 +97,23 @@
   height: 100%;
 }
 
-/* Responsive layout */
+/* ------------------------------------------------------------------ */
+/* RESPONSIVE BREAKPOINTS                                             */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 1200px) {
+  .detail-overlay-bottom-section {
+    --font-size-xxs: 8px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .detail-overlay-bottom-section {
+    --font-size-xxs: 7px;
+    gap: var(--spacing-sm);
+  }
+}
+
 @media (max-width: 600px) {
   .detail-overlay {
     padding: var(--spacing-lg);

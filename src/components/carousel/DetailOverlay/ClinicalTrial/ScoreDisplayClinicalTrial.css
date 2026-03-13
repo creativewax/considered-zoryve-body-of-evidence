@@ -77,8 +77,10 @@
 /* Last timepoint styling (Clinical Trial only) */
 .score-display-last-timepoint .score-display-main {
   border: 2px solid var(--colour-last-timepoint-highlight);
+  padding: calc(var(--spacing-md) - 2px);
 }
 
 .score-display-last-timepoint .score-display-secondary {
   border: 2px solid var(--colour-last-timepoint-highlight);
+  padding: calc(var(--spacing-md) - 2px);
 }

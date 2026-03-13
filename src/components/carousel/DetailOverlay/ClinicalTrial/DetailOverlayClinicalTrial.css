@@ -38,7 +38,87 @@
   min-width: 0;
 }
 
-/* Responsive layout for mobile */
+/* ------------------------------------------------------------------ */
+/* RESPONSIVE BREAKPOINTS                                             */
+/* ------------------------------------------------------------------ */
+
+/* Medium screens — tighten spacing and shrink text slightly */
+@media (max-width: 1200px) {
+  .detail-overlay-content {
+    --font-size-md: 11px;
+    --font-size-sm: 10px;
+    --font-size-xs: 10px;
+    --font-size-xxs: 8px;
+    --font-size-lg: 14px;
+  }
+
+  .detail-overlay-data-panel {
+    padding: var(--spacing-md);
+    margin: var(--spacing-md);
+  }
+
+  .detail-overlay-timepoints {
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+  }
+
+  .score-item-label {
+    width: 68px;
+    height: 34px;
+  }
+
+  .score-item-value {
+    width: 34px;
+    height: 34px;
+  }
+
+  .image-card-label {
+    width: 78px;
+    height: 30px;
+  }
+}
+
+/* Small screens — further reduction to hold the layout together */
+@media (max-width: 1024px) {
+  .detail-overlay-content {
+    --font-size-md: 10px;
+    --font-size-sm: 9px;
+    --font-size-xs: 9px;
+    --font-size-xxs: 7px;
+    --font-size-lg: 12px;
+  }
+
+  .detail-overlay-data-panel {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm);
+  }
+
+  .detail-overlay-timepoints {
+    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .score-item-label {
+    width: 58px;
+    height: 30px;
+  }
+
+  .score-item-value {
+    width: 30px;
+    height: 30px;
+  }
+
+  .score-item {
+    gap: var(--spacing-sm);
+  }
+
+  .image-card-label {
+    width: 68px;
+    height: 26px;
+  }
+}
+
+/* Very small screens — stack timepoints vertically */
 @media (max-width: 600px) {
   .detail-overlay-timepoints {
     flex-direction: column;

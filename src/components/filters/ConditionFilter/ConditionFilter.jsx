@@ -30,7 +30,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
   const handleSelect = (index) => {
     eventSystem.emit(eventSystem.constructor.EVENTS.FILTER_SELECTED, {
       filterType: FILTER_KEYS.INDICATION,
-      value: index === selected ? null : index
+      value: index
     })
   }
 
@@ -50,7 +50,7 @@ const ConditionFilter = ({ currentSource, selected }) => {
               value={option.display}
               label={option.display}
               colourClass={condition.colourClass}
-              isSelected={selected === index}
+              isSelected={selected.includes(index)}
               isDisabled={!isAvailable(index)}
               onClick={() => handleSelect(index)}
             />

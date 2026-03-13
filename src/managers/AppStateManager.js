@@ -2,6 +2,7 @@
 
 import { APP_STATE, DATA_SOURCE } from '../constants/index.js'
 import eventSystem from '../utils/EventSystem.js'
+import debugManager from './DebugManager.js'
 
 // ---------------------------------------------------------------------------
 // CLASS DEFINITION
@@ -123,15 +124,19 @@ class AppStateManager {
 
   /**
    * Handle filter changed — clear selected image (overlay closes on filter change)
+   * In debug mode, the selected image is preserved so the overlay stays open.
    */
   handleFilterChanged() {
+    if (debugManager.getIsDebugMode()) return
     this.setSelectedImage(null)
   }
 
   /**
    * Handle images updated — clear selected image (overlay closes when image pool changes)
+   * In debug mode, the selected image is preserved so the overlay stays open.
    */
   handleImagesUpdated() {
+    if (debugManager.getIsDebugMode()) return
     this.setSelectedImage(null)
   }
 

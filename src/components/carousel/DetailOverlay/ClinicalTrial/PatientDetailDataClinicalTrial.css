@@ -55,7 +55,32 @@
   color: var(--colour-white);
 }
 
-/* Responsive layout for mobile */
+/* ------------------------------------------------------------------ */
+/* RESPONSIVE BREAKPOINTS                                             */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 1200px) {
+  .detail-overlay-info {
+    flex-wrap: wrap;
+  }
+
+  .detail-overlay-info-column {
+    max-width: none;
+  }
+
+  .detail-overlay-info-item {
+    max-width: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .detail-overlay-info-item {
+    padding: 1px 0;
+    min-height: 1.3em;
+  }
+}
+
+/* Mobile — stack columns vertically */
 @media (max-width: 600px) {
   .detail-overlay-info {
     flex-direction: column;

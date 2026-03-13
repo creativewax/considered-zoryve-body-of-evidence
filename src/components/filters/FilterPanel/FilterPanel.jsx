@@ -79,11 +79,11 @@ const FilterPanel = () => {
 
       {/* Main content area with filter components */}
       <div className="filter-panel-content">
-        {/* Source selection tabs (Clinical Trial vs Practice Based) */}
-        <FilterTabs
+        {/* Source selection tabs (Clinical Trial vs Practice Based) — hidden, always Clinical Trial */}
+        {/* <FilterTabs
           currentSource={currentSource}
           onSourceChange={handleSourceChange}
-        />
+        /> */}
 
         {/* Filter options grid (condition, formulation, body area, etc.) */}
         <FilterBody currentSource={currentSource} filters={filters} />
