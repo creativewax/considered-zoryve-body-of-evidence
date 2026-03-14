@@ -1,13 +1,17 @@
 /**
- * DetailOverlayClinicalTrial.css
- * Styles specific to Clinical Trial patient detail overlay
+ * DetailOverlay.css
+ * Styles for the patient detail overlay
  */
 
-/* Clinical Trial overlay content wrapper - 960px max */
-.detail-overlay-content {
+/* Wrapper — provides positioning context for the floating close button */
+.detail-overlay-wrapper {
   position: relative;
   width: 90%;
   max-width: 1400px;
+}
+
+/* Overlay content card */
+.detail-overlay-content {
   max-height: 90vh;
   overflow: hidden;
   display: flex;
@@ -21,7 +25,28 @@
   );
 }
 
-/* Timepoints section - 3 columns for Clinical Trial */
+/* Mid bar — split left/right between patient data header and timepoint cards */
+.detail-overlay-mid-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.detail-overlay-mid-bar-left {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.detail-overlay-mid-bar-right {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Timepoints section - 3 columns */
 .detail-overlay-timepoints {
   display: flex;
   gap: var(--spacing-lg);
@@ -54,7 +79,12 @@
 
   .detail-overlay-data-panel {
     padding: var(--spacing-md);
-    margin: var(--spacing-md);
+    margin: var(--spacing-md) var(--spacing-md) 0 var(--spacing-md);
+  }
+
+  .detail-overlay-mid-bar {
+    padding: 0 var(--spacing-md);
+    margin: var(--spacing-md) 0;
   }
 
   .detail-overlay-timepoints {
@@ -90,7 +120,12 @@
 
   .detail-overlay-data-panel {
     padding: var(--spacing-sm);
-    margin: var(--spacing-sm);
+    margin: var(--spacing-sm) var(--spacing-sm) 0 var(--spacing-sm);
+  }
+
+  .detail-overlay-mid-bar {
+    padding: 0 var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
   }
 
   .detail-overlay-timepoints {

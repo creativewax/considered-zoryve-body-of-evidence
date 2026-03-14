@@ -12,7 +12,7 @@ import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
 import useMultipleEventSubscriptions from '../../../hooks/common/useMultipleEventSubscriptions.js'
 import useManagerSubscription from '../../../hooks/common/useManagerSubscription.js'
 import appStateManager from '../../../managers/AppStateManager.js'
-import DetailOverlayClinicalTrial from './ClinicalTrial/DetailOverlayClinicalTrial.jsx'
+import DetailOverlay from './DetailOverlay.jsx'
 import './DetailOverlayContainer.css'
 
 const DetailOverlayContainer = () => {
@@ -65,7 +65,7 @@ const DetailOverlayContainer = () => {
           transition={TRANSITIONS.NORMAL}
           onClick={onBackdrop}
         >
-          <DetailOverlayClinicalTrial patient={selected.patient} onClose={close} />
+          <DetailOverlay patient={selected.patient} onClose={close} />
         </motion.div>
       )}
     </AnimatePresence>

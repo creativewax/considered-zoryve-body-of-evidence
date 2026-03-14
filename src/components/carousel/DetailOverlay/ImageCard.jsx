@@ -1,19 +1,19 @@
 /**
- * ImageCardClinicalTrial.jsx
+ * ImageCard.jsx
  *
- * Displays a patient image with a label and expand button for Clinical Trial patients.
+ * Displays a patient image with a label and expand button.
  * Features: 2px white border, rounded corners, shadow, top-left label, bottom-right plus button.
  */
 
-import { PlusIcon } from '../../../common/Svg/index.js'
-import './ImageCardClinicalTrial.css'
+import { PlusIcon } from '../../common/Svg/index.js'
+import './ImageCard.css'
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
 /**
- * ImageCardClinicalTrial Component
+ * ImageCard Component
  *
  * @param {string} image - Full-size image filename
  * @param {string} thumb - Thumbnail image filename
@@ -22,7 +22,7 @@ import './ImageCardClinicalTrial.css'
  * @param {function} onExpand - Callback when plus button is clicked
  * @param {boolean} isLastTimepoint - Whether this is the last timepoint (for special styling)
  */
-const ImageCardClinicalTrial = ({ image, thumb, label, title, onExpand, isLastTimepoint = false }) => {
+const ImageCard = ({ image, thumb, label, title, onExpand, isLastTimepoint = false }) => {
   const thumbPath = `/patients/${thumb}`
 
   return (
@@ -61,4 +61,4 @@ const ImageCardClinicalTrial = ({ image, thumb, label, title, onExpand, isLastTi
   )
 }
 
-export default ImageCardClinicalTrial
+export default ImageCard

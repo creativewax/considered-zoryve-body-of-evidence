@@ -1,11 +1,11 @@
 /**
- * ScoreDisplayClinicalTrial.jsx
+ * ScoreDisplay.jsx
  *
- * Displays patient scale scores (IGA, v-IGA-AD, etc.) and optional WI-NRS/SI-NRS scores for Clinical Trial patients.
- * Features: Main score with 40% black background, optional secondary scores with 20% black background.
+ * Displays patient scale scores (IGA, v-IGA-AD, etc.) and optional WI-NRS/SI-NRS scores.
+ * Features: Main score with 50% midnight blue background, optional secondary scores with 25% midnight blue background.
  */
 
-import './ScoreDisplayClinicalTrial.css'
+import './ScoreDisplay.css'
 
 // ---------------------------------------------------------------------------
 // SCORE ITEM COMPONENT
@@ -17,10 +17,10 @@ import './ScoreDisplayClinicalTrial.css'
  * @param {string} label - Score label (e.g., "IGA", "WI-NRS")
  * @param {string|number|null} value - Score value (shows "-" if null)
  */
-const ScoreItem = ({ label, value }) => (
-  <div className="score-item">
-    <span className="score-item-label">{label}</span>
-    <span className="score-item-value">{value ?? '-'}</span>
+const ScoreItem = ({ label, value, isLastTimepoint }) => (
+  <div className={`score-item ${isLastTimepoint ? 'score-item-last-timepoint' : ''}`}>
+    <span className={`score-item-label ${isLastTimepoint ? 'score-item-label-last-timepoint' : ''}`}>{label}</span>
+    <span className={`score-item-value ${isLastTimepoint ? 'score-item-value-last-timepoint' : ''}`}>{value ?? '-'}</span>
   </div>
 )
 
@@ -29,10 +29,10 @@ const ScoreItem = ({ label, value }) => (
  *
  * @param {Array} scale - Array of scale objects with name and score
  */
-const ScoreItemArray = ({ scale }) => {
+const ScoreItemArray = ({ scale, isLastTimepoint }) => {
   return scale.map((scale, index) => {
     // if name is valid, display the score item
-    if (scale.name) return <ScoreItem key={index} label={scale.name} value={scale.score} />
+    if (scale.name) return <ScoreItem key={index} label={scale.name} value={scale.score} isLastTimepoint={isLastTimepoint} />
     return null
   })
 }
@@ -42,7 +42,7 @@ const ScoreItemArray = ({ scale }) => {
 // ---------------------------------------------------------------------------
 
 /**
- * ScoreDisplayClinicalTrial Component
+ * ScoreDisplay Component
  *
  * @param {Object} scale - Main scale object with name and score
  * @param {string|number|null} wiNrs - WI-NRS score (shows "-" if null)
@@ -51,26 +51,26 @@ const ScoreItemArray = ({ scale }) => {
  * @param {boolean} showSiNrs - Whether to show SI-NRS section (if any timepoint has SI-NRS data)
  * @param {boolean} isLastTimepoint - Whether this is the last timepoint (for special styling)
  */
-const ScoreDisplayClinicalTrial = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs, isLastTimepoint = false }) => {
+const ScoreDisplay = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs, isLastTimepoint = false }) => {
   // Show secondary scores section if either WI-NRS or SI-NRS should be displayed
   const hasSecondaryScores = showWiNrs || showSiNrs
 
   return (
     <div className={`score-display ${isLastTimepoint ? 'score-display-last-timepoint' : ''}`}>
       <div className="score-display-main">
-        {/* Main scale score - 50% midnight blue background */}
-        <ScoreItemArray scale={scale} />
-      </div>
-
-      {/* Secondary scores (WI-NRS and SI-NRS) - 25% midnight blue background */}
-      {hasSecondaryScores && (
-        <div className="score-display-secondary">
-          {showWiNrs && <ScoreItem label="WI-NRS" value={wiNrs} />}
-          {showSiNrs && <ScoreItem label="SI-NRS" value={siNrs} />}
+        <div className="score-display-primary">
+          <ScoreItemArray scale={scale} isLastTimepoint={isLastTimepoint} />
         </div>
-      )}
+
+        {hasSecondaryScores && (
+          <div className="score-display-secondary">
+            {showWiNrs && <ScoreItem label="WI-NRS" value={wiNrs} isLastTimepoint={isLastTimepoint} />}
+            {showSiNrs && <ScoreItem label="SI-NRS" value={siNrs} isLastTimepoint={isLastTimepoint} />}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
 
-export default ScoreDisplayClinicalTrial
+export default ScoreDisplay

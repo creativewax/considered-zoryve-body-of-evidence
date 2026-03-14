@@ -202,10 +202,17 @@ class DebugManager {
       FILTER_KEYS.FORMULATION, patient[PATIENT_SCHEMA.FORMULATION]
     ))
 
-    // Body Area — match patient.bodyAreaSimple against options[].value
-    filterValues[FILTER_KEYS.BODY_AREA] = wrap(this.findOptionIndex(
-      FILTER_KEYS.BODY_AREA, patient[PATIENT_SCHEMA.BODY_AREA_SIMPLE]
-    ))
+    // Body Area — match bodyAreaSimple, plus "Multiple body parts" if multiBodyArea is true
+    const bodyAreaIndices = []
+    const bodyAreaSimpleIndex = this.findOptionIndex(FILTER_KEYS.BODY_AREA, patient[PATIENT_SCHEMA.BODY_AREA_SIMPLE])
+    if (bodyAreaSimpleIndex !== null) bodyAreaIndices.push(bodyAreaSimpleIndex)
+
+    if (patient[PATIENT_SCHEMA.MULTI_BODY_AREA] === true) {
+      const multiIndex = FILTER_DEFINITIONS[FILTER_KEYS.BODY_AREA].options
+        .findIndex(opt => opt.matchField === PATIENT_SCHEMA.MULTI_BODY_AREA)
+      if (multiIndex !== -1) bodyAreaIndices.push(multiIndex)
+    }
+    filterValues[FILTER_KEYS.BODY_AREA] = bodyAreaIndices
 
     // Baseline Severity — match patient.baselineSeverity against options[].value
     filterValues[FILTER_KEYS.BASELINE_SEVERITY] = wrap(this.findOptionIndex(

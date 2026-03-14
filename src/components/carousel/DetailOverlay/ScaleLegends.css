@@ -1,0 +1,20 @@
+/**
+ * ScaleLegends.css
+ * Inline single-line scale legends, right-aligned
+ */
+
+.scale-legends {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 0;
+}
+
+.scale-legend-line {
+  font-size: var(--font-size-xxs);
+  font-weight: var(--font-weight-regular);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+  white-space: nowrap;
+}

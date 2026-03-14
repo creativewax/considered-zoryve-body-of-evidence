@@ -1,11 +1,11 @@
 /**
- * PatientDetailDataClinicalTrial.css
- * Styles for Clinical Trial patient detail data display
+ * PatientDetailData.css
+ * Styles for the patient detail data display
  */
 
 /* Patient data panel - midnight blue background */
 .detail-overlay-data-panel {
-  margin: var(--spacing-lg);
+  margin: var(--spacing-lg) var(--spacing-lg) 0 var(--spacing-lg);
   padding: var(--spacing-lg);
   background: var(--colour-zoryve-midnight-blue-75);
   border-radius: var(--radius-md);

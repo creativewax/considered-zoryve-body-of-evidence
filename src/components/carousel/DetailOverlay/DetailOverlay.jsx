@@ -1,27 +1,28 @@
 /**
- * DetailOverlayClinicalTrial.jsx
+ * DetailOverlay.jsx
  *
- * Displays Clinical Trial patient details in overlay format.
+ * Displays patient details in overlay format.
  * Shows patient data, timepoint cards with images/scores, and scale legends.
  */
 
 import { motion } from 'framer-motion'
-import { TRANSITIONS } from '../../../../constants/animations.js'
-import { splitPatientData } from '../../../../utils/patientDataSplitter.js'
-import { getScaleDefinition } from '../../../../constants/scaleDefinitions.js'
-import eventSystem from '../../../../utils/EventSystem'
-import PatientDetailDataClinicalTrial from './PatientDetailDataClinicalTrial.jsx'
-import ImageCardClinicalTrial from './ImageCardClinicalTrial.jsx'
-import ScoreDisplayClinicalTrial from './ScoreDisplayClinicalTrial.jsx'
-import ScaleLegendsClinicalTrial from './ScaleLegendsClinicalTrial.jsx'
-import CloseButton from '../Common/CloseButton.jsx'
-import './DetailOverlayClinicalTrial.css'
+import { TRANSITIONS } from '../../../constants/animations.js'
+import { splitPatientData } from '../../../utils/patientDataSplitter.js'
+import { getScaleDefinition } from '../../../constants/scaleDefinitions.js'
+import eventSystem from '../../../utils/EventSystem'
+import PatientDetailData from './PatientDetailData.jsx'
+import ImageCard from './ImageCard.jsx'
+import ScoreDisplay from './ScoreDisplay.jsx'
+import ScaleLegends from './ScaleLegends.jsx'
+import BodyAreaSelector from './BodyAreaSelector.jsx'
+import CloseButton from './Common/CloseButton.jsx'
+import './DetailOverlay.css'
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
 // ---------------------------------------------------------------------------
 
-const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
+const DetailOverlay = ({ patient, onClose }) => {
   const { timepoints, showWiNrs, showSiNrs } = splitPatientData(patient)
   const nrsDef = getScaleDefinition('WI-NRS')
 
@@ -34,7 +35,8 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <>
+    <div className="detail-overlay-wrapper">
+      <CloseButton onClick={onClose} className="detail-overlay-close-top" />
       <motion.div
         className="detail-overlay-content"
         initial={{ scale: 0.9, opacity: 0 }}
@@ -42,7 +44,22 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
         exit={{ scale: 0.9, opacity: 0 }}
         transition={TRANSITIONS.NORMAL}
       >
-        <PatientDetailDataClinicalTrial patient={patient} />
+        <PatientDetailData patient={patient} />
+
+        {/* Mid bar — body area selector (left) | scale legends (right) */}
+        <div className="detail-overlay-mid-bar">
+          <div className="detail-overlay-mid-bar-left">
+            <BodyAreaSelector patient={patient} />
+          </div>
+          <div className="detail-overlay-mid-bar-right">
+            <ScaleLegends
+              patient={patient}
+              nrsDef={nrsDef}
+              showWiNrs={showWiNrs}
+              showSiNrs={showSiNrs}
+            />
+          </div>
+        </div>
 
         {/* Timepoint cards section - 3 columns with staggered animation */}
         <motion.div
@@ -79,7 +96,7 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
                   }
                 }}
               >
-                <ImageCardClinicalTrial
+                <ImageCard
                   image={timepointData.image}
                   thumb={timepointData.thumb}
                   label={timepointData.label}
@@ -87,7 +104,7 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
                   onExpand={() => onExpandImage(timepoints, index)}
                   isLastTimepoint={isLastTimepoint}
                 />
-                <ScoreDisplayClinicalTrial
+                <ScoreDisplay
                   scale={timepointData.scale}
                   wiNrs={timepointData.wiNrs}
                   siNrs={timepointData.siNrs}
@@ -100,26 +117,8 @@ const DetailOverlayClinicalTrial = ({ patient, onClose }) => {
           })}
         </motion.div>
       </motion.div>
-
-      {/* Bottom section: Empty (left) | Close Button (center) | Legends (right) */}
-      <div className="detail-overlay-bottom-section">
-        <div className="detail-overlay-bottom-left">
-          {/* Empty - no disclaimer for Clinical Trial */}
-        </div>
-        <div className="detail-overlay-bottom-center">
-          <CloseButton onClick={onClose} />
-        </div>
-        <div className="detail-overlay-bottom-right">
-          <ScaleLegendsClinicalTrial
-            patient={patient}
-            nrsDef={nrsDef}
-            showWiNrs={showWiNrs}
-            showSiNrs={showSiNrs}
-          />
-        </div>
-      </div>
-    </>
+    </div>
   )
 }
 
-export default DetailOverlayClinicalTrial
+export default DetailOverlay

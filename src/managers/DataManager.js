@@ -197,6 +197,25 @@ class DataManager {
   }
 
   // ---------------------------------------------------------------------------
+  // RELATED PATIENTS (multi-body-area)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Get all patient entries sharing the same patientId.
+   * Returns array sorted alphabetically by bodyArea.
+   */
+  getRelatedPatients(patientId) {
+    if (!patientId) return []
+    return this.getPatients()
+      .filter(p => p[PATIENT_SCHEMA.PATIENT_ID] === patientId)
+      .sort((a, b) => {
+        const aArea = (a[PATIENT_SCHEMA.BODY_AREA] || '').toLowerCase()
+        const bArea = (b[PATIENT_SCHEMA.BODY_AREA] || '').toLowerCase()
+        return aArea.localeCompare(bArea)
+      })
+  }
+
+  // ---------------------------------------------------------------------------
   // FILTER AVAILABILITY
   // ---------------------------------------------------------------------------
 

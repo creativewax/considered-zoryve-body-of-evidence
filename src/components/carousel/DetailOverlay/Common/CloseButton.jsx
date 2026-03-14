@@ -9,10 +9,10 @@ import { motion } from 'framer-motion'
 import { TRANSITIONS } from '../../../../constants/animations.js'
 import { CloseIcon } from '../../../common/Svg/index.js'
 
-const CloseButton = ({ onClick, bgClassName, fgClassName }) => {
+const CloseButton = ({ onClick, className, bgClassName, fgClassName }) => {
   return (
     <motion.div
-      className="detail-bottom-bar"
+      className={`detail-bottom-bar ${className || ''}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

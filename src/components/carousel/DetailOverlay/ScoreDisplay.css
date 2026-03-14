@@ -11,28 +11,29 @@
   margin-top: var(--spacing-md);
 }
 
-/* Main score container - 40% black background */
+/* Main score container — horizontal flex: primary left, secondary right */
 .score-display-main {
   background-color: var(--colour-zoryve-midnight-blue-50);
   border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md);
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;
 }
 
-/* Secondary scores container - 20% black background */
-.score-display-secondary {
-  background-color: var(--colour-zoryve-midnight-blue-25);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+/* Primary scores — left side */
+.score-display-primary {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  align-items: center;
-  justify-content: center;
+}
+
+/* Secondary scores (NRS) — right side */
+.score-display-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 /* Score item - label and value in a flex row */
@@ -40,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs);
 }
 
 /* Score label text */
@@ -77,10 +78,11 @@
 /* Last timepoint styling (Clinical Trial only) */
 .score-display-last-timepoint .score-display-main {
   border: 2px solid var(--colour-last-timepoint-highlight);
-  padding: calc(var(--spacing-md) - 2px);
+  padding: calc(var(--spacing-lg) - 2px) var(--spacing-md);
 }
 
-.score-display-last-timepoint .score-display-secondary {
-  border: 2px solid var(--colour-last-timepoint-highlight);
-  padding: calc(var(--spacing-md) - 2px);
+.score-item-value-last-timepoint {
+  background-color: var(--colour-last-timepoint-highlight);
+  color: var(--colour-zoryve-midnight-blue);
 }
+
