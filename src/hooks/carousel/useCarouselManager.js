@@ -127,6 +127,8 @@ export const useCarouselManager = (containerRef) => {
     rotationStateManager.setColumnAngle(config.columnAngle)
     rotationStateManager.setRotation(0)
     poolManager.initialisePool(config, images, 0)
+
+    rotationStateManager.autoSpin(config.autoSpinColumns)
   }, [])
 
   // ---------------------------------------------------------------------------

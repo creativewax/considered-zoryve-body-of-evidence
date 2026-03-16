@@ -86,6 +86,17 @@ class RotationStateManager {
   }
 
   // ---------------------------------------------------------------------------
+  // AUTO-SPIN — intro animation that sweeps N columns on load
+  // ---------------------------------------------------------------------------
+
+  autoSpin(columns) {
+    if (!columns || this.columnAngle <= 0) return
+    const target = columns * this.columnAngle
+    const duration = Math.abs(columns) * 0.15
+    this.animateTo(target, duration)
+  }
+
+  // ---------------------------------------------------------------------------
   // ANIMATION
   // ---------------------------------------------------------------------------
 

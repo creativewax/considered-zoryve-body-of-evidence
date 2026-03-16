@@ -19,12 +19,13 @@ export function getLayoutConfig(imageCount) {
     : imageCount >= CAROUSEL_LAYOUT.MEDIUM.minImages ? CAROUSEL_LAYOUT.MEDIUM
       : CAROUSEL_LAYOUT.SMALL
 
-  const { rows, visibleColumns } = layout
+  const { rows, visibleColumns, autoSpinColumns } = layout
   const s = CAROUSEL_SETTINGS
 
   return {
     rows,
     visibleColumns,
+    autoSpinColumns,
     totalColumns: Math.ceil(imageCount / rows),
     imageSize: s.imageSizeBase - (rows - 1) * s.imageSizeRowReduction,
     cylinderRadius: s.cylinderRadius[rows] || 2.0,
