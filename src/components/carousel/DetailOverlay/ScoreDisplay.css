@@ -6,37 +6,69 @@
 .score-display {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
   width: 100%;
   margin-top: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-filter);
+  /* Enables container queries below — ScoreDisplay adapts to its own width, not the viewport's */
+  container-type: inline-size;
+  container-name: score-display;
 }
 
-/* Main score container — horizontal flex: primary left, secondary right */
+/* Header bar — full width title, mirrors filter-component-header */
+.score-display-header {
+  background: var(--colour-zoryve-midnight-blue);
+  text-align: center;
+  padding: var(--spacing-xxs);
+}
+
+.score-display-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Body — centred column below the header */
 .score-display-main {
   background-color: var(--colour-zoryve-midnight-blue-50);
-  border-radius: var(--radius-md);
   padding: var(--spacing-lg) var(--spacing-md);
   display: flex;
+  flex-direction: column;
   gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;
 }
 
-/* Primary scores — left side */
+/* Row wrapper — primary left, secondary right */
+.score-display-scores {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Primary scores */
 .score-display-primary {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
 }
 
-/* Secondary scores (NRS) — right side */
+/* Secondary scores (NRS) — default is stacked below primary with a dotted separator */
 .score-display-secondary {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  width: 100%;
+  padding-top: var(--spacing-sm);
+  border-top: 1px dotted rgba(255, 255, 255, 0.2);
 }
 
-/* Score item - label and value in a flex row */
+/* Score item — label chip + value box in a row */
 .score-item {
   display: flex;
   align-items: center;
@@ -44,24 +76,22 @@
   gap: var(--spacing-xs);
 }
 
-/* Score label text */
+/* Score label chip */
 .score-item-label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   color: var(--colour-white);
-  text-transform: uppercase;
   letter-spacing: 0.5px;
-  width: 80px;
+  width: 120px;
   height: 40px;
   background-color: var(--colour-zoryve-midnight-blue-25);
   border-radius: var(--radius-sm);
-  text-align: left;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Score value box - 40x40px midnight blue */
+/* Score value box */
 .score-item-value {
   width: 40px;
   height: 40px;
@@ -75,10 +105,81 @@
   color: var(--colour-white);
 }
 
-/* Last timepoint styling (Clinical Trial only) */
-.score-display-last-timepoint .score-display-main {
+/* ------------------------------------------------------------------ */
+/* RESPONSIVE BREAKPOINTS                                             */
+/* ------------------------------------------------------------------ */
+
+/* iPad landscape */
+@media (max-width: 1279px) {
+  .score-item-label {
+    font-size: var(--font-size-sm);
+    width: 100px;
+    height: 36px;
+  }
+
+  .score-item-value {
+    font-size: var(--font-size-sm);
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* iPad portrait — tighten label/value sizing (stacking is handled by the default layout) */
+@media (max-width: 1023px) {
+  .score-item-label {
+    font-size: var(--font-size-xs);
+    width: 80px;
+    height: 32px;
+  }
+
+  .score-item-value {
+    font-size: var(--font-size-xs);
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* iPhone */
+@media (max-width: 767px) {
+  .score-item-label {
+    font-size: var(--font-size-xxs);
+    width: 60px;
+    height: 28px;
+  }
+
+  .score-item-value {
+    font-size: var(--font-size-xs);
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* CONTAINER QUERIES — adapt layout to ScoreDisplay's own width        */
+/* ------------------------------------------------------------------ */
+
+/* When the card is wide enough, swap to side-by-side: primary left, secondary right */
+@container score-display (min-width: 340px) {
+  .score-display-scores {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+
+  .score-display-secondary {
+    width: auto;
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Last timepoint styling (Clinical Trial only)                       */
+/* ------------------------------------------------------------------ */
+
+.score-display-last-timepoint {
   border: 2px solid var(--colour-last-timepoint-highlight);
-  padding: calc(var(--spacing-lg) - 2px) var(--spacing-md);
 }
 
 .score-item-value-last-timepoint {
@@ -86,3 +187,10 @@
   color: var(--colour-zoryve-midnight-blue);
 }
 
+.score-display-last-timepoint .score-display-header {
+  background-color: var(--colour-last-timepoint-highlight);
+}
+
+.score-display-last-timepoint .score-display-title {
+  color: var(--colour-zoryve-midnight-blue);
+}

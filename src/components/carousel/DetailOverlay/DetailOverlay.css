@@ -12,7 +12,8 @@
 
 /* Overlay content card */
 .detail-overlay-content {
-  max-height: 90vh;
+  /* Subtract ISI reservation + breathing room so the card fits the centred backdrop region */
+  max-height: calc(100vh - var(--isi-panel-collapsed-height) - var(--spacing-xl));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -67,8 +68,8 @@
 /* RESPONSIVE BREAKPOINTS                                             */
 /* ------------------------------------------------------------------ */
 
-/* Medium screens — tighten spacing and shrink text slightly */
-@media (max-width: 1200px) {
+/* Medium tier — tighten spacing and shrink text slightly (narrow OR short viewports) */
+@media (max-width: 1200px), (max-height: 900px) {
   .detail-overlay-content {
     --font-size-md: 11px;
     --font-size-sm: 10px;
@@ -92,24 +93,14 @@
     padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
   }
 
-  .score-item-label {
-    width: 68px;
-    height: 34px;
-  }
-
-  .score-item-value {
-    width: 34px;
-    height: 34px;
-  }
-
   .image-card-label {
     width: 78px;
     height: 30px;
   }
 }
 
-/* Small screens — further reduction to hold the layout together */
-@media (max-width: 1024px) {
+/* Small tier — further reduction to hold the layout together (narrow OR short viewports) */
+@media (max-width: 1024px), (max-height: 800px) {
   .detail-overlay-content {
     --font-size-md: 10px;
     --font-size-sm: 9px;
@@ -131,16 +122,6 @@
   .detail-overlay-timepoints {
     gap: var(--spacing-sm);
     padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
-  }
-
-  .score-item-label {
-    width: 58px;
-    height: 30px;
-  }
-
-  .score-item-value {
-    width: 30px;
-    height: 30px;
   }
 
   .score-item {
