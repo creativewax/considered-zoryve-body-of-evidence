@@ -15,6 +15,7 @@ import './FilterComponent.css'
 
 const FilterComponent = ({
   title,
+  subTitle,
   children,
   condensed = false
 }) => {
@@ -30,7 +31,8 @@ const FilterComponent = ({
       transition={TRANSITIONS.NORMAL}
     >
       <div className="filter-component-header">
-        <h3 className="filter-component-title">{title}</h3>
+        <div className="filter-component-title">{title}</div>
+        {subTitle && <div className="filter-component-sub-title">{subTitle}</div>}
       </div>
 
       <div

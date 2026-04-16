@@ -67,6 +67,7 @@
   --font-size-xs: 11px;
   --font-size-sm: 12px;
   --font-size-md: 13px;
+  --font-size-lmd: 14px;
   --font-size-lg: 16px;
   --font-size-xl: 18px;
   --font-size-xxl: 22px;
@@ -100,12 +101,12 @@
   --filter-bottom-height: 60px;
   
   /* Footer */
-  --footer-height: 40px;
+  --footer-height: 50px;
   --footer-padding: 20px;
   
   /* ISI Panel */
-  --isi-panel-collapsed-height: 100px;
-  --isi-panel-expanded-height: 440px;
+  --isi-panel-collapsed-height: 118px;
+  --isi-panel-expanded-height: 400px;
   
   /* Radio Button */
   --radio-size: 15px;

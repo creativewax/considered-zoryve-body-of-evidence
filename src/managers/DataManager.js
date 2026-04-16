@@ -127,9 +127,9 @@ class DataManager {
       return gender && gender.trim().toUpperCase() === option.value
     }
 
-    // Standard string match
+    // Standard string match — case-insensitive to guard against data entry variation
     const fieldValue = patient[definition.schemaField]
-    return fieldValue && String(fieldValue).trim() === option.value
+    return fieldValue && String(fieldValue).trim().toLowerCase() === option.value.toLowerCase()
   }
 
   /**

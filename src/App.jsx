@@ -18,7 +18,6 @@ import eventSystem from './utils/EventSystem.js'
 import useManagerSubscription from './hooks/common/useManagerSubscription.js'
 import useEventSubscription from './hooks/common/useEventSubscription.js'
 import Background from './components/common/Background/Background.jsx'
-import DraftWatermark from './components/common/DraftWatermark/DraftWatermark.jsx'
 import IntroPage from './pages/IntroPage/IntroPage.jsx'
 import MainPage from './pages/MainPage/MainPage.jsx'
 import ImageViewer from './components/carousel/DetailOverlay/ImageViewer.jsx'
@@ -116,7 +115,6 @@ function App() {
     return (
       <div className="app-loading">
         <Background />
-        <DraftWatermark />
         <div className="app-loading-content">
           <PuffLoader
             color="var(--colour-white)"
@@ -140,7 +138,6 @@ function App() {
     <BrowserRouter>
       <div className="app">
         <Background />
-        <DraftWatermark />
 
         <Routes>
           <Route path={ROUTES.INTRO} element={<IntroPage />} />

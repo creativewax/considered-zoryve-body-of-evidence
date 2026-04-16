@@ -11,6 +11,7 @@ import NavigationArrows from '../../components/carousel/NavigationArrows/Navigat
 import Shadow from '../../components/carousel/Shadow/Shadow'
 import DetailOverlayContainer from '../../components/carousel/DetailOverlay/DetailOverlayContainer'
 import { calculateBestFitFOV } from '../../utils/carouselHelpers'
+import AppTitle from '../../components/layout/AppTitle/AppTitle.jsx'
 import useCarouselManager from '../../hooks/carousel/useCarouselManager.js'
 import './MainView.css'
 
@@ -32,6 +33,7 @@ const MainView = () => {
 
   return (
     <div className="main-view">
+      <AppTitle />
       <div className="main-view-content" ref={containerRef}>
         {layoutConfig && imageCount > 0 ? (
           <>

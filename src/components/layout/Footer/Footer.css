@@ -41,6 +41,6 @@
 }
 
 .footer-logo img {
-  height: 30px;
+  height: calc(var(--footer-height) - 12px);
   width: auto;
 }

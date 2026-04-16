@@ -13,14 +13,17 @@
  *   --base-url=http://localhost:5173   (default)
  *   --output=./screenshots             (default)
  *   --delay=1500                       (ms to wait before each screenshot, default 1500)
- *   --filters-only                     (skip debug routes)
- *   --debug-only                       (skip filter screenshots)
+ *   --filters-only                     (skip debug routes, references, and intro)
+ *   --debug-only                       (skip filter screenshots, references, and intro)
+ *   --references-only                  (skip filters, debug routes, and intro)
+ *   --intro-only                       (skip filters, debug routes, and references)
+ *   --resume                           (skip files that already exist)
  */
 
 import { chromium } from 'playwright'
 import { mkdir } from 'fs/promises'
 import { resolve } from 'path'
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 
 // ---------------------------------------------------------------------------
 // CONFIG
@@ -36,8 +39,11 @@ const args = Object.fromEntries(
 const BASE_URL = args['base-url'] || 'http://localhost:3000'
 const OUTPUT_DIR = resolve(args['output'] || './screenshots')
 const DELAY = parseInt(args['delay'] || '1500', 10)
-const SKIP_FILTERS = args['debug-only'] === true
-const SKIP_DEBUG = args['filters-only'] === true
+const SKIP_FILTERS = args['debug-only'] === true || args['references-only'] === true || args['intro-only'] === true
+const SKIP_DEBUG = args['filters-only'] === true || args['references-only'] === true || args['intro-only'] === true
+const SKIP_REFERENCES = args['filters-only'] === true || args['debug-only'] === true || args['intro-only'] === true
+const SKIP_INTRO = args['filters-only'] === true || args['debug-only'] === true || args['references-only'] === true
+const RESUME = args['resume'] === true
 
 // All filter options — group name, button text, filename slug
 const FILTER_OPTIONS = [
@@ -54,7 +60,7 @@ const FILTER_OPTIONS = [
   { group: 'bodyArea', text: 'Head and neck', file: 'head-and-neck' },
   { group: 'bodyArea', text: 'Torso', file: 'torso' },
   { group: 'bodyArea', text: 'Arms and hands', file: 'arms-and-hands' },
-  { group: 'bodyArea', text: 'Legs and feet', file: 'legs-and-feet' },
+  { group: 'bodyArea', text: 'Glute, legs and feet', file: 'glute-legs-and-feet' },
   { group: 'bodyArea', text: 'Multiple body parts', file: 'multiple-body-parts' },
   // Baseline Severity
   { group: 'severity', text: 'Mild', file: 'mild' },
@@ -62,9 +68,10 @@ const FILTER_OPTIONS = [
   { group: 'severity', text: 'Severe', file: 'severe' },
   // Age
   { group: 'age', text: '2-5', file: 'age-2-5' },
-  { group: 'age', text: '6-18', file: 'age-6-18' },
-  { group: 'age', text: '19-30', file: 'age-19-30' },
-  { group: 'age', text: '31-50', file: 'age-31-50' },
+  { group: 'age', text: '6-8', file: 'age-6-8' },
+  { group: 'age', text: '9-11', file: 'age-9-11' },
+  { group: 'age', text: '12-17', file: 'age-12-17' },
+  { group: 'age', text: '18-49', file: 'age-18-49' },
   { group: 'age', text: '50+', file: 'age-50-plus' },
   // Gender
   { group: 'gender', text: 'Male', file: 'male' },
@@ -90,8 +97,10 @@ function routeToFilename(route) {
 
 async function run() {
   await mkdir(OUTPUT_DIR, { recursive: true })
+  await mkdir(resolve(OUTPUT_DIR, 'intro'), { recursive: true })
   await mkdir(resolve(OUTPUT_DIR, 'filters'), { recursive: true })
   await mkdir(resolve(OUTPUT_DIR, 'patients'), { recursive: true })
+  await mkdir(resolve(OUTPUT_DIR, 'references'), { recursive: true })
 
   console.log(`Screenshots will be saved to: ${OUTPUT_DIR}`)
   console.log(`Base URL: ${BASE_URL}`)
@@ -107,11 +116,55 @@ async function run() {
       '--ignore-gpu-blocklist',
     ],
   })
+  const VIEWPORT = { width: 1366, height: 1024 }
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
-    deviceScaleFactor: 1,
+    viewport: VIEWPORT,
+    deviceScaleFactor: 2,
   })
   const page = await context.newPage()
+  page.setDefaultTimeout(5000)
+  page.setDefaultNavigationTimeout(5000)
+
+  // ------------------------------------------------------------------
+  // INTRO PAGE SCREENSHOTS
+  // ------------------------------------------------------------------
+
+  if (!SKIP_INTRO) {
+    console.log('=== INTRO PAGE SCREENSHOTS ===\n')
+
+    await page.goto(BASE_URL, { waitUntil: 'networkidle' })
+    console.log('  Waiting for intro to load...')
+    await page.getByText('Get Started', { exact: false }).first().waitFor({ state: 'visible', timeout: 10000 })
+    await wait(DELAY)
+
+    // Each step scrolls ~35% of the viewport height. The final step uses an
+    // oversized delta (99999) which the browser clamps to the scroll maximum,
+    // guaranteeing the last capture always shows the bottom of the content.
+    const INTRO_STEPS = 4
+    const STEP_DELTA = Math.floor(VIEWPORT.height * 0.35)
+    const scrollable = page.locator('.intro-content-scrollable')
+
+    for (let step = 0; step <= INTRO_STEPS; step++) {
+      const filename = `intro-scroll-${step}.jpg`
+      const filePath = resolve(OUTPUT_DIR, 'intro', filename)
+
+      if (RESUME && existsSync(filePath)) {
+        console.log(`  SKIP ${filename} (exists)`)
+      } else {
+        await page.screenshot({ path: filePath, type: 'jpeg', quality: 90 })
+        const label = step === 0 ? 'top' : step === INTRO_STEPS ? 'bottom' : `~${STEP_DELTA * step}px`
+        console.log(`  ${filename} (${label})`)
+      }
+
+      // Scroll before the next capture (skip after the last one)
+      if (step < INTRO_STEPS) {
+        const delta = step === INTRO_STEPS - 1 ? 99999 : STEP_DELTA
+        await scrollable.hover()
+        await page.mouse.wheel(0, delta)
+        await wait(400)
+      }
+    }
+  }
 
   // ------------------------------------------------------------------
   // FILTER SCREENSHOTS
@@ -125,26 +178,37 @@ async function run() {
     console.log('  Waiting for app to load...')
     // Wait for the "Get Started" button to appear (loading complete)
     const getStarted = page.getByText('Get Started', { exact: false }).first()
-    await getStarted.waitFor({ state: 'visible', timeout: 30000 })
+    await getStarted.waitFor({ state: 'visible', timeout: 5000 })
     await wait(500)
     await getStarted.click()
     // Wait for main view to render
     await wait(3000)
 
     // Take a baseline screenshot (no filters)
-    await page.screenshot({ path: resolve(OUTPUT_DIR, 'filters', 'reset-filters.png') })
-    console.log('  reset-filters.png')
+    const baselinePath = resolve(OUTPUT_DIR, 'filters', 'reset-filters.jpg')
+    if (!RESUME || !existsSync(baselinePath)) {
+      await page.screenshot({ path: baselinePath, type: 'jpeg', quality: 90 })
+      console.log('  reset-filters.jpg')
+    } else {
+      console.log('  SKIP reset-filters.jpg (exists)')
+    }
 
     for (const filter of FILTER_OPTIONS) {
       try {
+        const filename = `${filter.file}.jpg`
+        const filePath = resolve(OUTPUT_DIR, 'filters', filename)
+
+        if (RESUME && existsSync(filePath)) {
+          console.log(`  SKIP ${filename} (exists)`)
+          continue
+        }
+
         // Find and click the button by its visible text
         const button = page.getByText(filter.text, { exact: true }).first()
         await button.click()
         await wait(DELAY)
 
-        // Screenshot
-        const filename = `${filter.file}.png`
-        await page.screenshot({ path: resolve(OUTPUT_DIR, 'filters', filename) })
+        await page.screenshot({ path: filePath, type: 'jpeg', quality: 90 })
         console.log(`  ${filename}`)
 
         // Unclick (click again to deselect)
@@ -174,15 +238,40 @@ async function run() {
 
     for (const route of routes) {
       try {
+        const filename = `${routeToFilename(route)}.jpg`
+        const filePath = resolve(OUTPUT_DIR, 'patients', filename)
+
+        if (RESUME && existsSync(filePath)) {
+          console.log(`  SKIP ${filename} (exists)`)
+          continue
+        }
+
         await page.goto(`${BASE_URL}${route}`, { waitUntil: 'networkidle' })
         await wait(DELAY)
 
-        const filename = `${routeToFilename(route)}.png`
-        await page.screenshot({ path: resolve(OUTPUT_DIR, 'patients', filename) })
+        await page.screenshot({ path: filePath, type: 'jpeg', quality: 90 })
         console.log(`  ${filename}`)
       } catch (err) {
         console.error(`  SKIP ${route}: ${err.message}`)
       }
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // REFERENCES MODAL SCREENSHOT
+  // ------------------------------------------------------------------
+
+  if (!SKIP_REFERENCES) {
+    console.log('\n=== REFERENCES MODAL SCREENSHOT ===\n')
+
+    const refsPath = resolve(OUTPUT_DIR, 'references', 'references-modal.jpg')
+    if (RESUME && existsSync(refsPath)) {
+      console.log('  SKIP references-modal.jpg (exists)')
+    } else {
+      await page.goto(`${BASE_URL}/debug/references`, { waitUntil: 'networkidle' })
+      await wait(DELAY)
+      await page.screenshot({ path: refsPath, type: 'jpeg', quality: 90 })
+      console.log('  references-modal.jpg')
     }
   }
 

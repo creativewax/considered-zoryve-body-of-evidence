@@ -39,7 +39,7 @@
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lmd);
   line-height: 1;
   padding: var(--spacing-xxs) 0;
   min-height: 1.5em;
@@ -59,7 +59,8 @@
 /* RESPONSIVE BREAKPOINTS                                             */
 /* ------------------------------------------------------------------ */
 
-@media (max-width: 1200px) {
+/* iPad landscape — wrap columns, slight font reduction */
+@media (max-width: 1279px) {
   .detail-overlay-info {
     flex-wrap: wrap;
   }
@@ -70,20 +71,27 @@
 
   .detail-overlay-info-item {
     max-width: none;
+    font-size: var(--font-size-md);
   }
 }
 
-@media (max-width: 1024px) {
+/* iPad portrait — tighter spacing, smaller font */
+@media (max-width: 1023px) {
   .detail-overlay-info-item {
     padding: 1px 0;
     min-height: 1.3em;
+    font-size: var(--font-size-md);
   }
 }
 
-/* Mobile — stack columns vertically */
-@media (max-width: 600px) {
+/* iPhone — stack columns vertically, smallest font */
+@media (max-width: 767px) {
   .detail-overlay-info {
     flex-direction: column;
+  }
+
+  .detail-overlay-info-item {
+    font-size: var(--font-size-xxs);
   }
 
   .detail-overlay-info-column:not(:first-child) {

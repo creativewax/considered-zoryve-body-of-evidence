@@ -6,20 +6,17 @@
  * Uses N/A for missing or "Not Reported" values.
  */
 
-import { FILTER_OPTIONS, GENDER_CODE } from '../../../constants/index.js'
+import { FILTER_OPTIONS, GENDER_CODE, PATIENT_SCHEMA } from '../../../constants/index.js'
+import { isValidValue } from '../../../utils/patientDataSplitter.js'
 import './PatientDetailData.css'
 
 // ---------------------------------------------------------------------------
 // HELPERS
 // ---------------------------------------------------------------------------
 
-const NOT_REPORTED = /^not reported\.?$/i
-
 function displayValue(value) {
-  if (value == null || value === '') return 'N/A'
-  const s = String(value).trim()
-  if (s === '' || NOT_REPORTED.test(s)) return 'N/A'
-  return s
+  if (isValidValue(value, false)) return value
+  return 'N/A'
 }
 
 // ---------------------------------------------------------------------------
@@ -38,11 +35,12 @@ const InfoItem = ({ label, value }) => (
 // ---------------------------------------------------------------------------
 
 const PatientDetailData = ({ patient }) => {
-  const genderDisplay = patient.gender === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE
+  const genderDisplay = patient[PATIENT_SCHEMA.GENDER] === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE
+  console.log('PatientDetailData patient:', patient, 'genderDisplay:', genderDisplay, 'patient[PATIENT_SCHEMA.GENDER]:', patient[PATIENT_SCHEMA.GENDER])
 
   const column1 = [
-    { label: 'Type', value: 'Clinical Trial Patient' },
-    { label: 'Condition', value: displayValue(patient.indication) },
+    { label: 'Type', value: displayValue(patient.type) },
+    { label: 'Condition', value: displayValue(patient.condition) },
     { label: 'Formulation', value: displayValue(patient.formulation) },
   ]
   const column2 = [
@@ -52,7 +50,7 @@ const PatientDetailData = ({ patient }) => {
   ]
   const column3 = [
     { label: 'Body Area', value: displayValue(patient.bodyArea) },
-    { label: 'Treatments Tried and Failed', value: displayValue(patient.treatmentsTriedAndFailed) },
+    // { label: 'Treatments Tried and Failed', value: displayValue(patient.treatmentsTriedAndFailed) },
     { label: 'Ethnicity', value: displayValue(patient.ethnicity) },
   ]
 

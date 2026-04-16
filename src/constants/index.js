@@ -21,7 +21,7 @@ export const PATIENT_SCHEMA = {
   INDICATION: 'condition',
   FORMULATION: 'formulation',
   FITZPATRICK_SKIN_TYPE: 'fitzpatrickSkinType',
-  GENDER: 'gender',
+  GENDER: 'sex',
   AGE: 'age',
   RACE: 'race',
   ETHNICITY: 'ethnicity',
@@ -231,6 +231,7 @@ export const ASSETS = {
  */
 export const FILTER_DEFINITIONS = {
   [FILTER_KEYS.INDICATION]: {
+    label: 'Indication',
     schemaField: PATIENT_SCHEMA.INDICATION,
     multiSelect: false,
     options: [
@@ -241,6 +242,7 @@ export const FILTER_DEFINITIONS = {
   },
 
   [FILTER_KEYS.FORMULATION]: {
+    label: 'Formulation',
     schemaField: PATIENT_SCHEMA.FORMULATION,
     multiSelect: true,
     options: [
@@ -252,18 +254,21 @@ export const FILTER_DEFINITIONS = {
   },
 
   [FILTER_KEYS.BODY_AREA]: {
+    label: 'Body Area',
     schemaField: PATIENT_SCHEMA.BODY_AREA_SIMPLE,
     multiSelect: true,
     options: [
       { value: 'Head and neck', display: 'Head and neck' },
       { value: 'Torso', display: 'Torso' },
       { value: 'Arms and hands', display: 'Arms and hands' },
-      { value: 'Legs and feet', display: 'Legs and feet' },
+      { value: 'Legs and feet', display: 'Glute, legs and feet' },
       { value: true, display: 'Multiple body parts', matchField: PATIENT_SCHEMA.MULTI_BODY_AREA },
     ]
   },
 
   [FILTER_KEYS.BASELINE_SEVERITY]: {
+    label: 'Baseline Severity',
+    subLabel: '(IGA/B-IGA/S-IGA/vIGA-AD)',
     schemaField: PATIENT_SCHEMA.BASELINE_SEVERITY,
     multiSelect: true,
     options: [
@@ -274,21 +279,24 @@ export const FILTER_DEFINITIONS = {
   },
 
   [FILTER_KEYS.AGE]: {
+    label: 'Age',
     schemaField: PATIENT_SCHEMA.AGE,
     matchFunction: 'ageRange',
     multiSelect: true,
     options: [
       { min: 2, max: 5, display: '2-5' },
-      { min: 6, max: 18, display: '6-18' },
-      { min: 19, max: 30, display: '19-30' },
-      { min: 31, max: 50, display: '31-50' },
+      { min: 6, max: 8, display: '6-8' },
+      { min: 9, max: 11, display: '9-11' },
+      { min: 12, max: 17, display: '12-17' },
+      { min: 18, max: 49, display: '18-49' },
       { min: 50, max: Infinity, display: '50+' },
     ]
   },
 
   [FILTER_KEYS.GENDER]: {
+    label: 'Sex',
     schemaField: PATIENT_SCHEMA.GENDER,
-    matchFunction: 'gender',
+    matchFunction: PATIENT_SCHEMA.GENDER,
     multiSelect: true,
     options: [
       { value: 'M', display: 'Male', icon: ASSETS.ICONS.MALE },

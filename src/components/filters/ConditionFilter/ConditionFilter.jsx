@@ -38,7 +38,7 @@ const ConditionFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Indication" condensed>
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.INDICATION].label} condensed>
       <div className="condition-filter">
         {/* Render colour-coded condition option buttons */}
         {conditions.map((condition, index) => {

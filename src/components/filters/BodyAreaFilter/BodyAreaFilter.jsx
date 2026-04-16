@@ -35,7 +35,7 @@ const BodyAreaFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Body Area">
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.BODY_AREA].label}>
       <div className="body-area-filter">
         {/* Decorative background element */}
         <div className="body-area-filter-background" />

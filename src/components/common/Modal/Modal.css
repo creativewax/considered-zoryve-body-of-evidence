@@ -1,0 +1,89 @@
+/**
+ * Modal.css
+ * Base modal styles — backdrop, container, header, body, close button
+ */
+
+/* Fullscreen backdrop — white blur */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* White card container */
+.modal-container {
+  position: relative;
+  background: var(--colour-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  max-width: 560px;
+  width: 100%;
+}
+
+/* Close button — floats outside top-right corner */
+.modal-close {
+  position: absolute;
+  top: calc(var(--spacing-sm) * -1);
+  right: calc(var(--spacing-sm) * -1);
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: var(--shadow-button);
+  z-index: 1;
+}
+
+/* Header — dark bar with white title */
+.modal-header {
+  background: var(--colour-zoryve-midnight-blue);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.modal-title {
+  color: var(--colour-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Body — Zoryve blue text on white */
+.modal-body {
+  padding: var(--spacing-xl);
+  color: var(--colour-zoryve-midnight-blue);
+}
+
+/* ------------------------------------------------------------------ */
+/* RESPONSIVE                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 767px) {
+  .modal-backdrop {
+    padding: var(--spacing-md);
+    align-items: flex-end;
+  }
+
+  .modal-container {
+    max-width: 100%;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .modal-header {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+}

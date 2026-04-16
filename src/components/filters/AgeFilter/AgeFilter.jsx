@@ -34,7 +34,7 @@ const AgeFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Age">
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.AGE].label}>
       <div className="age-filter">
         {/* Render age range buttons */}
         {ageOptions.map((option, index) => (

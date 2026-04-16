@@ -1,0 +1,28 @@
+/**
+ * AppTitle.css
+ * Patient type label — pinned to top centre of the main view
+ */
+
+.app-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  background: var(  --colour-zoryve-midnight-blue-50);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.app-title-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--colour-white);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}

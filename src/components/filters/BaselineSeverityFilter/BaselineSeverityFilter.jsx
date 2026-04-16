@@ -34,7 +34,7 @@ const BaselineSeverityFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Baseline Severity">
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.BASELINE_SEVERITY].label} subTitle={FILTER_DEFINITIONS[FILTER_KEYS.BASELINE_SEVERITY].subLabel}>
       <div className="radio-filter">
         {/* Render severity level radio option buttons */}
         {severityOptions.map((option, index) => (

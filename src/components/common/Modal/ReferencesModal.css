@@ -1,0 +1,20 @@
+/**
+ * ReferencesModal.css
+ * Styles specific to the references and definitions modal content
+ */
+
+.references-definitions {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--colour-zoryve-midnight-blue);
+  margin-bottom: var(--spacing-md);
+}
+
+.references-source {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--colour-zoryve-midnight-blue);
+  border-top: 1px solid rgba(20, 54, 91, 0.15);
+  padding-top: var(--spacing-md);
+}

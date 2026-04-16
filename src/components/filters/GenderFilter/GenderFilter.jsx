@@ -34,7 +34,7 @@ const GenderFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Gender">
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.GENDER].label}>
       <div className="gender-filter">
         {/* Render gender option buttons with icons */}
         {genderOptions.map((option, index) => (

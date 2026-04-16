@@ -27,8 +27,8 @@
         "nullable": true
       },
       {
-        "name": "Practice Based or Clinical Trial",
-        "camelCase": "practiceBasedOrClinicalTrial",
+        "name": "Type",
+        "camelCase": "type",
         "type": "string",
         "nullable": true
       },
@@ -51,15 +51,15 @@
         "nullable": true
       },
       {
-        "name": "Gender",
-        "camelCase": "gender",
+        "name": "Sex",
+        "camelCase": "sex",
         "type": "string",
         "nullable": true
       },
       {
         "name": "Age",
         "camelCase": "age",
-        "type": "string",
+        "type": "number",
         "nullable": true
       },
       {
@@ -124,8 +124,8 @@
         "nullable": true
       },
       {
-        "name": "WI-NRS  Daily Itch Score - 24 hrs",
-        "camelCase": "wi-nrsDailyItchScore-24Hrs",
+        "name": "WI-NRS  Daily Itch Scale - 24 hrs",
+        "camelCase": "wi-nrsDailyItchScale-24Hrs",
         "type": "string",
         "nullable": true
       },
@@ -166,6 +166,12 @@
         "nullable": true
       },
       {
+        "name": "WI-NRS Week 52",
+        "camelCase": "wi-nrsWeek52",
+        "type": "number",
+        "nullable": true
+      },
+      {
         "name": "SI-NRS Baseline",
         "camelCase": "si-nrsBaseline",
         "type": "string",
@@ -184,8 +190,8 @@
         "nullable": true
       },
       {
-        "name": "SI-NRS Daily Itch Score - 24 hrs",
-        "camelCase": "si-nrsDailyItchScore-24Hrs",
+        "name": "SI-NRS Daily Itch Scale - 24 hrs",
+        "camelCase": "si-nrsDailyItchScale-24Hrs",
         "type": "string",
         "nullable": true
       },
@@ -291,7 +297,7 @@
             {
               "name": "Baseline",
               "camelCase": "baseline",
-              "type": "string",
+              "type": "number",
               "nullable": true
             },
             {
@@ -309,7 +315,7 @@
             {
               "name": "Week 4",
               "camelCase": "week4",
-              "type": "string",
+              "type": "integer",
               "nullable": true
             },
             {

@@ -57,17 +57,22 @@ const ScoreDisplay = ({ scale, wiNrs, siNrs, showWiNrs, showSiNrs, isLastTimepoi
 
   return (
     <div className={`score-display ${isLastTimepoint ? 'score-display-last-timepoint' : ''}`}>
+      {/* <div className="score-display-header">
+        <span className="score-display-title">Scales</span>
+      </div> */}
       <div className="score-display-main">
-        <div className="score-display-primary">
-          <ScoreItemArray scale={scale} isLastTimepoint={isLastTimepoint} />
-        </div>
-
-        {hasSecondaryScores && (
-          <div className="score-display-secondary">
-            {showWiNrs && <ScoreItem label="WI-NRS" value={wiNrs} isLastTimepoint={isLastTimepoint} />}
-            {showSiNrs && <ScoreItem label="SI-NRS" value={siNrs} isLastTimepoint={isLastTimepoint} />}
+        <div className="score-display-scores">
+          <div className="score-display-primary">
+            <ScoreItemArray scale={scale} isLastTimepoint={isLastTimepoint} />
           </div>
-        )}
+
+          {hasSecondaryScores && (
+            <div className="score-display-secondary">
+              {showWiNrs && <ScoreItem label="WI-NRS" value={wiNrs} isLastTimepoint={isLastTimepoint} />}
+              {showSiNrs && <ScoreItem label="SI-NRS" value={siNrs} isLastTimepoint={isLastTimepoint} />}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

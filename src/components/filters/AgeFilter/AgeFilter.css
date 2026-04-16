@@ -13,7 +13,7 @@
   background-color: var(--colour-primary-blue);
   color: var(--colour-white);
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -30,10 +30,6 @@
   box-shadow: 0 0 var(--radio-glow) var(--colour-zoryve-yellow);
 }
 
-.age-button-text {
-  font-weight: var(--font-weight-regular);
-  color: var(--colour-white);
-}
 
 .age-button-text-selected {
   font-weight: var(--font-weight-bold);

@@ -25,10 +25,10 @@ const ALL_WEEKS = ['baseline', 'week1', 'week2', 'week3', 'week4', 'week6', 'wee
 /**
  * Checks if a value is valid (not null, empty, or "Not Reported")
  */
-function isValidValue(value) {
+function isValidValue(value, checkNotReported = true) {
   if (value == null || value === '') return false
   const s = String(value).trim()
-  if (s === '' || NOT_REPORTED_REGEX.test(s)) return false
+  if (s === '' || (checkNotReported && NOT_REPORTED_REGEX.test(s))) return false
   return true
 }
 
@@ -197,3 +197,5 @@ export function splitPatientData(patient) {
 
   return { timepoints: result, showWiNrs, showSiNrs }
 }
+
+export { isValidValue }

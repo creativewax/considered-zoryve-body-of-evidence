@@ -34,7 +34,7 @@ const FormulationFilter = ({ selected }) => {
   // ---------------------------------------------------------------------------
 
   return (
-    <FilterComponent title="Formulation">
+    <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.FORMULATION].label}>
       <div className="radio-filter">
         {/* Render formulation radio option buttons */}
         {formulationOptions.map((option, index) => (
