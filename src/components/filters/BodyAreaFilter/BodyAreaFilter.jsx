@@ -5,7 +5,7 @@
  * selected - Currently selected body area indices
  */
 
-import { FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
+import { ASSETS, FILTER_DEFINITIONS, FILTER_KEYS } from '../../../constants/index.js'
 import eventSystem from '../../../utils/EventSystem.js'
 import { useFilterAvailability } from '../../../hooks/filters/useFilterAvailability'
 import FilterComponent from '../shared/FilterComponent.jsx'
@@ -38,7 +38,10 @@ const BodyAreaFilter = ({ selected }) => {
     <FilterComponent title={FILTER_DEFINITIONS[FILTER_KEYS.BODY_AREA].label}>
       <div className="body-area-filter">
         {/* Decorative background element */}
-        <div className="body-area-filter-background" />
+        <div
+          className="body-area-filter-background"
+          style={{ backgroundImage: `url(${ASSETS.ICONS.BODY_AREA_PERSON})` }}
+        />
         {/* Body area radio option buttons */}
         <div className="radio-filter body-area-filter-options">
           {bodyAreaOptions.map((option, index) => (

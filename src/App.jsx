@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import { PuffLoader } from 'react-spinners'
 import { AnimatePresence } from 'framer-motion'
 import { APP_STATE, ROUTES } from './constants/index.js'
@@ -135,7 +135,7 @@ function App() {
   // ---------------------------------------------------------------------------
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="app">
         <Background />
 
@@ -154,7 +154,7 @@ function App() {
           )}
         </AnimatePresence>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

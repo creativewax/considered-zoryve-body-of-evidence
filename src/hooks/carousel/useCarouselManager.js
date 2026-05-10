@@ -34,7 +34,7 @@
  *
  * filteredImages[] — from DataManager.getFilteredImages(), one entry per patient:
  *   [{
- *     imagePath:  string   — full path to first valid image (e.g. '/patients/110-005_baseline.jpg')
+ *     imagePath:  string   — full path to first valid image (e.g. 'patients/110-005_baseline.jpg')
  *     field:      string   — which image field matched (e.g. 'baselineImage', 'week2Image')
  *     patient:    object   — the full patient record with all PATIENT_SCHEMA fields:
  *       {

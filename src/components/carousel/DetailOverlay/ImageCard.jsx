@@ -5,6 +5,7 @@
  * Features: 2px white border, rounded corners, shadow, top-left label, bottom-right plus button.
  */
 
+import { ASSETS } from '../../../constants/index.js'
 import { PlusIcon } from '../../common/Svg/index.js'
 import './ImageCard.css'
 
@@ -23,7 +24,7 @@ import './ImageCard.css'
  * @param {boolean} isLastTimepoint - Whether this is the last timepoint (for special styling)
  */
 const ImageCard = ({ image, thumb, label, title, onExpand, isLastTimepoint = false }) => {
-  const thumbPath = `/patients/${thumb}`
+  const thumbPath = `${ASSETS.PATIENTS_PATH}${thumb}`
 
   return (
     <div className={`image-card ${isLastTimepoint ? 'image-card-last-timepoint' : ''}`}>

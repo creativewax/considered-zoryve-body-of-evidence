@@ -26,7 +26,7 @@ const Footer = () => {
 
   // Auto-open when navigating to /debug/references (for screenshot capture)
   useEffect(() => {
-    if (window.location.pathname === '/debug/references') setRefsOpen(true)
+    if (window.location.hash === '#/debug/references') setRefsOpen(true)
   }, [])
 
   // ---------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ASSETS } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations'
 import { ChevronLeft, ChevronRight, CloseIcon } from '../../common/Svg/index.js'
 import eventSystem from '../../../utils/EventSystem'
@@ -96,7 +97,7 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
   }
 
   const currentTimepoint = timepoints[currentIndex]
-  const imagePath = `/patients/${currentTimepoint.image}`
+  const imagePath = `${ASSETS.PATIENTS_PATH}${currentTimepoint.image}`
 
   // Animation variants for image transitions
   const imageVariants = {

@@ -6,6 +6,7 @@
  *       Content is from trusted intro_data.json source file
  */
 
+import { ASSETS } from '../../../constants'
 import './IntroContentHeader.css'
 
 const IntroContentHeader = ({ icon, title, headerColor }) => {
@@ -20,7 +21,7 @@ const IntroContentHeader = ({ icon, title, headerColor }) => {
       style={{ backgroundColor }}
     >
       <img 
-        src={`/UI/${icon}`}
+        src={`${ASSETS.ICONS_BASE}${icon}`}
         alt=""
         className="intro-content-header-icon"
       />

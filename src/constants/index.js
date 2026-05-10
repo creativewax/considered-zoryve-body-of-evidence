@@ -186,28 +186,29 @@ export const COLOURS = {
  * All paths are relative to the public directory
  */
 export const ASSETS = {
-  BACKGROUND: '/UI/bkgd-ct.jpg',
-  FILTER_BACKGROUND: '/UI/filter-bkgd-ct.jpg',
+  BACKGROUND: 'UI/bkgd-ct.jpg',
+  FILTER_BACKGROUND: 'UI/filter-bkgd-ct.jpg',
+  ICONS_BASE: 'UI/',
   ICONS: {
-    MALE: '/UI/icon-male.svg',
-    FEMALE: '/UI/icon-female.svg',
-    BODY_AREA_PERSON: '/UI/body-area-person.svg',
-    CLOSE_BUTTON: '/UI/close-button.svg',
-    PLUS_BUTTON: '/UI/plus-button.svg',
-    PLUS_BUTTON_BLUE: '/UI/plus-button-blue.svg',
-    FOOTER_INFO: '/UI/footer-info.svg',
-    FOOTER_REFS: '/UI/footer-refs.svg',
-    LOGO_ZORYVE: '/UI/logo-zoryve.svg',
-    LOGO_APP: '/UI/logo-app.svg',
-    SHADOW: '/UI/shadow.png',
-    ISI_TITLE_SHAPE: '/UI/isi-title-shape.svg',
+    MALE: 'UI/icon-male.svg',
+    FEMALE: 'UI/icon-female.svg',
+    BODY_AREA_PERSON: 'UI/body-area-person.svg',
+    CLOSE_BUTTON: 'UI/close-button.svg',
+    PLUS_BUTTON: 'UI/plus-button.svg',
+    PLUS_BUTTON_BLUE: 'UI/plus-button-blue.svg',
+    FOOTER_INFO: 'UI/footer-info.svg',
+    FOOTER_REFS: 'UI/footer-refs.svg',
+    LOGO_ZORYVE: 'UI/logo-zoryve.svg',
+    LOGO_APP: 'UI/logo-app.svg',
+    SHADOW: 'UI/shadow.png',
+    ISI_TITLE_SHAPE: 'UI/isi-title-shape.svg',
   },
   DATA: {
-    PATIENT_DATA: '/data/patient_data.json',
-    PATIENT_SCHEMA: '/data/patient_schema.json',
-    INTRO_DATA: '/data/intro_data.json',
+    PATIENT_DATA: 'data/patient_data.json',
+    PATIENT_SCHEMA: 'data/patient_schema.json',
+    INTRO_DATA: 'data/intro_data.json',
   },
-  PATIENTS_PATH: '/patients/',
+  PATIENTS_PATH: 'patients/',
 }
 
 // ---------------------------------------------------------------------------

@@ -43,7 +43,8 @@ class DebugManager {
    * @returns {boolean} True if debug URL was detected
    */
   parseUrl() {
-    const path = window.location.pathname
+    // HashRouter puts the path in the hash fragment — strip the leading '#'
+    const path = window.location.hash.replace(/^#/, '')
     const match = path.match(/^\/debug\/([^/]+)\/([^/]+)(?:\/(\d+))?$/)
 
     if (!match) return false
