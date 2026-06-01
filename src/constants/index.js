@@ -262,7 +262,7 @@ export const FILTER_DEFINITIONS = {
       { value: 'Head and neck', display: 'Head and neck' },
       { value: 'Torso', display: 'Torso' },
       { value: 'Arms and hands', display: 'Arms and hands' },
-      { value: 'Legs and feet', display: 'Glute, legs and feet' },
+      { value: 'Legs and feet', display: 'Glute, legs, and feet' },
       { value: true, display: 'Multiple body parts', matchField: PATIENT_SCHEMA.MULTI_BODY_AREA },
     ]
   },

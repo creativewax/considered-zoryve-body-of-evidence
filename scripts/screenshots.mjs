@@ -60,7 +60,7 @@ const FILTER_OPTIONS = [
   { group: 'bodyArea', text: 'Head and neck', file: 'head-and-neck' },
   { group: 'bodyArea', text: 'Torso', file: 'torso' },
   { group: 'bodyArea', text: 'Arms and hands', file: 'arms-and-hands' },
-  { group: 'bodyArea', text: 'Glute, legs and feet', file: 'glute-legs-and-feet' },
+  { group: 'bodyArea', text: 'Glute, legs, and feet', file: 'glute-legs-and-feet' },
   { group: 'bodyArea', text: 'Multiple body parts', file: 'multiple-body-parts' },
   // Baseline Severity
   { group: 'severity', text: 'Mild', file: 'mild' },
@@ -246,7 +246,13 @@ async function run() {
           continue
         }
 
-        await page.goto(`${BASE_URL}${route}`, { waitUntil: 'networkidle' })
+        // HashRouter + relative asset paths (Veeva fix): navigate via /# so the
+        // document base stays at root and ./data fetches resolve. Bounce through
+        // about:blank first — goto between two URLs that differ only after the #
+        // is a same-document nav that does NOT reload, leaving the prior patient
+        // on screen (one-route lag); the blank load forces a fresh route parse.
+        await page.goto('about:blank')
+        await page.goto(`${BASE_URL}/#${route}`, { waitUntil: 'networkidle' })
         await wait(DELAY)
 
         await page.screenshot({ path: filePath, type: 'jpeg', quality: 90 })
@@ -268,7 +274,8 @@ async function run() {
     if (RESUME && existsSync(refsPath)) {
       console.log('  SKIP references-modal.jpg (exists)')
     } else {
-      await page.goto(`${BASE_URL}/debug/references`, { waitUntil: 'networkidle' })
+      await page.goto('about:blank')
+      await page.goto(`${BASE_URL}/#/debug/references`, { waitUntil: 'networkidle' })
       await wait(DELAY)
       await page.screenshot({ path: refsPath, type: 'jpeg', quality: 90 })
       console.log('  references-modal.jpg')

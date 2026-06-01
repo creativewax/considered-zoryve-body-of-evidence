@@ -2,7 +2,7 @@
  * PatientDetailData.jsx
  *
  * Renders patient info in the detail overlay: 9 fields in 3 columns of 3.
- * Type, Condition, Formulation | Gender, Age, Race | Body Area, Treatments, Ethnicity.
+ * Clinical Trial, Condition, Formulation | Gender, Age, Race | Body Area, Treatments, Ethnicity.
  * Uses N/A for missing or "Not Reported" values.
  */
 
@@ -39,7 +39,7 @@ const PatientDetailData = ({ patient }) => {
   console.log('PatientDetailData patient:', patient, 'genderDisplay:', genderDisplay, 'patient[PATIENT_SCHEMA.GENDER]:', patient[PATIENT_SCHEMA.GENDER])
 
   const column1 = [
-    { label: 'Type', value: displayValue(patient.type) },
+    { label: 'Clinical Trial', value: displayValue(patient.clinicalTrial) },
     { label: 'Condition', value: displayValue(patient.condition) },
     { label: 'Formulation', value: displayValue(patient.formulation) },
   ]

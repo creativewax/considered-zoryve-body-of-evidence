@@ -27,8 +27,8 @@
         "nullable": true
       },
       {
-        "name": "Type",
-        "camelCase": "type",
+        "name": "Clinical Trial",
+        "camelCase": "clinicalTrial",
         "type": "string",
         "nullable": true
       },
