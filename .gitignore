@@ -14,6 +14,12 @@ build/
 screenshots/
 *.zip
 
+# Source documents (large workbooks etc., not for version control)
+/docs/
+
+# Firebase deploy cache
+.firebase/
+
 # Misc
 .DS_Store
 .env
