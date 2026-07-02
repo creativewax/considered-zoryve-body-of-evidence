@@ -129,7 +129,7 @@
       "annotation": "p1/para1/all; para2/all\np2/Listing 16.2.6.1/col1-3,6\np3-6/Listing 16.2.6.2/all\np7/Listing 16.2.4.1/row2 (11-910)\np8/Listing 16.2.4.3/row2 (11-910)",
       "pageNumber": "66, 68, 83",
       "patientId": "11-910",
-      "clinicalTrial": "DERMIS-1",
+      "clinicalTrial": "ARRECTOR",
       "condition": "Plaque Psoriasis",
       "formulation": "0.3% Foam",
       "fitzpatrickSkinType": "Not Reported",

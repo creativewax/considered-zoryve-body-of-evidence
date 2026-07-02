@@ -15,7 +15,7 @@ import ImageCard from './ImageCard.jsx'
 import ScoreDisplay from './ScoreDisplay.jsx'
 import ScaleLegends from './ScaleLegends.jsx'
 import BodyAreaSelector from './BodyAreaSelector.jsx'
-import CloseButton from './Common/CloseButton.jsx'
+import CloseButton from '../../common/CloseButton/CloseButton.jsx'
 import './DetailOverlay.css'
 
 // ---------------------------------------------------------------------------

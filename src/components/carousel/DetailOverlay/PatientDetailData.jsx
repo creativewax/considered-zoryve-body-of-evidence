@@ -36,7 +36,6 @@ const InfoItem = ({ label, value }) => (
 
 const PatientDetailData = ({ patient }) => {
   const genderDisplay = patient[PATIENT_SCHEMA.GENDER] === GENDER_CODE.MALE ? FILTER_OPTIONS.GENDER.MALE : FILTER_OPTIONS.GENDER.FEMALE
-  console.log('PatientDetailData patient:', patient, 'genderDisplay:', genderDisplay, 'patient[PATIENT_SCHEMA.GENDER]:', patient[PATIENT_SCHEMA.GENDER])
 
   const column1 = [
     { label: 'Clinical Trial', value: displayValue(patient.clinicalTrial) },

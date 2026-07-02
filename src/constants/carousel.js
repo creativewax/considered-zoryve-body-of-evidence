@@ -6,7 +6,7 @@
 
 export const CAROUSEL_LAYOUT = {
   LARGE: { minImages: 45, rows: 5, visibleColumns: 11, autoSpinColumns: 5 },
-  MEDIUM: { minImages: 21, rows: 3, visibleColumns: 7, autoSpinColumns: 5 },
+  MEDIUM: { minImages: 19, rows: 3, visibleColumns: 7, autoSpinColumns: 5 },
   SMALL: { minImages: 2, rows: 1, visibleColumns: 5, autoSpinColumns: 4 }
 }
 

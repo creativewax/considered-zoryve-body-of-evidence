@@ -64,6 +64,15 @@
   min-width: 0;
 }
 
+/* Floating close button — sits on the top-right corner of the overlay */
+.detail-overlay-close-top {
+  position: absolute;
+  top: calc(var(--spacing-md) * -1);
+  right: calc(var(--spacing-md) * -1);
+  z-index: 10;
+  padding: 0;
+}
+
 /* ------------------------------------------------------------------ */
 /* RESPONSIVE BREAKPOINTS                                             */
 /* ------------------------------------------------------------------ */

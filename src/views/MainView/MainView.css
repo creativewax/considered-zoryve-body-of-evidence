@@ -33,3 +33,24 @@
   height: 100%;
   width: 100%;
 }
+
+/* Floating close button — sits on the top-right corner of the view */
+.main-view-close-button {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 10;
+  padding: 0;
+}
+
+.main-view-close-button-bg {
+  fill: rgba(255, 255, 255, 0.9) !important;
+}
+
+.main-view-close-button-fg {
+  fill: var(--colour-zoryve-midnight-blue) !important;
+}
+
+.main-view-close-button:hover .main-view-close-button-fg {
+  fill: var(--colour-zoryve-blue) !important;
+}

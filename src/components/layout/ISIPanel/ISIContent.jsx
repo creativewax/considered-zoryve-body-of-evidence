@@ -29,8 +29,8 @@ export default function ISIContent() {
 
       <SectionTitle>INDICATIONS</SectionTitle>
       <p>ZORYVE cream, 0.05%, is indicated for topical treatment of mild to moderate atopic dermatitis in pediatric patients 2 to 5 years of age.</p>
-      <p>ZORYVE cream, 0.15%, is indicated for topical treatment of mild to moderate atopic dermatitis in adult and pediatric patients 6 years of age and older.</p>
-      <p>ZORYVE cream, 0.3%, is indicated for topical treatment of plaque psoriasis, including intertriginous areas, in adult and pediatric patients 6 years of age and older.</p>
+      <p>ZORYVE cream, 0.15%, is indicated for topical treatment of mild to moderate atopic dermatitis in adult and pediatric patients 2 years of age and older.</p>
+      <p>ZORYVE cream, 0.3%, is indicated for topical treatment of plaque psoriasis, including intertriginous areas, in adult and pediatric patients 2 years of age and older.</p>
       <p>ZORYVE topical foam, 0.3%, is indicated for the treatment of plaque psoriasis of the scalp and body in adult and pediatric patients 12 years of age and older.</p>
       <p>ZORYVE topical foam, 0.3%, is indicated for the treatment of seborrheic dermatitis in adult and pediatric patients 9 years of age and older.</p>
     </div>
