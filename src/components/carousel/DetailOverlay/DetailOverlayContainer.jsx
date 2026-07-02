@@ -27,7 +27,9 @@ const DetailOverlayContainer = () => {
 
   const close = () => {
     isClosingRef.current = true
-    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED)
+    // source distinguishes an explicit user close from FilterManager's
+    // defensive deselect on filter changes (DeepLinkManager needs to know)
+    eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_DESELECTED, { source: 'user' })
   }
 
   const onBackdrop = (e) => {

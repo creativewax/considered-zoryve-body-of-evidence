@@ -17,6 +17,7 @@
  *   --debug-only                       (skip filter screenshots, references, and intro)
  *   --references-only                  (skip filters, debug routes, and intro)
  *   --intro-only                       (skip filters, debug routes, and references)
+ *   --patient-id=110-005               (debug only: capture just this patient's overlay + large images)
  *   --resume                           (skip files that already exist)
  */
 
@@ -39,10 +40,13 @@ const args = Object.fromEntries(
 const BASE_URL = args['base-url'] || 'http://localhost:3000'
 const OUTPUT_DIR = resolve(args['output'] || './screenshots')
 const DELAY = parseInt(args['delay'] || '1500', 10)
-const SKIP_FILTERS = args['debug-only'] === true || args['references-only'] === true || args['intro-only'] === true
+// A present --patient-id implies debug-only: it is a stronger form of --debug-only
+const PATIENT_ID = args['patient-id'] || null
+const DEBUG_ONLY = args['debug-only'] === true || PATIENT_ID !== null
+const SKIP_FILTERS = DEBUG_ONLY || args['references-only'] === true || args['intro-only'] === true
 const SKIP_DEBUG = args['filters-only'] === true || args['references-only'] === true || args['intro-only'] === true
-const SKIP_REFERENCES = args['filters-only'] === true || args['debug-only'] === true || args['intro-only'] === true
-const SKIP_INTRO = args['filters-only'] === true || args['debug-only'] === true || args['references-only'] === true
+const SKIP_REFERENCES = args['filters-only'] === true || DEBUG_ONLY || args['intro-only'] === true
+const SKIP_INTRO = args['filters-only'] === true || DEBUG_ONLY || args['references-only'] === true
 const RESUME = args['resume'] === true
 
 // All filter options — group name, button text, filename slug
@@ -87,8 +91,8 @@ async function wait(ms) {
 }
 
 function routeToFilename(route) {
-  // "/debug/11-910/axilla/0" → "11-910-axilla-0"
-  return route.replace('/debug/', '').replace(/\//g, '-')
+  // "/patient/11-910/axilla/0" → "11-910-axilla-0"
+  return route.replace('/patient/', '').replace(/\//g, '-')
 }
 
 // ---------------------------------------------------------------------------
@@ -227,14 +231,22 @@ async function run() {
   if (!SKIP_DEBUG) {
     console.log('\n=== DEBUG ROUTE SCREENSHOTS ===\n')
 
-    const debugPath = resolve('./public/data/debug.json')
+    const debugPath = resolve('./public/data/deeplinks.json')
     const allRoutes = JSON.parse(readFileSync(debugPath, 'utf-8'))
 
-    // Filter out image indexes > 2 — splitPatientData selects max 3 timepoints
+    // Filter out image indexes > 2 — splitPatientData selects max 3 timepoints.
+    // When --patient-id is set, exact-match the patient segment (split[2]) so
+    // "11-910" never matches "110-005" the way a substring check would.
     const routes = allRoutes.filter(route => {
       const indexMatch = route.match(/\/(\d+)$/)
-      return !indexMatch || parseInt(indexMatch[1], 10) <= 2
+      if (indexMatch && parseInt(indexMatch[1], 10) > 2) return false
+      if (PATIENT_ID && route.split('/')[2] !== PATIENT_ID) return false
+      return true
     })
+
+    if (PATIENT_ID && routes.length === 0) {
+      console.warn(`  No debug routes found for patient ID "${PATIENT_ID}"`)
+    }
 
     for (const route of routes) {
       try {

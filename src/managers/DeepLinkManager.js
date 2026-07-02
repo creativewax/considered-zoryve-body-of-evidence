@@ -1,19 +1,19 @@
 /**
- * DebugManager.js
+ * DeepLinkManager.js
  *
- * Singleton manager for debug mode. Parses /debug URLs and orchestrates
- * the detail overlay and image viewer without going through the normal
- * carousel interaction flow.
+ * Singleton manager for the permanent, always-on deep-linking feature.
+ * Parses /patient URLs and orchestrates the detail overlay and image
+ * viewer without going through the normal carousel interaction flow.
  *
  * URL patterns:
- *   /debug/:patientId/:bodyArea        — Opens detail overlay for patient
- *   /debug/:patientId/:bodyArea/:index  — Opens detail overlay + image viewer at index
+ *   /patient/:patientId/:bodyArea        — Opens detail overlay for patient
+ *   /patient/:patientId/:bodyArea/:index  — Opens detail overlay + image viewer at index
  *
- * When active, sets a global debug flag that prevents normal events
+ * When active, sets a global flag that prevents normal events
  * (FILTER_CHANGED, IMAGES_UPDATED) from clearing the selected image.
  */
 
-import { DATA_SOURCE_KEY, IMAGE_FIELDS, ASSETS, FILTER_KEYS, FILTER_DEFINITIONS, PATIENT_SCHEMA } from '../constants/index.js'
+import { DATA_SOURCE_KEY, IMAGE_FIELDS, ASSETS, FILTER_KEYS, FILTER_DEFINITIONS, PATIENT_SCHEMA, ROUTES } from '../constants/index.js'
 import eventSystem, { EventSystem } from '../utils/EventSystem.js'
 import { splitPatientData } from '../utils/patientDataSplitter.js'
 import filterManager from './FilterManager.js'
@@ -22,12 +22,101 @@ import filterManager from './FilterManager.js'
 // CLASS DEFINITION
 // ---------------------------------------------------------------------------
 
-class DebugManager {
+class DeepLinkManager {
   constructor() {
-    this.isDebugMode = false
+    this.isDeepLinkActive = false
     this.patientId = null
     this.bodyArea = null
     this.imageIndex = null // null = overlay only, number = also open image viewer
+    this.patientData = null // cached on DATA_LOADED so hashchange links can activate
+
+    // A hash-only URL change is a same-document navigation (no reload), so the
+    // startup parse in App.jsx never re-runs. Listen for it so deep links work
+    // when pasted into a running tab or set on the iframe by the RAMP host.
+    eventSystem.on(EventSystem.EVENTS.DATA_LOADED, ({ data }) => {
+      this.patientData = data
+    })
+    window.addEventListener('hashchange', () => this.handleHashChange())
+
+    // While a deep link is active, keep the URL bar honest as the user moves
+    // around or out of the deep-linked view. history.replaceState fires no
+    // hashchange, so these cosmetic rewrites never re-trigger activation.
+    eventSystem.on(EventSystem.EVENTS.IMAGE_VIEWER_OPENED, payload => {
+      if (this.isDeepLinkActive) this.updateHashIndex(payload?.index ?? null)
+    })
+    eventSystem.on(EventSystem.EVENTS.IMAGE_VIEWER_NAVIGATED, payload => {
+      if (this.isDeepLinkActive) this.updateHashIndex(payload?.index ?? null)
+    })
+    eventSystem.on(EventSystem.EVENTS.IMAGE_VIEWER_CLOSED, () => {
+      if (this.isDeepLinkActive) this.updateHashIndex(null)
+    })
+    eventSystem.on(EventSystem.EVENTS.IMAGE_SELECTED, payload => {
+      if (this.isDeepLinkActive && payload?.patient) this.retarget(payload.patient)
+    })
+    eventSystem.on(EventSystem.EVENTS.IMAGE_DESELECTED, payload => {
+      if (this.isDeepLinkActive) this.exit(payload?.source === 'user')
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+  // URL SYNC (active deep-link session only)
+  // ---------------------------------------------------------------------------
+
+  // Rewrite the hash without navigating (no hashchange event, no router remount)
+  replaceHash(path) {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${path}`)
+  }
+
+  patientPath() {
+    const idSlug = encodeURIComponent(this.patientId)
+    const bodySlug = this.bodyArea.toLowerCase().replace(/ /g, '-')
+    return `${ROUTES.PATIENT}/${idSlug}/${bodySlug}`
+  }
+
+  // Reflect the viewer's state in the URL's index segment (null = overlay only)
+  updateHashIndex(index) {
+    this.imageIndex = index
+    this.replaceHash(index !== null ? `${this.patientPath()}/${index}` : this.patientPath())
+  }
+
+  // The overlay switched patient or body area (e.g. BodyAreaSelector tab)
+  retarget(patient) {
+    const samePatient = (patient.patientId || '').toLowerCase() === this.patientId.toLowerCase()
+    const sameBody = (patient.bodyArea || '').toLowerCase() === this.bodyArea.toLowerCase()
+    if (samePatient && sameBody) return
+
+    this.patientId = patient.patientId
+    this.bodyArea = patient.bodyArea
+    this.imageIndex = null
+    this.replaceHash(this.patientPath())
+  }
+
+  /**
+   * End the deep-link session: the deep link was the jump-in point, so moving
+   * out of it returns the URL to /main. An explicit user close also resets the
+   * filters that were quietly set for the deep-linked patient. A filter-driven
+   * deselect keeps them: the user's own filter click defines the new state.
+   */
+  exit(userClosed) {
+    this.isDeepLinkActive = false
+    this.patientId = null
+    this.bodyArea = null
+    this.imageIndex = null
+    this.replaceHash(ROUTES.MAIN)
+
+    // Full pipeline (availability, carousel refresh), but a direct call rather
+    // than FILTERS_RESET_REQUESTED: a system reset is not a user intent and
+    // must not reach RAMP analytics.
+    if (userClosed) filterManager.handleResetRequested()
+  }
+
+  /**
+   * Re-parse the URL on a runtime hash change and activate any patient link.
+   * A non-patient hash deactivates deep-link mode.
+   */
+  handleHashChange() {
+    if (!this.parseUrl()) return
+    if (this.patientData) this.activate(this.patientData)
   }
 
   // ---------------------------------------------------------------------------
@@ -35,21 +124,29 @@ class DebugManager {
   // ---------------------------------------------------------------------------
 
   /**
-   * Parse the current URL to check for debug mode.
-   * Expected format: /debug/:patientId/:bodyArea[/:imageIndex]
+   * Parse the current URL to check for a patient deep link.
+   * Expected format: /patient/:patientId/:bodyArea[/:imageIndex]
    * Body area in URL uses hyphens (e.g., "antecubital-fossa") which we
    * normalise to match the JSON data (e.g., "Antecubital Fossa").
    *
-   * @returns {boolean} True if debug URL was detected
+   * @returns {boolean} True if a patient deep link URL was detected
    */
   parseUrl() {
     // HashRouter puts the path in the hash fragment — strip the leading '#'
     const path = window.location.hash.replace(/^#/, '')
-    const match = path.match(/^\/debug\/([^/]+)\/([^/]+)(?:\/(\d+))?$/)
+    const match = path.match(/^\/patient\/([^/]+)\/([^/]+)(?:\/(\d+))?$/)
 
-    if (!match) return false
+    if (!match) {
+      // Keep state true to the current URL — navigating away from a patient
+      // link ends deep-link mode (and its overlay-close suppression)
+      this.isDeepLinkActive = false
+      this.patientId = null
+      this.bodyArea = null
+      this.imageIndex = null
+      return false
+    }
 
-    this.isDebugMode = true
+    this.isDeepLinkActive = true
     this.patientId = decodeURIComponent(match[1])
     // Convert URL-friendly body area back to title case with spaces
     // e.g., "antecubital-fossa" → "Antecubital Fossa"
@@ -63,7 +160,7 @@ class DebugManager {
       .join(' ')
     this.imageIndex = match[3] !== undefined ? parseInt(match[3], 10) : null
 
-    console.log('[DebugManager] Debug mode active:', {
+    console.log('[DeepLinkManager] Deep link active:', {
       patientId: this.patientId,
       bodyArea: this.bodyArea,
       imageIndex: this.imageIndex
@@ -101,26 +198,26 @@ class DebugManager {
   // ---------------------------------------------------------------------------
 
   /**
-   * Activate debug mode after data has loaded.
+   * Activate the deep link after data has loaded.
    * Finds the patient, sets the source to Clinical Trial, emits IMAGE_SELECTED,
    * and optionally opens the image viewer.
    *
    * @param {Object} patientData - The full patient_data.json object
    */
   activate(patientData) {
-    if (!this.isDebugMode) return
+    if (!this.isDeepLinkActive) return
 
     const patient = this.findPatient(patientData)
 
     if (!patient) {
-      console.error('[DebugManager] Patient not found:', this.patientId, this.bodyArea)
-      console.log('[DebugManager] Available patients:')
+      console.error('[DeepLinkManager] Patient not found:', this.patientId, this.bodyArea)
+      console.log('[DeepLinkManager] Available patients:')
       const patients = patientData[DATA_SOURCE_KEY] || []
       patients.forEach(p => console.log(`  ${p.patientId} / ${p.bodyArea}`))
       return
     }
 
-    console.log('[DebugManager] Found patient:', patient.patientId, patient.bodyArea)
+    console.log('[DeepLinkManager] Found patient:', patient.patientId, patient.bodyArea)
 
     // Build the imageData object that IMAGE_SELECTED expects
     // (same shape as DataManager.getFirstValidImage)
@@ -133,7 +230,7 @@ class DebugManager {
     }
 
     if (!firstImageField) {
-      console.error('[DebugManager] Patient has no images')
+      console.error('[DeepLinkManager] Patient has no images')
       return
     }
 
@@ -168,7 +265,7 @@ class DebugManager {
     const { timepoints } = splitPatientData(patient)
 
     if (index >= timepoints.length) {
-      console.warn(`[DebugManager] Image index ${index} out of range (max ${timepoints.length - 1})`)
+      console.warn(`[DeepLinkManager] Image index ${index} out of range (max ${timepoints.length - 1})`)
       index = timepoints.length - 1
     }
 
@@ -183,7 +280,7 @@ class DebugManager {
   // ---------------------------------------------------------------------------
 
   /**
-   * Set filter selections to match the debug patient's data.
+   * Set filter selections to match the deep-linked patient's data.
    * Uses FILTER_DEFINITIONS to find the correct option index for each field.
    * Calls filterManager.setFiltersQuietly() — no events fired, just UI highlighting.
    *
@@ -235,7 +332,7 @@ class DebugManager {
       FILTER_KEYS.GENDER, patient[PATIENT_SCHEMA.GENDER]
     ))
 
-    console.log('[DebugManager] Setting filters:', filterValues)
+    console.log('[DeepLinkManager] Setting filters:', filterValues)
     filterManager.setFiltersQuietly(filterValues)
   }
 
@@ -262,8 +359,8 @@ class DebugManager {
   // PUBLIC API
   // ---------------------------------------------------------------------------
 
-  getIsDebugMode() {
-    return this.isDebugMode
+  getIsDeepLinkActive() {
+    return this.isDeepLinkActive
   }
 }
 
@@ -271,6 +368,6 @@ class DebugManager {
 // SINGLETON EXPORT
 // ---------------------------------------------------------------------------
 
-const debugManager = new DebugManager()
+const deepLinkManager = new DeepLinkManager()
 
-export default debugManager
+export default deepLinkManager

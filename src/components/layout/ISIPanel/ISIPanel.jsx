@@ -7,6 +7,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { PlusIcon } from '../../common/Svg/index.js'
 import { gsap } from 'gsap'
+import eventSystem, { EventSystem } from '../../../utils/EventSystem.js'
 import ISIContent from './ISIContent.jsx'
 import './ISIPanel.css'
 
@@ -31,6 +32,7 @@ const ISIPanel = () => {
   const timelineRef = useRef(null)
 
   const togglePanel = () => {
+    eventSystem.emit(EventSystem.EVENTS.ISI_TOGGLED, { isOpen: !isOpen })
     setIsOpen(!isOpen)
   }
 

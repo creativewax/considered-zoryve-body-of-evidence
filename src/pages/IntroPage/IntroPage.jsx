@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../constants/animations.js'
+import eventSystem, { EventSystem } from '../../utils/EventSystem.js'
 import dataManager from '../../managers/DataManager.js'
 import useManagerSubscription from '../../hooks/common/useManagerSubscription.js'
 import Button from '../../components/common/Button/Button.jsx'
@@ -26,6 +27,7 @@ const IntroPage = () => {
 
   const handleGetStarted = () => {
     navigate(ROUTES.MAIN)
+    eventSystem.emit(EventSystem.EVENTS.GET_STARTED_SELECTED)
   }
 
   // Show loading or fallback if data not ready

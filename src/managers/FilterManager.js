@@ -95,6 +95,7 @@ class FilterManager {
   handleFilterSelected({ filterType, value }) {
     const definition = FILTER_DEFINITIONS[filterType]
     const current = this.filters[filterType]
+    const selected = !current.includes(value)
     let next
 
     if (definition.multiSelect) {
@@ -119,6 +120,8 @@ class FilterManager {
     eventSystem.emit(EventSystem.EVENTS.FILTER_CHANGED, {
       filterType,
       value: next,
+      clickedValue: value,
+      selected,
       filters: { ...this.filters }
     })
 
@@ -241,7 +244,7 @@ class FilterManager {
 
   /**
    * Set filter values directly without emitting any events.
-   * Used by DebugManager to highlight the matching filters in the UI
+   * Used by DeepLinkManager to highlight the matching filters in the UI
    * without triggering carousel updates or overlay closures.
    *
    * @param {Object} filterValues - Map of FILTER_KEYS to index values

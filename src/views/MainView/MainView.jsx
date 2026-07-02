@@ -13,7 +13,10 @@ import DetailOverlayContainer from '../../components/carousel/DetailOverlay/Deta
 import { calculateBestFitFOV } from '../../utils/carouselHelpers'
 import AppTitle from '../../components/layout/AppTitle/AppTitle.jsx'
 import useCarouselManager from '../../hooks/carousel/useCarouselManager.js'
+import eventSystem, { EventSystem } from '../../utils/EventSystem.js'
+import ivaManager from '../../managers/IvaManager.js'
 import './MainView.css'
+import CloseButton from '../../components/common/CloseButton/CloseButton.jsx'
 
 // ---------------------------------------------------------------------------
 // MAIN COMPONENT
@@ -27,6 +30,12 @@ const MainView = () => {
   // Note: Thumbnails are preloaded by ImageManager during app init
   const { layoutConfig, imageCount } = useCarouselManager(containerRef)
 
+  // Close application and go back to iCVA in Veeva
+  const onClose = () => {
+    eventSystem.emit(EventSystem.EVENTS.APP_CLOSE_REQUESTED)
+    ivaManager.goBack()
+  }
+
   // ---------------------------------------------------------------------------
   // RENDER
   // ---------------------------------------------------------------------------
@@ -34,6 +43,7 @@ const MainView = () => {
   return (
     <div className="main-view">
       <AppTitle />
+      <CloseButton onClick={onClose} className="main-view-close-button" bgClassName="main-view-close-button-bg" fgClassName="main-view-close-button-fg" />
       <div className="main-view-content" ref={containerRef}>
         {layoutConfig && imageCount > 0 ? (
           <>

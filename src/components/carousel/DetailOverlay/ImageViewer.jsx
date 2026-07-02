@@ -54,6 +54,7 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
     if (currentIndex > 0) {
       setDirection(-1)
       setCurrentIndex(currentIndex - 1)
+      eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_VIEWER_NAVIGATED, { direction: 'previous', index: currentIndex - 1 })
     }
   }
 
@@ -61,6 +62,7 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
     if (currentIndex < timepoints.length - 1) {
       setDirection(1)
       setCurrentIndex(currentIndex + 1)
+      eventSystem.emit(eventSystem.constructor.EVENTS.IMAGE_VIEWER_NAVIGATED, { direction: 'next', index: currentIndex + 1 })
     }
   }
 
@@ -193,23 +195,24 @@ const ImageViewer = ({ timepoints, initialIndex }) => {
                 </div>
               </ImageContainer>
             </div>
-
-            {/* Close Button */}
-            <motion.button
-              type="button"
-              className="image-viewer-close"
-              onClick={closeViewer}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              aria-label="Close viewer"
-            >
-              <CloseIcon width={40} height={40} />
-            </motion.button>
           </motion.div>
         </AnimatePresence>
+
+        {/* Close Button - sibling of the draggable wrapper (not nested inside it),
+            so a click doesn't also trigger the wrapper's onTap and double-fire closeViewer */}
+        <motion.button
+          type="button"
+          className="image-viewer-close"
+          onClick={closeViewer}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label="Close viewer"
+        >
+          <CloseIcon width={40} height={40} />
+        </motion.button>
       </div>
     </motion.div>
   )

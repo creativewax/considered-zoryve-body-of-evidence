@@ -52,6 +52,12 @@ class EventSystem {
     IMAGE_VIEWER_OPENED: 'imageViewerOpened',        // User opened full-screen image viewer
     IMAGE_VIEWER_CLOSED: 'imageViewerClosed',        // User closed image viewer
     NAVIGATION_REQUESTED: 'navigationRequested',     // User clicked nav arrow
+    APP_CLOSE_REQUESTED: 'appCloseRequested',        // User clicked global close button
+    REFERENCES_OPENED: 'referencesOpened',           // User opened references modal
+    REFERENCES_CLOSED: 'referencesClosed',           // User closed references modal
+    GET_STARTED_SELECTED: 'getStartedSelected',      // User clicked Get Started on intro
+    IMAGE_VIEWER_NAVIGATED: 'imageViewerNavigated',  // User clicked image viewer prev/next arrow
+    ISI_TOGGLED: 'isiToggled',                       // User clicked ISI panel plus button
 
     // Manager state change events (notifications from managers)
     FILTER_CHANGED: 'filterChanged',          // Individual filter value changed

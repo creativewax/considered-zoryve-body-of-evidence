@@ -13,7 +13,7 @@ import { APP_STATE, ROUTES } from './constants/index.js'
 import dataManager from './managers/DataManager.js'
 import imageManager from './managers/ImageManager.js'
 import appStateManager from './managers/AppStateManager.js'
-import debugManager from './managers/DebugManager.js'
+import deepLinkManager from './managers/DeepLinkManager.js'
 import eventSystem from './utils/EventSystem.js'
 import useManagerSubscription from './hooks/common/useManagerSubscription.js'
 import useEventSubscription from './hooks/common/useEventSubscription.js'
@@ -42,7 +42,7 @@ function App() {
   // ---------------------------------------------------------------------------
 
   // Check for debug mode before anything renders
-  const isDebug = debugManager.parseUrl()
+  const isDebug = deepLinkManager.parseUrl()
 
   useEffect(() => {
     /**
@@ -81,7 +81,7 @@ function App() {
         if (isDebug) {
           appStateManager.setState(APP_STATE.MAIN)
           // Give the main page time to mount before activating debug
-          setTimeout(() => debugManager.activate(data), 500)
+          setTimeout(() => deepLinkManager.activate(data), 500)
         } else {
           // Normal flow: transition to intro page
           appStateManager.setState(APP_STATE.INTRO)
@@ -142,6 +142,7 @@ function App() {
         <Routes>
           <Route path={ROUTES.INTRO} element={<IntroPage />} />
           <Route path={ROUTES.MAIN} element={<MainPage />} />
+          <Route path={ROUTES.PATIENT + '/*'} element={<MainPage />} />
           <Route path="/debug/*" element={<MainPage />} />
         </Routes>
 

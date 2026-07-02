@@ -363,6 +363,7 @@ export const ROUTES = {
   INTRO: '/',
   MAIN: '/main',
   DETAIL: '/detail',
+  PATIENT: '/patient',
 }
 
 // ---------------------------------------------------------------------------

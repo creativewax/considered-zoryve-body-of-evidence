@@ -81,10 +81,13 @@
   letter-spacing: 0.5px;
 }
 
-/* Close button - centered below image */
+/* Close button - centered below image. Now a sibling of image-viewer-image-wrapper
+   (not a child), so it positions relative to image-viewer-container instead; the
+   offset compensates for the wrapper's 10% vertical centering margin to land in
+   the same spot as before. */
 .image-viewer-close {
   position: absolute;
-  bottom: -60px;
+  bottom: calc(10% - 60px);
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
@@ -171,6 +174,6 @@
   }
 
   .image-viewer-close {
-    bottom: -50px;
+    bottom: calc(5% - 50px);
   }
 }

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 import { ASSETS } from '../../../constants/index.js'
 import { ANIMATIONS, TRANSITIONS } from '../../../constants/animations.js'
 import ReferencesModal from '../../common/Modal/ReferencesModal.jsx'
+import eventSystem, { EventSystem } from '../../../utils/EventSystem.js'
 import './Footer.css'
 
 /**
@@ -35,7 +36,10 @@ const Footer = () => {
 
   return (
     <>
-    <ReferencesModal isOpen={refsOpen} onClose={() => setRefsOpen(false)} />
+    <ReferencesModal isOpen={refsOpen} onClose={() => {
+      setRefsOpen(false)
+      eventSystem.emit(EventSystem.EVENTS.REFERENCES_CLOSED)
+    }} />
     <motion.footer
       className="footer"
       initial={{ y: 80 }}
@@ -49,7 +53,10 @@ const Footer = () => {
           <img src={ASSETS.ICONS.FOOTER_INFO} alt="Info" />
         </button>
         {/* References button - displays citations and sources */}
-        <button className="footer-button" onClick={() => setRefsOpen(true)}>
+        <button className="footer-button" onClick={() => {
+          setRefsOpen(true)
+          eventSystem.emit(EventSystem.EVENTS.REFERENCES_OPENED)
+        }}>
           <img src={ASSETS.ICONS.FOOTER_REFS} alt="References" />
         </button>
       </div>
